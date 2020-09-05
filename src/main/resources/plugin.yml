@@ -1,0 +1,10 @@
+name: HexNicks
+version: 1.0
+main: me.majekdor.hexnicks.HexNicks
+api-version: 1.16
+authors: [Majekdor]
+description: Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
+commands:
+  nick:
+    description: Change your nickname.
+    aliases: [nickname]

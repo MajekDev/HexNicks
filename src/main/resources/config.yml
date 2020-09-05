@@ -1,0 +1,11 @@
+# HexNicks created by Majekdor on August 27th, 2020 | Need help? Message me on Discord @Majekdor#6346
+
+# Maximum number of characters allowed in a nickname (not including any color codes)
+max-length: 20
+
+# Minimum number of characters allowed in a nickname (not including any color codes)
+min-length: 3
+
+# If set to true only players with permission hexnicks.use will be able to use /nick (false by default)
+use-permissions: false
+

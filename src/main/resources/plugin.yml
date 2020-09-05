@@ -8,3 +8,5 @@ commands:
   nick:
     description: Change your nickname.
     aliases: [nickname]
+  nonick:
+    description: Remove you nickname.

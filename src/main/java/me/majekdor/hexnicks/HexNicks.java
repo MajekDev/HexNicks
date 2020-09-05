@@ -44,8 +44,10 @@ public final class HexNicks extends JavaPlugin {
         // Plugin startup logic
         this.nicknames = new DataManager(this);
         loadNicks();
+        int pluginId = 8764; Metrics metrics = new Metrics(this, pluginId); // Metric stuffs
         final FileConfiguration config = this.getConfig(); this.saveDefaultConfig();
         this.getCommand("nick").setExecutor(new CommandNick());
+        this.getCommand("nonick").setExecutor(new CommandNick());
         this.getCommand("nick").setTabCompleter(new Listen());
         this.getServer().getPluginManager().registerEvents(new Listen(), this);
     }

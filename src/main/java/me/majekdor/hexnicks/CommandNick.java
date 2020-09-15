@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,8 @@ public class CommandNick implements CommandExecutor {
                 }
             }
 
-            if (args.length == 1) {
+            if (args.length >= 1) {
+                String nick, noColor;
                 if (args[0].equalsIgnoreCase("help")) {
                     p.sendMessage(HexNicks.format("&7----------&cNickname &6Help&7----------"));
                     p.sendMessage(HexNicks.format("&cUsage: &7/nick <nickname>"));
@@ -44,8 +46,33 @@ public class CommandNick implements CommandExecutor {
                     p.sendMessage(HexNicks.format("&7Max nickname length not including colors is: &c" + max));
                     return true;
                 }
-                String nick = args[0];
-                String noColor = HexNicks.removeColorCodes(nick);
+                // This section looks dumb as shit but trust me it works
+                if (args.length > 1) {
+                    char[] chars = Arrays.toString(args).toCharArray();
+                    StringBuilder sb = new StringBuilder();
+                    int helpful = 0;
+                    for (char aChar : chars) {
+                        if (helpful < 2) {
+                            if (aChar == '\"') {
+                                helpful++;
+                                continue;
+                            }
+                            if (helpful == 1) {
+                                sb.append(aChar);
+                            }
+                        }
+                    }
+                    if (helpful != 2) {
+                        p.sendMessage(HexNicks.format("&cIt seems as if you have tried to add a space in your nickname."));
+                        p.sendMessage(HexNicks.format("&cTo do this, use /nick \"part1 part2\" with quotations."));
+                        return true;
+                    } else {
+                        nick = sb.toString().replaceAll(",", "");
+                    }
+                } else {
+                    nick = args[0];
+                }
+                noColor = HexNicks.removeColorCodes(nick);
                 if (noColor.length() > max) {
                     p.sendMessage(HexNicks.format("&cThis nickname is too long!")); return true;
                 }

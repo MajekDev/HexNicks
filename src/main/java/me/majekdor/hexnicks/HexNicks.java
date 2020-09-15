@@ -3,11 +3,12 @@ package me.majekdor.hexnicks;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,16 @@ public final class HexNicks extends JavaPlugin {
         this.nicknames = new DataManager(this);
         loadNicks();
         int pluginId = 8764; Metrics metrics = new Metrics(this, pluginId); // Metric stuffs
-        final FileConfiguration config = this.getConfig(); this.saveDefaultConfig();
+
+        this.saveDefaultConfig();
+        File configFile = new File(getDataFolder(), "config.yml"); String[] foo = new String[0];
+        try {
+            ConfigUpdater.update(instance, "config.yml", configFile, Arrays.asList(foo));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.reloadConfig();
+
         this.getCommand("nick").setExecutor(new CommandNick());
         this.getCommand("nonick").setExecutor(new CommandNick());
         this.getCommand("nick").setTabCompleter(new Listen());

@@ -17,3 +17,6 @@ joinleave-message-nicks: false
 
 # If set to true death messages will use the player's nickname instead of real name
 death-message-nicks: false
+
+# Toggle whether or not the name above a player's head is their nickname
+player-head-nick: false

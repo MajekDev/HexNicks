@@ -21,6 +21,7 @@ public class Listen implements Listener, TabCompleter {
         Player p = e.getPlayer();
         if (CommandNick.nicks.containsKey(p.getName())) {
             p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getName()) + "&r"));
+            p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
         }
     }
 

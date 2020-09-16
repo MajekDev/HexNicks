@@ -3,6 +3,7 @@ package me.majekdor.hexnicks;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,12 +17,16 @@ import java.util.List;
 
 public class Listen implements Listener, TabCompleter {
 
+    FileConfiguration c = HexNicks.instance.getConfig();
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (CommandNick.nicks.containsKey(p.getName())) {
             p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getName()) + "&r"));
-            p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
+            if (c.getBoolean("tab-nicknames")) {
+                p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
+            }
         }
     }
 

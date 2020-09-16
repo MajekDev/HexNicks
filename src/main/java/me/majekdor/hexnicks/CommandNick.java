@@ -111,6 +111,9 @@ public class CommandNick implements CommandExecutor {
             }
             if (args.length == 0) {
                 p.setDisplayName(p.getName());
+                if (c.getBoolean("tab-nicknames")) {
+                    p.setPlayerListName(HexNicks.format(p.getName()));
+                }
                 if (nicks.containsKey(p.getName())) {
                     nicks.replace(p.getName(), p.getName());
                 } else {

@@ -9,5 +9,11 @@ min-length: 3
 # If set to true only players with permission hexnicks.use will be able to use /nick (false by default)
 use-permissions: false
 
-# If true then players nicknames will be shown in the tablist
+# If set to true then players nicknames will be shown in the tablist
 tab-nicknames: false
+
+# If set to true join and leave messages will use the player's nickname instead of real name
+joinleave-message-nicks: false
+
+# If set to true death messages will use the player's nickname instead of real name
+death-message-nicks: false

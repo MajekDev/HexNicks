@@ -7,8 +7,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +24,34 @@ public class Listen implements Listener, TabCompleter {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+        String message = e.getJoinMessage();
         if (CommandNick.nicks.containsKey(p.getName())) {
             p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getName()) + "&r"));
+            if (c.getBoolean("joinleave-message-nicks")) {
+                e.setJoinMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
+            }
             if (c.getBoolean("tab-nicknames")) {
                 p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer(); String message = e.getQuitMessage();
+        if (CommandNick.nicks.containsKey(p.getName())) {
+            if (c.getBoolean("joinleave-message-nicks")) {
+                e.setQuitMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player p = e.getEntity(); String message = e.getDeathMessage();
+        if (CommandNick.nicks.containsKey(p.getName())) {
+            if (c.getBoolean("death-message-nicks")) {
+                e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
             }
         }
     }

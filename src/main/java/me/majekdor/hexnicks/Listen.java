@@ -28,11 +28,13 @@ public class Listen implements Listener, TabCompleter {
         if (CommandNick.nicks.containsKey(p.getName())) {
             p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getName()) + "&r"));
             if (c.getBoolean("joinleave-message-nicks")) {
-                e.setJoinMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
+                e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getName()))));
             }
             if (c.getBoolean("tab-nicknames")) {
                 p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
             }
+        } else {
+            e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
@@ -41,8 +43,10 @@ public class Listen implements Listener, TabCompleter {
         Player p = e.getPlayer(); String message = e.getQuitMessage();
         if (CommandNick.nicks.containsKey(p.getName())) {
             if (c.getBoolean("joinleave-message-nicks")) {
-                e.setQuitMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
+                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getName()))));
             }
+        } else {
+            e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
@@ -51,7 +55,7 @@ public class Listen implements Listener, TabCompleter {
         Player p = e.getEntity(); String message = e.getDeathMessage();
         if (CommandNick.nicks.containsKey(p.getName())) {
             if (c.getBoolean("death-message-nicks")) {
-                e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()))));
+                e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
             }
         }
     }

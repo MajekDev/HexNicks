@@ -13,10 +13,10 @@ use-permissions: false
 tab-nicknames: false
 
 # If set to true join and leave messages will use the player's nickname instead of real name
+# The formatting will only be used if joinleave-message-nicks is set to true
 joinleave-message-nicks: false
+join-message-format: '&7&l > &b%nickname% &rjoined the game'
+leave-message-format: '&7&l > &b%nickname% &rleft the game'
 
 # If set to true death messages will use the player's nickname instead of real name
 death-message-nicks: false
-
-# Toggle whether or not the name above a player's head is their nickname
-player-head-nick: false

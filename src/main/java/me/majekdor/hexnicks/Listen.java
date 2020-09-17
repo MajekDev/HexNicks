@@ -52,10 +52,16 @@ public class Listen implements Listener, TabCompleter {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        Player p = e.getEntity(); String message = e.getDeathMessage();
+        String message = e.getDeathMessage();
+        Player p = e.getEntity(); Player killer = p.getKiller();
         if (CommandNick.nicks.containsKey(p.getName())) {
             if (c.getBoolean("death-message-nicks")) {
-                e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
+                if (killer != null) {
+                    e.setDeathMessage(HexNicks.format(message.replace(killer.getName(), CommandNick.nicks.get(killer.getName()) + "&r")
+                            .replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
+                } else {
+                    e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
+                }
             }
         }
     }

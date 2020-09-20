@@ -1,10 +1,12 @@
 package me.majekdor.hexnicks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -81,6 +83,16 @@ public class CommandNick implements CommandExecutor {
                 }
                 
                 p.setDisplayName(HexNicks.format(nick + "&r"));
+
+                ScoreboardManager manager = Bukkit.getScoreboardManager();
+                Scoreboard board = manager.getNewScoreboard();
+                Team team = board.registerNewTeam(p.getName());
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+                team.addPlayer(p);
+
+                Objective objective = board.registerNewObjective("shownick", "nickname", nick);
+                objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+                p.setScoreboard(board);
 
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(nick));

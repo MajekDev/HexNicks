@@ -1,12 +1,10 @@
 package me.majekdor.hexnicks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -45,6 +43,7 @@ public class CommandNick implements CommandExecutor {
                     p.sendMessage(HexNicks.format("&cUsage: &7/nick <nickname>"));
                     p.sendMessage(HexNicks.format("&7You may use hex and standard color codes."));
                     p.sendMessage(HexNicks.format("&7Use &c/nonick &7to remove your nickname."));
+                    p.sendMessage(HexNicks.format("&7Use &c/nickcolor &7to just change the color."));
                     p.sendMessage(HexNicks.format("&7Max nickname length not including colors is: &c" + max));
                     return true;
                 }
@@ -84,16 +83,6 @@ public class CommandNick implements CommandExecutor {
                 
                 p.setDisplayName(HexNicks.format(nick + "&r"));
 
-                ScoreboardManager manager = Bukkit.getScoreboardManager();
-                Scoreboard board = manager.getNewScoreboard();
-                Team team = board.registerNewTeam(p.getName());
-                team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-                team.addPlayer(p);
-
-                Objective objective = board.registerNewObjective("shownick", "nickname", nick);
-                objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-                p.setScoreboard(board);
-
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(nick));
                 }
@@ -131,6 +120,42 @@ public class CommandNick implements CommandExecutor {
                     nicks.put(p.getName(), p.getName());
                 }
                 p.sendMessage(HexNicks.format("&7Nickname removed."));
+            } else {
+                p.sendMessage(HexNicks.format("&cUsage: /nick <nickname> | Use /nick help for more"));
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("nickcolor")) {
+            // Sender isn't a player
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(HexNicks.format("&cConsole is unable to run this command."));
+                return true;
+            }
+            Player p = (Player) sender; FileConfiguration c = HexNicks.instance.getConfig();
+            if (c.getBoolean("use-permissions")) {
+                if (!p.hasPermission("hexnicks.changecolor")) {
+                    p.sendMessage(HexNicks.format("&cYou don't have permission to change your nickname's color!"));
+                    return true;
+                }
+            }
+            if (args.length == 0) {
+                p.sendMessage(HexNicks.format("&cPlease specify a color for the nickname!"));
+                return true;
+            }
+            if (args.length == 1) {
+                String nickname;
+                if (HexNicks.removeColorCodes(args[0]).equals("")) {
+                    nickname = args[0] + p.getName();
+                } else if (HexNicks.removeColorCodes(args[0]).equalsIgnoreCase(p.getName())) {
+                    nickname = args[0];
+                } else {
+                    nickname = p.getName();
+                    p.sendMessage(HexNicks.format("&cYou may only use color codes and your name with this command!"));
+                }
+                p.setDisplayName(HexNicks.format(nickname + "&r"));
+                if (c.getBoolean("tab-nicknames")) {
+                    p.setPlayerListName(HexNicks.format(nickname));
+                }
+                p.sendMessage(HexNicks.format("&7Your nickname is now: &f" + nickname));
             } else {
                 p.sendMessage(HexNicks.format("&cUsage: /nick <nickname> | Use /nick help for more"));
             }

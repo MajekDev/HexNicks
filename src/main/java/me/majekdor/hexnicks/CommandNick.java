@@ -148,12 +148,17 @@ public class CommandNick implements CommandExecutor {
                 } else if (HexNicks.removeColorCodes(args[0]).equalsIgnoreCase(p.getName())) {
                     nickname = args[0];
                 } else {
-                    nickname = p.getName();
                     p.sendMessage(HexNicks.format("&cYou may only use color codes and your name with this command!"));
+                    return true;
                 }
                 p.setDisplayName(HexNicks.format(nickname + "&r"));
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(nickname));
+                }
+                if (nicks.containsKey(p.getName())) {
+                    nicks.replace(p.getName(), nickname);
+                } else {
+                    nicks.put(p.getName(), nickname);
                 }
                 p.sendMessage(HexNicks.format("&7Your nickname is now: &f" + nickname));
             } else {

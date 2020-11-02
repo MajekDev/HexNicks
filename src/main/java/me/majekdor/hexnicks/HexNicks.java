@@ -3,27 +3,35 @@ package me.majekdor.hexnicks;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class HexNicks extends JavaPlugin {
+public final class HexNicks extends JavaPlugin implements Listener {
 
     public static HexNicks instance;
+    public MySQL SQL;
+    public SQLGetter data;
     public DataManager nicknames;
     public HexNicks() {
         instance = this;
     }
 
     public void saveNicks() {
-        for(String s : CommandNick.nicks.keySet()) {
-            String value = CommandNick.nicks.get(s);
-            this.nicknames.getConfig().set("nickData."+ s, value);
+        for(UUID uuid : CommandNick.nicks.keySet()) {
+            String value = CommandNick.nicks.get(uuid);
+            this.nicknames.getConfig().set("nickData."+ uuid.toString(), value);
         }
         this.nicknames.saveConfig();
     }
@@ -33,16 +41,40 @@ public final class HexNicks extends JavaPlugin {
         if(this.nicknames.getConfig().contains("nickData")) {
             this.nicknames.getConfig().getConfigurationSection("nickData").getKeys(false).forEach(key -> {
                 String value = (String) this.nicknames.getConfig().get("nickData." + key);
-                CommandNick.nicks.put(key, value);
+                CommandNick.nicks.put(UUID.fromString(key), value);
             });
         }
         this.nicknames.getConfig().set("nickData", null);
         this.nicknames.saveConfig();
+        if (SQL.isConnected()) {
+            for (UUID uuid : CommandNick.nicks.keySet()) {
+                Player p = Bukkit.getPlayer(uuid);
+                if (p != null) {
+                    data.createPlayer(p);
+                    data.addNickname(p.getUniqueId(), CommandNick.nicks.get(uuid));
+                }
+            }
+        }
     }
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        FileConfiguration c = HexNicks.instance.getConfig();
+        this.SQL = new MySQL();
+        this.data = new SQLGetter(this);
+        if (c.getBoolean("database-enabled")) {
+            try {
+                SQL.connect();
+            } catch (ClassNotFoundException | SQLException e) {
+                //e.printStackTrace();
+                Bukkit.getLogger().info("[HexNicks] Failed to connect to database.");
+            }
+            if (SQL.isConnected()) {
+                Bukkit.getLogger().info("[HexNicks] Successfully connected to database.");
+                data.createTable();
+            }
+        }
         this.nicknames = new DataManager(this);
         loadNicks();
         int pluginId = 8764; Metrics metrics = new Metrics(this, pluginId); // Metric stuffs
@@ -67,7 +99,12 @@ public final class HexNicks extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        this.saveNicks();
+        FileConfiguration c = HexNicks.instance.getConfig();
+        if (c.getBoolean("database-enabled")) {
+            SQL.disconnect();
+        } else {
+            this.saveNicks();
+        }
     }
 
     // Format hex color codes and standard minecraft color codes
@@ -101,5 +138,4 @@ public final class HexNicks extends JavaPlugin {
         }
         return sb.toString();
     }
-
 }

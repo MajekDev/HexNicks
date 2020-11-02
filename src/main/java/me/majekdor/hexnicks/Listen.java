@@ -24,29 +24,33 @@ public class Listen implements Listener, TabCompleter {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        String message = e.getJoinMessage();
-        if (CommandNick.nicks.containsKey(p.getName())) {
-            p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getName()) + "&r"));
-            if (c.getBoolean("joinleave-message-nicks")) {
-                e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getName()))));
-            }
+        if (!c.getBoolean("database-enabled")) {
+            p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getUniqueId()) + "&r"));
+        }
+        if (HexNicks.instance.SQL.isConnected()) {
+            HexNicks.instance.data.createPlayer(p);
+            if (HexNicks.instance.data.getNickname(p.getUniqueId()) != null)
+                CommandNick.nicks.put(p.getUniqueId(), HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r");
+                p.setDisplayName(HexNicks.format(HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r"));
+        }
+        if (CommandNick.nicks.containsKey(p.getUniqueId())) {
+            if (c.getBoolean("joinleave-message-nicks"))
+                e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
             if (c.getBoolean("tab-nicknames")) {
-                p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getName())));
+                p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getUniqueId())));
             }
-        } else {
-            e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer(); String message = e.getQuitMessage();
-        if (CommandNick.nicks.containsKey(p.getName())) {
-            if (c.getBoolean("joinleave-message-nicks")) {
-                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getName()))));
-            }
+        if (CommandNick.nicks.containsKey(p.getUniqueId())) {
+            if (c.getBoolean("joinleave-message-nicks"))
+                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
         } else {
-            e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
+            if (c.getBoolean("joinleave-message-nicks"))
+                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
@@ -54,13 +58,13 @@ public class Listen implements Listener, TabCompleter {
     public void onPlayerDeath(PlayerDeathEvent e) {
         String message = e.getDeathMessage();
         Player p = e.getEntity(); Player killer = p.getKiller();
-        if (CommandNick.nicks.containsKey(p.getName())) {
+        if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("death-message-nicks")) {
                 if (killer != null) {
-                    e.setDeathMessage(HexNicks.format(message.replace(killer.getName(), CommandNick.nicks.get(killer.getName()) + "&r")
-                            .replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
+                    e.setDeathMessage(HexNicks.format(message.replace(killer.getName(), CommandNick.nicks.get(killer.getUniqueId()) + "&r")
+                            .replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 } else {
-                    e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getName()) + "&r")));
+                    e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 }
             }
         }

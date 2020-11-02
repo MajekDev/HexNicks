@@ -20,3 +20,14 @@ leave-message-format: '&7&l > &b%nickname% &rleft the game'
 
 # If set to true death messages will use the player's nickname instead of real name
 death-message-nicks: false
+
+
+# Database settings
+# Only enable this if you know what you're doing and have an existing database
+database-enabled: false
+host: ''
+port: ''
+database: ''
+username: ''
+password: ''
+use-ssl: false

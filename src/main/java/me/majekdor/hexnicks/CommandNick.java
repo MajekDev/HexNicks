@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class CommandNick implements CommandExecutor {
 
-    public static Map<String, String> nicks = new HashMap<>();
+    public static Map<UUID, String> nicks = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
@@ -86,10 +87,14 @@ public class CommandNick implements CommandExecutor {
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(nick));
                 }
-                if (nicks.containsKey(p.getName())) {
-                    nicks.replace(p.getName(), nick);
+                if (nicks.containsKey(p.getUniqueId())) {
+                    nicks.replace(p.getUniqueId(), nick);
                 } else {
-                    nicks.put(p.getName(), nick);
+                    nicks.put(p.getUniqueId(), nick);
+                }
+                // SQL shit
+                if (HexNicks.instance.SQL.isConnected()) {
+                    HexNicks.instance.data.addNickname(p.getUniqueId(), nick);
                 }
                 p.sendMessage(HexNicks.format("&7Your nickname is now: " + nick));
             } else {
@@ -114,10 +119,14 @@ public class CommandNick implements CommandExecutor {
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(p.getName()));
                 }
-                if (nicks.containsKey(p.getName())) {
-                    nicks.replace(p.getName(), p.getName());
+                if (nicks.containsKey(p.getUniqueId())) {
+                    nicks.replace(p.getUniqueId(), p.getName());
                 } else {
-                    nicks.put(p.getName(), p.getName());
+                    nicks.put(p.getUniqueId(), p.getName());
+                }
+                // SQL shit
+                if (HexNicks.instance.SQL.isConnected()) {
+                    HexNicks.instance.data.removeNickname(p.getUniqueId());
                 }
                 p.sendMessage(HexNicks.format("&7Nickname removed."));
             } else {
@@ -155,11 +164,17 @@ public class CommandNick implements CommandExecutor {
                 if (c.getBoolean("tab-nicknames")) {
                     p.setPlayerListName(HexNicks.format(nickname));
                 }
-                if (nicks.containsKey(p.getName())) {
-                    nicks.replace(p.getName(), nickname);
+                if (nicks.containsKey(p.getUniqueId())) {
+                    nicks.replace(p.getUniqueId(), nickname);
                 } else {
-                    nicks.put(p.getName(), nickname);
+                    nicks.put(p.getUniqueId(), nickname);
                 }
+
+                // SQL shit
+                if (HexNicks.instance.SQL.isConnected()) {
+                    HexNicks.instance.data.addNickname(p.getUniqueId(), nickname);
+                }
+
                 p.sendMessage(HexNicks.format("&7Your nickname is now: &f" + nickname));
             } else {
                 p.sendMessage(HexNicks.format("&cUsage: /nick <nickname> | Use /nick help for more"));

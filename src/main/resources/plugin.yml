@@ -1,18 +1,23 @@
 name: HexNicks
 version: 1.2.0
-main: me.majekdor.hexnicks.HexNicks
-api-version: 1.16
+main: dev.majek.hexnicks.HexNicks
+api-version: 1.13
 authors: [Majekdor]
 description: Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
 commands:
   nick:
     description: Change your nickname.
     aliases: [nickname]
+    usage: /nick [player] <nickname> | Use /nick help for more
   nickcolor:
     description: Change just the color of your nickname.
     aliases: [colornick]
+    usage: /nick <colorcode>
   nonick:
     description: Remove you nickname.
+    usage: /nonick [player]
+  hexreload:
+    description: Reload the plugin config file.
 
 permissions:
   hexnicks.use:
@@ -20,3 +25,6 @@ permissions:
     children: [hexnicks.changecolor]
   hexnicks.changecolor:
     description: Use /nickcolor if use-permissions is enabled in the config.yml
+  hexnicks.admin:
+    description: Ability to run HexNicks admin commands.
+    default: op

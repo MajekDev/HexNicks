@@ -1,4 +1,4 @@
-package me.majekdor.hexnicks;
+package dev.majek.hexnicks;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,52 +19,54 @@ import java.util.List;
 
 public class Listen implements Listener, TabCompleter {
 
-    FileConfiguration c = HexNicks.instance.getConfig();
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        FileConfiguration c = HexNicks.instance.getConfig();
         Player p = e.getPlayer();
         if (!c.getBoolean("database-enabled")) {
-            p.setDisplayName(HexNicks.format(CommandNick.nicks.get(p.getUniqueId()) + "&r"));
+            if (CommandNick.nicks.containsKey(p.getUniqueId()))
+                p.setDisplayName(HexNicks.colorize(CommandNick.nicks.get(p.getUniqueId()) + "&r"));
         }
         if (HexNicks.instance.SQL.isConnected()) {
             HexNicks.instance.data.createPlayer(p);
             if (HexNicks.instance.data.getNickname(p.getUniqueId()) != null)
                 CommandNick.nicks.put(p.getUniqueId(), HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r");
-                p.setDisplayName(HexNicks.format(HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r"));
+                p.setDisplayName(HexNicks.colorize(HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r"));
         }
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setJoinMessage(HexNicks.format((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
+                e.setJoinMessage(HexNicks.colorize((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
             if (c.getBoolean("tab-nicknames")) {
-                p.setPlayerListName(HexNicks.format(CommandNick.nicks.get(p.getUniqueId())));
+                p.setPlayerListName(HexNicks.colorize(CommandNick.nicks.get(p.getUniqueId())));
             }
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        Player p = e.getPlayer(); String message = e.getQuitMessage();
+        FileConfiguration c = HexNicks.instance.getConfig();
+        Player p = e.getPlayer();
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
+                e.setQuitMessage(HexNicks.colorize((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
         } else {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setQuitMessage(HexNicks.format((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
+                e.setQuitMessage(HexNicks.colorize((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
+        FileConfiguration c = HexNicks.instance.getConfig();
         String message = e.getDeathMessage();
         Player p = e.getEntity(); Player killer = p.getKiller();
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("death-message-nicks")) {
                 if (killer != null) {
-                    e.setDeathMessage(HexNicks.format(message.replace(killer.getName(), CommandNick.nicks.get(killer.getUniqueId()) + "&r")
+                    e.setDeathMessage(HexNicks.colorize(message.replace(killer.getName(), CommandNick.nicks.get(killer.getUniqueId()) + "&r")
                             .replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 } else {
-                    e.setDeathMessage(HexNicks.format(message.replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
+                    e.setDeathMessage(HexNicks.colorize(message.replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 }
             }
         }
@@ -73,7 +75,7 @@ public class Listen implements Listener, TabCompleter {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         String message = e.getMessage();
-        e.setMessage(HexNicks.format(message));
+        e.setMessage(HexNicks.colorize(message));
     }
 
     @Override

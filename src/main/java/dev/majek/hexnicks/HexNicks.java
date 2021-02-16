@@ -1,18 +1,16 @@
-package me.majekdor.hexnicks;
+package dev.majek.hexnicks;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -27,6 +25,9 @@ public final class HexNicks extends JavaPlugin implements Listener {
     public HexNicks() {
         instance = this;
     }
+
+    /** Pattern matching "nicer" legacy hex chat color codes - &#rrggbb */
+    private static final Pattern NICER_HEX_COLOR_PATTERN = Pattern.compile("&#([0-9a-fA-F]{6})");
 
     public void saveNicks() {
         for(UUID uuid : CommandNick.nicks.keySet()) {
@@ -58,6 +59,7 @@ public final class HexNicks extends JavaPlugin implements Listener {
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void onEnable() {
         // Plugin startup logic
         FileConfiguration c = HexNicks.instance.getConfig();
@@ -77,12 +79,12 @@ public final class HexNicks extends JavaPlugin implements Listener {
         }
         this.nicknames = new DataManager(this);
         loadNicks();
-        int pluginId = 8764; Metrics metrics = new Metrics(this, pluginId); // Metric stuffs
+        new Metrics(this, 8764); // Metric stuffs
 
         this.saveDefaultConfig();
-        File configFile = new File(getDataFolder(), "config.yml"); String[] foo = new String[0];
+        File configFile = new File(getDataFolder(), "config.yml");
         try {
-            ConfigUpdater.update(instance, "config.yml", configFile, Arrays.asList(foo));
+            ConfigUpdater.update(instance, "config.yml", configFile, Collections.emptyList());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,6 +95,7 @@ public final class HexNicks extends JavaPlugin implements Listener {
         this.getCommand("nickcolor").setExecutor(new CommandNick());
         this.getCommand("nickcolor").setTabCompleter(new Listen());
         this.getCommand("nick").setTabCompleter(new Listen());
+        this.getCommand("hexreload").setExecutor(new CommandNick());
         this.getServer().getPluginManager().registerEvents(new Listen(), this);
     }
 
@@ -107,35 +110,43 @@ public final class HexNicks extends JavaPlugin implements Listener {
         }
     }
 
-    // Format hex color codes and standard minecraft color codes
-    public static final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-    public static String format(String msg) {
-        if (Bukkit.getVersion().contains("1.16")) {
-            Matcher match = pattern.matcher(msg);
-            while (match.find()) {
-                String color = msg.substring(match.start(), match.end());
-                msg = msg.replace(color, ChatColor.of(color) + "");
-                match = pattern.matcher(msg);
-            }
-        }
-        return ChatColor.translateAlternateColorCodes('&', msg);
-    }
-
     // Remove hex and standard color codes
     public static String removeColorCodes(String msg) {
         StringBuilder sb = new StringBuilder(msg.length());
         char[] chars =  msg.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
-            if (chars[i] == '&' || chars[i] == org.bukkit.ChatColor.COLOR_CHAR) {
+            if (chars[i] == '&' || chars[i] == ChatColor.COLOR_CHAR) {
                 ++i;
-                continue;
-            }
-            if (chars[i] == '#') {
-                i += 6;
                 continue;
             }
             sb.append(chars[i]);
         }
         return sb.toString();
+    }
+
+    /**
+     * Translates color codes in the given input string.
+     *
+     * @param string the string to "colorize"
+     * @return the colorized string
+     */
+    public static String colorize(String string) {
+        if (string == null)
+            return "null";
+
+        // Convert from the '&#rrggbb' hex color format to the '&x&r&r&g&g&b&b' one used by Bukkit.
+        Matcher matcher = NICER_HEX_COLOR_PATTERN.matcher(string);
+        StringBuffer sb = new StringBuffer();
+
+        while (matcher.find()) {
+            StringBuilder replacement = new StringBuilder(14).append("&x");
+            for (char character : matcher.group(1).toCharArray())
+                replacement.append('&').append(character);
+            matcher.appendReplacement(sb, replacement.toString());
+        }
+        matcher.appendTail(sb);
+
+        // Translate from '&' to '§' (section symbol)
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', sb.toString());
     }
 }

@@ -1,4 +1,4 @@
-package me.majekdor.hexnicks;
+package dev.majek.hexnicks;
 
 import org.bukkit.entity.Player;
 

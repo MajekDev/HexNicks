@@ -1,4 +1,4 @@
-package me.majekdor.hexnicks;
+package dev.majek.hexnicks;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

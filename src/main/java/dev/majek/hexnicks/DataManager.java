@@ -1,4 +1,4 @@
-package me.majekdor.hexnicks;
+package dev.majek.hexnicks;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

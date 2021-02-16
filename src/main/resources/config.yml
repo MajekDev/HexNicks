@@ -21,7 +21,6 @@ leave-message-format: '&7&l > &b%nickname% &rleft the game'
 # If set to true death messages will use the player's nickname instead of real name
 death-message-nicks: false
 
-
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false
@@ -31,3 +30,26 @@ database: ''
 username: ''
 password: ''
 use-ssl: false
+
+# Message Configuration
+# You may use standard Minecraft color codes here.
+no-permission: '&cYou do not have permission to use this command!'
+name-too-long: '&cThat nickname is too long!'
+name-too-short: '&cThat nickname is too short!'
+nickname-set: '&7Your nickname is now: &b%nick%&7!'
+other-nickname-set: '&7Player nickname set to: &b%nick%&7.'
+nickname-removed: '&7Nickname removed.'
+player-not-found: '&cPlayer not found!'
+only-color-codes: '&cYou may only use color codes and your name with this command!'
+config-reloaded: '&7Reloaded config file.'
+help-messages:
+  - '&7----------&cNickname &6Help&7----------'
+  - '&cUsage: &7/nick [player] <nickname>'
+  - '&7You may use hex and standard color codes.'
+  - '&7Use &c/nonick &7to remove your nickname.'
+  - '&7Use &c/nickcolor &7to just change the color.'
+  - '&7Use quotations around the nickname if you want to include spaces.'
+  - '&7Max nickname length not including colors is: &c%max%'
+spaces-prompt:
+  - '&cIt seems as if you have tried to add a space in your nickname.'
+  - '&cTo do this, use /nick "part1 part2" with quotations.'

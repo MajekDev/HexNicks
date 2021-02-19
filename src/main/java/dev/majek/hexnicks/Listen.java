@@ -79,7 +79,7 @@ public class Listen implements Listener, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias,
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias,
                                                 @NotNull String[] args) throws IllegalArgumentException {
         return Collections.emptyList();
     }

@@ -8,7 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -50,14 +52,14 @@ public class CommandNick implements CommandExecutor {
                     if (player.hasPermission("hexnicks.admin")) {
                         Player target = Bukkit.getPlayer(args[0]);
                         if (target == null) {
-                            nick = getNick(args, player);
+                            nick = getNickFromMsg(args, player);
                             if (nick.equals("%ERROR%"))
                                 return true;
                             setNick(player, nick, true);
                             return true;
                         }
                         args = (String[]) ArrayUtils.remove(args, 0);
-                        nick = getNick(args, player);
+                        nick = getNickFromMsg(args, player);
                         if (nick.equals("%ERROR%"))
                             return true;
                         setNick(target, nick, true);
@@ -65,7 +67,7 @@ public class CommandNick implements CommandExecutor {
                                 .replace("%nick%", nick)));
                         return true;
                     }
-                    nick = getNick(args, player);
+                    nick = getNickFromMsg(args, player);
                     if (nick.equals("%ERROR%"))
                         return true;
                     setNick(player, nick, true);
@@ -156,10 +158,12 @@ public class CommandNick implements CommandExecutor {
             FileConfiguration config = HexNicks.instance.getConfig();
             if (sender.hasPermission("hexnicks.admin")) {
                 HexNicks.instance.reloadConfig();
-                sender.sendMessage(HexNicks.colorize(config.getString("config-reloaded"))); return true;
+                HexNicks.instance.loadNicksFromJSON();
+                sender.sendMessage(HexNicks.colorize(config.getString("config-reloaded")));
             } else {
-                sender.sendMessage(HexNicks.colorize(config.getString("no-permission"))); return true;
+                sender.sendMessage(HexNicks.colorize(config.getString("no-permission")));
             }
+            return true;
         }
         return false;
     }
@@ -173,6 +177,13 @@ public class CommandNick implements CommandExecutor {
 
         nicks.put(player.getUniqueId(), nick);
 
+        try {
+            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), nick);
+        } catch (IOException | ParseException e) {
+            HexNicks.instance.getLogger().severe("Error saving nickname to nicknames.json data file.");
+            e.printStackTrace();
+        }
+
         // SQL shit
         if (HexNicks.instance.SQL.isConnected())
             HexNicks.instance.data.addNickname(player.getUniqueId(), nick);
@@ -180,7 +191,7 @@ public class CommandNick implements CommandExecutor {
             player.sendMessage(HexNicks.colorize((config.getString("nickname-set") + "").replace("%nick%", nick)));
     }
 
-    public String getNick(String[] args, Player player) {
+    public String getNickFromMsg(String[] args, Player player) {
         FileConfiguration config = HexNicks.instance.getConfig();
         String arguments = String.join(" ", args);
         String nick;

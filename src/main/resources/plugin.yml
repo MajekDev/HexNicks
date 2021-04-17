@@ -1,9 +1,10 @@
 name: HexNicks
-version: 1.3.1
+version: 1.4.0
 main: dev.majek.hexnicks.HexNicks
 api-version: 1.13
 authors: [Majekdor]
 description: Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
+softdepend: [PlaceholderAPI]
 commands:
   nick:
     description: Change your nickname.
@@ -27,4 +28,7 @@ permissions:
     description: Use /nickcolor if use-permissions is enabled in the config.yml
   hexnicks.admin:
     description: Ability to run HexNicks admin commands.
+    default: op
+  hexnicks.chat:
+    description: Ability to use color codes in chat if use-permissions is enabled in the config.yml
     default: op

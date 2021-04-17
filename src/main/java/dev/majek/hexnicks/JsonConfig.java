@@ -59,7 +59,7 @@ public class JsonConfig {
     }
 
     /**
-     * This returns the name of the configuration file with the .yml extension.
+     * This returns the name of the configuration file with the .json extension.
      * To get the file's directory, use {@link JsonConfig#getDirectory()}.
      *
      * @return The name of the configuration file, including file extensions.

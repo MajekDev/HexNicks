@@ -1,5 +1,9 @@
 package dev.majek.hexnicks;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -32,10 +36,15 @@ public class CommandNick implements CommandExecutor {
             FileConfiguration config = HexNicks.instance.getConfig();
             int max = config.getInt("max-length");
             int min = config.getInt("min-length");
+            String foo = "&#336633$This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo! &c and maybe some fancy ${hover,&ahover,WOOO} text? ${";
+
+            //player.sendMessage(TextUtils.parseExpression(BaseComponent.toLegacyText(BungeeComponentSerializer.get().serialize(MiniMessage.get().parse(HexNicks.applyColorCodes(foo))))));
+            //player.sendMessage(MiniMessage.get().parse("&#336633This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo!"));
+            //player.sendMessage(HexNicks.format("&#336633This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo!"));
 
             if (config.getBoolean("use-permissions", false)) {
                 if (!player.hasPermission("hexnicks.use")) {
-                    player.sendMessage(HexNicks.colorize(config.getString("no-permission")));
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
                     return true;
                 }
             }
@@ -44,7 +53,7 @@ public class CommandNick implements CommandExecutor {
                 String nick, noColor;
                 if (args[0].equalsIgnoreCase("help")) {
                     for (String string : config.getStringList("help-messages"))
-                        player.sendMessage(HexNicks.colorize(string.replace("%max%", String.valueOf(max))));
+                        player.sendMessage(TextUtils.applyColorCodes(string.replace("%max%", String.valueOf(max))));
                     return true;
                 }
 
@@ -55,130 +64,158 @@ public class CommandNick implements CommandExecutor {
                             nick = getNickFromMsg(args, player);
                             if (nick.equals("%ERROR%"))
                                 return true;
-                            setNick(player, nick, true);
+                            setNickname(player, nick, true);
                             return true;
                         }
                         args = (String[]) ArrayUtils.remove(args, 0);
                         nick = getNickFromMsg(args, player);
                         if (nick.equals("%ERROR%"))
                             return true;
-                        setNick(target, nick, true);
-                        player.sendMessage(HexNicks.colorize((config.getString("other-nickname-set") + "")
+                        setNickname(target, nick, true);
+                        player.sendMessage(TextUtils.applyColorCodes((config.getString("other-nickname-set") + "")
                                 .replace("%nick%", nick)));
                         return true;
                     }
                     nick = getNickFromMsg(args, player);
                     if (nick.equals("%ERROR%"))
                         return true;
-                    setNick(player, nick, true);
+                    setNickname(player, nick, true);
                 } else
                     nick = args[0];
 
-                noColor = HexNicks.removeColorCodes(nick);
+                noColor = getNickNoFormat(nick);
                 if (noColor.length() > max) {
-                    player.sendMessage(HexNicks.colorize(config.getString("name-too-long"))); return true;
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("name-too-long"))); return true;
                 }
                 if (noColor.length() < min) {
-                    player.sendMessage(HexNicks.colorize(config.getString("name-too-short"))); return true;
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("name-too-short"))); return true;
                 }
-                
-                setNick(player, nick, true);
+
+                setNickname(player, nick, true);
                 return true;
             } else
                return false;
         }
+
         if (cmd.getName().equalsIgnoreCase("nonick")) {
 
             // Sender isn't a player
             if (!(sender instanceof Player)) {
-                sender.sendMessage("You must be in-game to use this command."); return true;
+                sender.sendMessage("You must be in-game to use this command.");
+                return true;
             }
 
-            Player player = (Player) sender; FileConfiguration config = HexNicks.instance.getConfig();
+            Player player = (Player) sender;
+            FileConfiguration config = HexNicks.instance.getConfig();
 
             if (config.getBoolean("use-permissions")) {
                 if (!player.hasPermission("hexnicks.use")) {
-                    player.sendMessage(HexNicks.colorize(config.getString("no-permission")));
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
                     return true;
                 }
             }
 
-            if (player.hasPermission("hexnicks")) {
-                if (args.length > 0) {
-                    Player target = Bukkit.getPlayer(args[0]);
-                    if (target == null) {
-                        player.sendMessage(HexNicks.colorize(config.getString("player-not-found")));
-                        return true;
-                    }
-                    setNick(target, target.getName(), false);
-                    player.sendMessage(HexNicks.colorize(config.getString("nickname-removed")));
-                    target.sendMessage(HexNicks.colorize(config.getString("nickname-removed")));
+            if (args.length > 0) {
+                Player target = Bukkit.getPlayer(args[0]);
+                if (target == null) {
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("player-not-found")));
                     return true;
-                } else  {
-                    setNick(player, player.getName(), false);
-                    player.sendMessage(HexNicks.colorize(config.getString("nickname-removed")));
                 }
-            } else {
-                setNick(player, player.getName(), false);
-                player.sendMessage(HexNicks.colorize(config.getString("nickname-removed")));
+
+                setNickname(target, target.getName(), false);
+
+                player.sendMessage(TextUtils.applyColorCodes(config.getString("nickname-removed")));
+                target.sendMessage(TextUtils.applyColorCodes(config.getString("nickname-removed")));
+                return true;
+            } else  {
+
+                setNickname(player, player.getName(), false);
+
+                player.sendMessage(TextUtils.applyColorCodes(config.getString("nickname-removed")));
             }
+
             return true;
         }
+
         if (cmd.getName().equalsIgnoreCase("nickcolor")) {
 
             // Sender isn't a player
             if (!(sender instanceof Player)) {
-                sender.sendMessage("You must be in-game to use this command."); return true;
+                sender.sendMessage("You must be in-game to use this command.");
+                return true;
             }
 
-            Player player = (Player) sender; FileConfiguration config = HexNicks.instance.getConfig();
+            Player player = (Player) sender;
+            FileConfiguration config = HexNicks.instance.getConfig();
 
             if (config.getBoolean("use-permissions")) {
                 if (!player.hasPermission("hexnicks.changecolor")) {
-                    player.sendMessage(HexNicks.colorize(config.getString("no-permission")));
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
                     return true;
                 }
             }
             if (args.length == 1) {
                 String nick;
-                if (HexNicks.removeColorCodes(args[0]).equals("")) {
+                if (TextUtils.removeColorCodes(args[0]).equals("")) {
                     nick = args[0] + player.getName();
-                } else if (HexNicks.removeColorCodes(args[0]).equalsIgnoreCase(player.getName())) {
+                } else if (TextUtils.removeColorCodes(args[0]).equalsIgnoreCase(player.getName())) {
                     nick = args[0];
                 } else {
-                    player.sendMessage(HexNicks.colorize(config.getString("only-color-codes")));
+                    player.sendMessage(TextUtils.applyColorCodes(config.getString("only-color-codes")));
                     return true;
                 }
-                setNick(player, nick, true);
+
+                setNickname(player, nick, true);
+
                 return true;
             } else
                 return false;
         }
+
         if (cmd.getName().equalsIgnoreCase("hexreload")) {
             FileConfiguration config = HexNicks.instance.getConfig();
             if (sender.hasPermission("hexnicks.admin")) {
                 HexNicks.instance.reloadConfig();
                 HexNicks.instance.loadNicksFromJSON();
-                sender.sendMessage(HexNicks.colorize(config.getString("config-reloaded")));
+                sender.sendMessage(TextUtils.applyColorCodes(config.getString("config-reloaded")));
             } else {
-                sender.sendMessage(HexNicks.colorize(config.getString("no-permission")));
+                sender.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
             }
             return true;
         }
         return false;
     }
 
-    public void setNick(Player player, String nick, boolean sendMessage) {
+    public static String getNickNoFormat(String nick) {
+        // Separate lines to help with debugging if something goes wrong
+        String finalNick = nick;
+        finalNick = TextUtils.applyColorCodes(finalNick);
+        Component nickComp = MiniMessage.get().parse(finalNick);
+        BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
+        finalNick = BaseComponent.toLegacyText(nickBase);
+        return TextUtils.removeColorCodes(finalNick);
+    }
+
+    public static void setNickname(Player player, String nick, boolean sendMessage) {
         FileConfiguration config = HexNicks.instance.getConfig();
-        player.setDisplayName(HexNicks.colorize(nick + "&r"));
+
+        // Separate lines to help with debugging if something goes wrong
+        String finalNick = nick;
+        finalNick = TextUtils.applyColorCodes(finalNick);
+        Component nickComp = MiniMessage.get().parse(finalNick);
+        BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
+        finalNick = BaseComponent.toLegacyText(nickBase);
+        finalNick = finalNick + "&r&f";
+
+        player.setDisplayName(TextUtils.applyColorCodes(finalNick));
 
         if (config.getBoolean("tab-nicknames"))
-            player.setPlayerListName(HexNicks.colorize(nick));
+            player.setPlayerListName(TextUtils.applyColorCodes(finalNick));
 
-        nicks.put(player.getUniqueId(), nick);
+        nicks.put(player.getUniqueId(), TextUtils.applyColorCodes(finalNick));
 
         try {
-            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), nick);
+            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), TextUtils.applyColorCodes(finalNick));
         } catch (IOException | ParseException e) {
             HexNicks.instance.getLogger().severe("Error saving nickname to nicknames.json data file.");
             e.printStackTrace();
@@ -186,14 +223,15 @@ public class CommandNick implements CommandExecutor {
 
         // SQL shit
         if (HexNicks.instance.SQL.isConnected())
-            HexNicks.instance.data.addNickname(player.getUniqueId(), nick);
+            HexNicks.instance.data.addNickname(player.getUniqueId(), finalNick);
         if (sendMessage)
-            player.sendMessage(HexNicks.colorize((config.getString("nickname-set") + "").replace("%nick%", nick)));
+            player.sendMessage(TextUtils.applyColorCodes((config.getString("nickname-set") + "").replace("%nick%", finalNick)));
     }
 
     public String getNickFromMsg(String[] args, Player player) {
         FileConfiguration config = HexNicks.instance.getConfig();
         String arguments = String.join(" ", args);
+
         String nick;
         int count = 0;
         for (char c : arguments.toCharArray())
@@ -207,7 +245,7 @@ public class CommandNick implements CommandExecutor {
             nick = args[0];
         else {
             for (String string : config.getStringList("spaces-prompt"))
-                player.sendMessage(HexNicks.colorize(string));
+                player.sendMessage(TextUtils.applyColorCodes(string));
             return "%ERROR%";
         }
         return nick;

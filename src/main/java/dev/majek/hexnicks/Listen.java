@@ -24,19 +24,19 @@ public class Listen implements Listener, TabCompleter {
         Player p = e.getPlayer();
         if (!c.getBoolean("database-enabled")) {
             if (CommandNick.nicks.containsKey(p.getUniqueId()))
-                p.setDisplayName(HexNicks.colorize(CommandNick.nicks.get(p.getUniqueId()) + "&r"));
+                p.setDisplayName(TextUtils.applyColorCodes(CommandNick.nicks.get(p.getUniqueId()) + "&r&f"));
         }
         if (HexNicks.instance.SQL.isConnected()) {
             HexNicks.instance.data.createPlayer(p);
             if (HexNicks.instance.data.getNickname(p.getUniqueId()) != null)
-                CommandNick.nicks.put(p.getUniqueId(), HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r");
-                p.setDisplayName(HexNicks.colorize(HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r"));
+                CommandNick.nicks.put(p.getUniqueId(), HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r&f");
+                p.setDisplayName(TextUtils.applyColorCodes(HexNicks.instance.data.getNickname(p.getUniqueId()) + "&r&f"));
         }
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setJoinMessage(HexNicks.colorize((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
+                e.setJoinMessage(TextUtils.applyColorCodes((c.getString("join-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
             if (c.getBoolean("tab-nicknames")) {
-                p.setPlayerListName(HexNicks.colorize(CommandNick.nicks.get(p.getUniqueId())));
+                p.setPlayerListName(TextUtils.applyColorCodes(CommandNick.nicks.get(p.getUniqueId())));
             }
         }
     }
@@ -47,10 +47,10 @@ public class Listen implements Listener, TabCompleter {
         Player p = e.getPlayer();
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setQuitMessage(HexNicks.colorize((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
+                e.setQuitMessage(TextUtils.applyColorCodes((c.getString("leave-message-format")).replace("%nickname%", CommandNick.nicks.get(p.getUniqueId()))));
         } else {
             if (c.getBoolean("joinleave-message-nicks"))
-                e.setQuitMessage(HexNicks.colorize((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
+                e.setQuitMessage(TextUtils.applyColorCodes((c.getString("leave-message-format")).replace("%nickname%", p.getDisplayName())));
         }
     }
 
@@ -62,10 +62,10 @@ public class Listen implements Listener, TabCompleter {
         if (CommandNick.nicks.containsKey(p.getUniqueId())) {
             if (c.getBoolean("death-message-nicks")) {
                 if (killer != null) {
-                    e.setDeathMessage(HexNicks.colorize(message.replace(killer.getName(), CommandNick.nicks.get(killer.getUniqueId()) + "&r")
+                    e.setDeathMessage(TextUtils.applyColorCodes(message.replace(killer.getName(), CommandNick.nicks.get(killer.getUniqueId()) + "&r")
                             .replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 } else {
-                    e.setDeathMessage(HexNicks.colorize(message.replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
+                    e.setDeathMessage(TextUtils.applyColorCodes(message.replace(p.getName(), CommandNick.nicks.get(p.getUniqueId()) + "&r")));
                 }
             }
         }
@@ -73,8 +73,16 @@ public class Listen implements Listener, TabCompleter {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
+        if (!HexNicks.instance.getConfig().getBoolean("format-chat"))
+            return;
         String message = e.getMessage();
-        e.setMessage(HexNicks.colorize(message));
+        Player player = e.getPlayer();
+        if (HexNicks.instance.getConfig().getBoolean("use-permissions")) {
+            if (player.hasPermission("hexnicks.chat"))
+                e.setMessage(TextUtils.applyColorCodes(message));
+        } else
+            e.setMessage(TextUtils.applyColorCodes(message));
+
     }
 
     @Override

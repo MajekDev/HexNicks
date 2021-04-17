@@ -1,4 +1,4 @@
-# HexNicks created by Majekdor on August 27th, 2020 | Need help? Message me on Discord @Majekdor#6346
+# HexNicks created by Majekdor on August 27th, 2020 | Need help? https://discord.majek.dev/
 
 # Maximum number of characters allowed in a nickname (not including any color codes)
 max-length: 20
@@ -11,6 +11,10 @@ use-permissions: false
 
 # If set to true then players nicknames will be shown in the tablist
 tab-nicknames: false
+
+# Whether or not to format color codes in chat
+# If use-permissions is enabled this requires hexnicks.chat permisison node
+format-chat: false
 
 # If set to true join and leave messages will use the player's nickname instead of real name
 # The formatting will only be used if joinleave-message-nicks is set to true

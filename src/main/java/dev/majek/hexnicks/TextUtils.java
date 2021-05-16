@@ -6,7 +6,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.json.JSONException;
 
@@ -34,7 +33,7 @@ public class TextUtils {
      * @param blockDarkColors Whether or not to disallow colors that are too dark.
      * @return Formatted string.
      */
-    public static String applyColorCodes(String string, boolean blockDarkColors) {
+    public static String applyColorCodes(String string, boolean blockDarkColors, boolean noHex) {
         // Do this first so it doesn't affect &0 in hex codes since they haven't been formatted
         if (blockDarkColors)
             string = string.replace("&0", "");
@@ -46,7 +45,7 @@ public class TextUtils {
             StringBuilder replacement = new StringBuilder(14).append("&x");
             for (char character : matcher6.group(1).toCharArray())
                 replacement.append('&').append(character);
-            if (blockDarkColors && getLuminescence(replacement.toString()) < 16)
+            if ((blockDarkColors && getLuminescence(replacement.toString()) < 16) || noHex)
                 matcher6.appendReplacement(sb6, "");
             else
                 matcher6.appendReplacement(sb6, replacement.toString());
@@ -61,7 +60,7 @@ public class TextUtils {
             StringBuilder replacement = new StringBuilder(14).append("&x");
             for (char character : matcher3.group(1).toCharArray())
                 replacement.append('&').append(character).append('&').append(character);
-            if (blockDarkColors && getLuminescence(replacement.toString()) < 16)
+            if ((blockDarkColors && getLuminescence(replacement.toString()) < 16) || noHex)
                 matcher3.appendReplacement(sb3, "");
             else
                 matcher3.appendReplacement(sb3, replacement.toString());
@@ -73,14 +72,14 @@ public class TextUtils {
     }
 
     /**
-     * Apply color codes using {@link TextUtils#applyColorCodes(String, boolean)}
+     * Apply color codes using {@link TextUtils#applyColorCodes(String, boolean, boolean)}
      * and defaulting blockDarkColors to false.
      *
      * @param string The string to colorize.
      * @return Formatted string.
      */
     public static String applyColorCodes(String string) {
-        return applyColorCodes(string, false);
+        return applyColorCodes(string, false, false);
     }
 
     /**

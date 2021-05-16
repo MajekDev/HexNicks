@@ -1,5 +1,5 @@
 name: HexNicks
-version: 1.4.0
+version: 1.4.1
 main: dev.majek.hexnicks.HexNicks
 api-version: 1.13
 authors: [Majekdor]
@@ -23,9 +23,13 @@ commands:
 permissions:
   hexnicks.use:
     description: Use /nick if use-permissions is enabled in the config.yml
-    children: [hexnicks.changecolor]
+    children: [hexnicks.changecolor, hexnicks.colors.normal, hexnicks.colors.hex]
   hexnicks.changecolor:
     description: Use /nickcolor if use-permissions is enabled in the config.yml
+  hexnicks.colors.normal:
+    description: Ability to use normal color codes in nicknames
+  hexnicks.colors.hex:
+    description: Ability to use hex color codes in nicknames
   hexnicks.admin:
     description: Ability to run HexNicks admin commands.
     default: op

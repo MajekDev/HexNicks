@@ -189,7 +189,6 @@ public class CommandNick implements CommandExecutor {
     public static String getNickNoFormat(String nick) {
         // Separate lines to help with debugging if something goes wrong
         String finalNick = nick;
-        finalNick = TextUtils.applyColorCodes(finalNick);
         Component nickComp = MiniMessage.get().parse(finalNick);
         BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
         finalNick = BaseComponent.toLegacyText(nickBase);
@@ -200,22 +199,26 @@ public class CommandNick implements CommandExecutor {
         FileConfiguration config = HexNicks.instance.getConfig();
 
         // Separate lines to help with debugging if something goes wrong
-        String finalNick = nick;
-        finalNick = TextUtils.applyColorCodes(finalNick);
-        Component nickComp = MiniMessage.get().parse(finalNick);
-        BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
-        finalNick = BaseComponent.toLegacyText(nickBase);
-        finalNick = finalNick + "&r&f";
+        String finalNick = nick + "&r&f";
+        if (player.hasPermission("hexnicks.colors.hex")) {
+            Component nickComp = MiniMessage.get().parse(finalNick);
+            BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
+            finalNick = BaseComponent.toLegacyText(nickBase);
+            finalNick = TextUtils.applyColorCodes(finalNick);
+        } else if (player.hasPermission("hexnicks.colors.normal"))
+            finalNick = TextUtils.applyColorCodes(finalNick, false, true);
+        else
+            finalNick = TextUtils.removeColorCodes(finalNick);
 
-        player.setDisplayName(TextUtils.applyColorCodes(finalNick));
+        player.setDisplayName(finalNick);
 
         if (config.getBoolean("tab-nicknames"))
-            player.setPlayerListName(TextUtils.applyColorCodes(finalNick));
+            player.setPlayerListName(finalNick);
 
-        nicks.put(player.getUniqueId(), TextUtils.applyColorCodes(finalNick));
+        nicks.put(player.getUniqueId(), finalNick);
 
         try {
-            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), TextUtils.applyColorCodes(finalNick));
+            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), finalNick);
         } catch (IOException | ParseException e) {
             HexNicks.instance.getLogger().severe("Error saving nickname to nicknames.json data file.");
             e.printStackTrace();

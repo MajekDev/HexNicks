@@ -1,5 +1,5 @@
 name: HexNicks
-version: 1.4.1
+version: ${project.version}
 main: dev.majek.hexnicks.HexNicks
 api-version: 1.13
 authors: [Majekdor]

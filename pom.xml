@@ -39,6 +39,28 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>dev.majek.libs.com.google</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori</pattern>
+                                    <shadedPattern>dev.majek.libs.net.kyori</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.checkerframework</pattern>
+                                    <shadedPattern>dev.majek.libs.org.checkerframework</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.intellij</pattern>
+                                    <shadedPattern>dev.majek.libs.org.intellij</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jetbrains</pattern>
+                                    <shadedPattern>dev.majek.libs.org.jetbrains</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>

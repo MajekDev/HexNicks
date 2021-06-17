@@ -6,7 +6,7 @@
 
     <groupId>dev.majek.hexnicks</groupId>
     <artifactId>HexNicks</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
@@ -14,7 +14,7 @@
     <description>Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
     </description>
     <properties>
-        <java.version>1.8</java.version>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -25,8 +25,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -40,6 +39,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.8.0</version>
+            <version>4.8.1</version>
         </dependency>
         <!-- Adventure - Bukkit Specific -->
         <dependency>

@@ -6,7 +6,7 @@
 
     <groupId>dev.majek.hexnicks</groupId>
     <artifactId>HexNicks</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
@@ -109,20 +109,30 @@
         <!-- Adventure API -->
         <dependency>
             <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Adventure API -->
+        <dependency>
+            <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Adventure Serializers -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.8.1</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Adventure - Bukkit Specific -->
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
+            <artifactId>adventure-text-serializer-bungeecord</artifactId>
             <version>4.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!-- JSON -->
         <dependency>
@@ -136,6 +146,13 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.7</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

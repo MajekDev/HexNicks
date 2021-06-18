@@ -199,12 +199,12 @@ public class CommandNick implements CommandExecutor {
         FileConfiguration config = HexNicks.instance.getConfig();
 
         // Separate lines to help with debugging if something goes wrong
-        String finalNick = nick + "&r&f";
+        String finalNick = nick;
         if (player.hasPermission("hexnicks.colors.hex")) {
             Component nickComp = MiniMessage.get().parse(finalNick);
             BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
             finalNick = BaseComponent.toLegacyText(nickBase);
-            finalNick = TextUtils.applyColorCodes(finalNick);
+            finalNick = TextUtils.applyColorCodes(finalNick + "&r&f");
         } else if (player.hasPermission("hexnicks.colors.normal"))
             finalNick = TextUtils.applyColorCodes(finalNick, false, true);
         else

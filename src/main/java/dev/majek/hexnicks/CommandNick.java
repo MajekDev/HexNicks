@@ -36,17 +36,10 @@ public class CommandNick implements CommandExecutor {
             FileConfiguration config = HexNicks.instance.getConfig();
             int max = config.getInt("max-length");
             int min = config.getInt("min-length");
-            String foo = "&#336633$This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo! &c and maybe some fancy ${hover,&ahover,WOOO} text? ${";
 
-            //player.sendMessage(TextUtils.parseExpression(BaseComponent.toLegacyText(BungeeComponentSerializer.get().serialize(MiniMessage.get().parse(HexNicks.applyColorCodes(foo))))));
-            //player.sendMessage(MiniMessage.get().parse("&#336633This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo!"));
-            //player.sendMessage(HexNicks.format("&#336633This is a &btest message with a <gradient:#00a5e3:#8dd7bf>gradient</gradient> &fwoo!"));
-
-            if (config.getBoolean("use-permissions", false)) {
-                if (!player.hasPermission("hexnicks.use")) {
-                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
-                    return true;
-                }
+            if (!player.hasPermission("hexnicks.nick")) {
+                player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
+                return true;
             }
 
             if (args.length >= 1) {
@@ -108,11 +101,9 @@ public class CommandNick implements CommandExecutor {
             Player player = (Player) sender;
             FileConfiguration config = HexNicks.instance.getConfig();
 
-            if (config.getBoolean("use-permissions")) {
-                if (!player.hasPermission("hexnicks.use")) {
-                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
-                    return true;
-                }
+            if (!player.hasPermission("hexnicks.nonick")) {
+                player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
+                return true;
             }
 
             if (args.length > 0) {
@@ -130,7 +121,6 @@ public class CommandNick implements CommandExecutor {
             } else  {
 
                 setNickname(player, player.getName(), false);
-
                 player.sendMessage(TextUtils.applyColorCodes(config.getString("nickname-removed")));
             }
 
@@ -148,12 +138,11 @@ public class CommandNick implements CommandExecutor {
             Player player = (Player) sender;
             FileConfiguration config = HexNicks.instance.getConfig();
 
-            if (config.getBoolean("use-permissions")) {
-                if (!player.hasPermission("hexnicks.changecolor")) {
-                    player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
-                    return true;
-                }
+            if (!player.hasPermission("hexnicks.nickcolor")) {
+                player.sendMessage(TextUtils.applyColorCodes(config.getString("no-permission")));
+                return true;
             }
+
             if (args.length == 1) {
                 String nick;
                 if (TextUtils.removeColorCodes(args[0]).equals("")) {
@@ -174,7 +163,7 @@ public class CommandNick implements CommandExecutor {
 
         if (cmd.getName().equalsIgnoreCase("hexreload")) {
             FileConfiguration config = HexNicks.instance.getConfig();
-            if (sender.hasPermission("hexnicks.admin")) {
+            if (sender.hasPermission("hexnicks.reload")) {
                 HexNicks.instance.reloadConfig();
                 HexNicks.instance.loadNicksFromJSON();
                 sender.sendMessage(TextUtils.applyColorCodes(config.getString("config-reloaded")));
@@ -199,26 +188,25 @@ public class CommandNick implements CommandExecutor {
         FileConfiguration config = HexNicks.instance.getConfig();
 
         // Separate lines to help with debugging if something goes wrong
-        String finalNick = nick;
         if (player.hasPermission("hexnicks.colors.hex")) {
-            Component nickComp = MiniMessage.get().parse(finalNick);
+            Component nickComp = MiniMessage.get().parse(nick);
             BaseComponent[] nickBase = BungeeComponentSerializer.get().serialize(nickComp);
-            finalNick = BaseComponent.toLegacyText(nickBase);
-            finalNick = TextUtils.applyColorCodes(finalNick + "&r&f");
+            nick = BaseComponent.toLegacyText(nickBase);
+            nick = TextUtils.applyColorCodes(nick + "&r&f");
         } else if (player.hasPermission("hexnicks.colors.normal"))
-            finalNick = TextUtils.applyColorCodes(finalNick, false, true);
+            nick = TextUtils.applyColorCodes(nick, false, true);
         else
-            finalNick = TextUtils.removeColorCodes(finalNick);
+            nick = TextUtils.removeColorCodes(nick);
 
-        player.setDisplayName(finalNick);
+        player.setDisplayName(nick);
 
         if (config.getBoolean("tab-nicknames"))
-            player.setPlayerListName(finalNick);
+            player.setPlayerListName(nick);
 
-        nicks.put(player.getUniqueId(), finalNick);
+        nicks.put(player.getUniqueId(), nick);
 
         try {
-            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), finalNick);
+            HexNicks.instance.jsonConfig.putInJSONObject(player.getUniqueId().toString(), nick);
         } catch (IOException | ParseException e) {
             HexNicks.instance.getLogger().severe("Error saving nickname to nicknames.json data file.");
             e.printStackTrace();
@@ -226,9 +214,9 @@ public class CommandNick implements CommandExecutor {
 
         // SQL shit
         if (HexNicks.instance.SQL.isConnected())
-            HexNicks.instance.data.addNickname(player.getUniqueId(), finalNick);
+            HexNicks.instance.data.addNickname(player.getUniqueId(), nick);
         if (sendMessage)
-            player.sendMessage(TextUtils.applyColorCodes((config.getString("nickname-set") + "").replace("%nick%", finalNick)));
+            player.sendMessage(TextUtils.applyColorCodes((config.getString("nickname-set") + "").replace("%nick%", nick)));
     }
 
     public String getNickFromMsg(String[] args, Player player) {

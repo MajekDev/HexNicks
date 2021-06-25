@@ -10,29 +10,45 @@ commands:
     description: Change your nickname.
     aliases: [nickname]
     usage: /nick [player] <nickname> | Use /nick help for more
+    permission: hexnicks.nick
   nickcolor:
     description: Change just the color of your nickname.
     aliases: [colornick]
     usage: /nick <colorcode>
+    permission: hexnicks.nickcolor
   nonick:
     description: Remove you nickname.
     usage: /nonick [player]
+    permission: hexnicks.nonick
   hexreload:
     description: Reload the plugin config file and data file.
+    permission: hexnicks.reload
 
 permissions:
-  hexnicks.use:
-    description: Use /nick if use-permissions is enabled in the config.yml
-    children: [hexnicks.changecolor, hexnicks.colors.normal, hexnicks.colors.hex]
-  hexnicks.changecolor:
-    description: Use /nickcolor if use-permissions is enabled in the config.yml
+  hexnicks.nick:
+    description: Permission to use /nick with normal and hex color codes.
+    children:
+      - hexnicks.colors.normal
+      - hexnicks.colors.hex
+    default: true
+  hexnicks.nickcolor:
+    description: Permission to use /nickcolor with normal and hex color codes.
+    children:
+      - hexnicks.colors.normal
+      - hexnicks.colors.hex
+    default: true
   hexnicks.colors.normal:
-    description: Ability to use normal color codes in nicknames
+    description: Ability to use normal color codes in nicknames.
   hexnicks.colors.hex:
-    description: Ability to use hex color codes in nicknames
+    description: Ability to use hex color codes in nicknames.
   hexnicks.admin:
     description: Ability to run HexNicks admin commands.
+    children:
+      - hexnicks.reload
+    default: op
+  hexnicks.reload:
+    description: Permission to reload the plugin.
     default: op
   hexnicks.chat:
-    description: Ability to use color codes in chat if use-permissions is enabled in the config.yml
-    default: op
+    description: Permission to use color codes in chat.
+    default: true

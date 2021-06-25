@@ -7,6 +7,7 @@ max-length: 20
 min-length: 3
 
 # If set to true only players with permission hexnicks.use will be able to use /nick (false by default)
+# No longer does anything, all permissions are given by default. Must be negated with permission manager,
 use-permissions: false
 
 # If set to true then players nicknames will be shown in the tablist

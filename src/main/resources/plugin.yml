@@ -1,54 +1,48 @@
 name: HexNicks
 version: ${project.version}
-main: dev.majek.hexnicks.HexNicks
+main: dev.majek.hexnicks.Nicks
 api-version: 1.13
 authors: [Majekdor]
-description: Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
-softdepend: [PlaceholderAPI]
+description: ${project.description}
+softdepend: [PlaceholderAPI, Vault]
 commands:
   nick:
     description: Change your nickname.
-    aliases: [nickname]
-    usage: /nick [player] <nickname> | Use /nick help for more
+    usage: /nick <nickname>
     permission: hexnicks.nick
-  nickcolor:
-    description: Change just the color of your nickname.
-    aliases: [colornick]
-    usage: /nick <colorcode>
-    permission: hexnicks.nickcolor
+  nickother:
+    description: Change the nickname of another player.
+    usage: /nickother <player> <nickname>
+    permission: hexnicks.nick.other
   nonick:
-    description: Remove you nickname.
+    description: Remove your nickname entirely.
     usage: /nonick [player]
     permission: hexnicks.nonick
-  hexreload:
-    description: Reload the plugin config file and data file.
+  nickcolor:
+    description: Change the color of your nickname.
+    usage: /nickcolor <color>
+    permission: hexnicks.nickcolor
+  nicksreload:
+    description: Reload the plugin.
+    usage: /nicksreload
     permission: hexnicks.reload
 
 permissions:
   hexnicks.nick:
-    description: Permission to use /nick with normal and hex color codes.
-    children:
-      - hexnicks.colors.normal
-      - hexnicks.colors.hex
+    description: Permission to change nicknames.
     default: true
-  hexnicks.nickcolor:
-    description: Permission to use /nickcolor with normal and hex color codes.
-    children:
-      - hexnicks.colors.normal
-      - hexnicks.colors.hex
-    default: true
-  hexnicks.colors.normal:
-    description: Ability to use normal color codes in nicknames.
-  hexnicks.colors.hex:
-    description: Ability to use hex color codes in nicknames.
-  hexnicks.admin:
-    description: Ability to run HexNicks admin commands.
-    children:
-      - hexnicks.reload
+  hexnicks.nick.other:
+    description: Permission to change other player's nicknames.
     default: op
+  hexnicks.nonick:
+    description: Permission to remove nicknames.
+    default: true
+  hexnicks.nonick.other:
+    description: Permission to remove other player's nicknames.
+    default: op
+  hexnicks.nickcolor:
+    description: Permission to change color of nickname.
+    default: true
   hexnicks.reload:
     description: Permission to reload the plugin.
     default: op
-  hexnicks.chat:
-    description: Permission to use color codes in chat.
-    default: true

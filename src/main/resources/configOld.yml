@@ -1,0 +1,60 @@
+# HexNicks created by Majekdor on August 27th, 2020 | Need help? https://discord.majek.dev/
+
+# Maximum number of characters allowed in a nickname (not including any color codes)
+max-length: 20
+
+# Minimum number of characters allowed in a nickname (not including any color codes)
+min-length: 3
+
+# If set to true only players with permission hexnicks.use will be able to use /nick (false by default)
+# No longer does anything, all permissions are given by default. Must be negated with permission manager,
+use-permissions: false
+
+# If set to true then players nicknames will be shown in the tablist
+tab-nicknames: false
+
+# Whether or not to format color codes in chat
+# If use-permissions is enabled this requires hexnicks.chat permisison node
+format-chat: false
+
+# If set to true join and leave messages will use the player's nickname instead of real name
+# The formatting will only be used if joinleave-message-nicks is set to true
+joinleave-message-nicks: false
+join-message-format: '&7&l > &b%nickname% &rjoined the game'
+leave-message-format: '&7&l > &b%nickname% &rleft the game'
+
+# If set to true death messages will use the player's nickname instead of real name
+death-message-nicks: false
+
+# Database settings
+# Only enable this if you know what you're doing and have an existing database
+database-enabled: false
+host: ''
+port: ''
+database: ''
+username: ''
+password: ''
+use-ssl: false
+
+# Message Configuration
+# You may use standard Minecraft color codes here.
+no-permission: '&cYou do not have permission to use this command!'
+name-too-long: '&cThat nickname is too long!'
+name-too-short: '&cThat nickname is too short!'
+nickname-set: '&7Your nickname is now: &b%nick%&7!'
+other-nickname-set: '&7Player nickname set to: &b%nick%&7.'
+nickname-removed: '&7Nickname removed.'
+player-not-found: '&cPlayer not found!'
+only-color-codes: '&cYou may only use color codes and your name with this command!'
+config-reloaded: '&7Reloaded config file.'
+help-messages:
+  - '&7----------&cNickname &6Help&7----------'
+  - '&cUsage: &7/nick [player] <nickname>'
+  - '&7You may use hex and standard color codes.'
+  - '&7Use &c/nonick &7to remove your nickname.'
+  - '&7Use &c/nickcolor &7to just change the color.'
+  - '&7Use quotations around the nickname if you want to include spaces.'
+  - '&7Max nickname length not including colors is: &c%max%'
+spaces-prompt:
+  - '&cIt seems as if you have tried to add a space in your nickname.'
+  - '&cTo do this, use /nick "part1 part2" with quotations.'

@@ -6,17 +6,30 @@
 
     <groupId>dev.majek.hexnicks</groupId>
     <artifactId>HexNicks</artifactId>
-    <version>1.4.4</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
 
-    <description>Allow users to give themselves nicknames using hex color codes and use hex color codes in chat.
-    </description>
+    <description>Simple nickname plugin with hex color code and gradient support.</description>
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>majek-repo</id>
+            <name>Majekdor repository</name>
+            <url>https://repo.majek.dev/releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <url>https://repository.apache.org/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <plugins>
@@ -25,13 +38,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>11</release>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -42,23 +56,39 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.google</pattern>
-                                    <shadedPattern>dev.majek.libs.com.google</shadedPattern>
+                                    <shadedPattern>dev.majek.relocations.com.google</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>net.kyori</pattern>
-                                    <shadedPattern>dev.majek.libs.net.kyori</shadedPattern>
+                                    <pattern>net.kyori.adventure.text.minimessage</pattern>
+                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.minimessage</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori.adventure.text.serializer.plain</pattern>
+                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.plain</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori.adventure.text.serializer.legacy</pattern>
+                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.legacy</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori.adventure.text.serializer.gson</pattern>
+                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.gson</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.checkerframework</pattern>
-                                    <shadedPattern>dev.majek.libs.org.checkerframework</shadedPattern>
+                                    <shadedPattern>dev.majek.relocations.org.checkerframework</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.intellij</pattern>
-                                    <shadedPattern>dev.majek.libs.org.intellij</shadedPattern>
+                                    <shadedPattern>dev.majek.relocations.org.intellij</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.jetbrains</pattern>
-                                    <shadedPattern>dev.majek.libs.org.jetbrains</shadedPattern>
+                                    <shadedPattern>dev.majek.relocations.org.jetbrains</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>dev.majek.relocations.org.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>true</minimizeJar>
@@ -89,6 +119,10 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -113,32 +147,40 @@
             <version>4.8.1</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Adventure API -->
+        <!-- Adventure Platform Bukkit -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bukkit</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- MiniMessage -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Adventure Serializers -->
+        <!-- Adventure Legacy Serializer -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.8.1</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Adventure - Bukkit Specific -->
+        <!-- Adventure Gson Serializer -->
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-bungeecord</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.8.1</version>
             <scope>compile</scope>
         </dependency>
-        <!-- JSON -->
+        <!-- Adventure Plain Text Serializer -->
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20210307</version>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>4.8.1</version>
+            <scope>compile</scope>
         </dependency>
         <!-- PlaceholderAPI -->
         <dependency>
@@ -153,6 +195,20 @@
             <artifactId>gson</artifactId>
             <version>2.8.7</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Vault -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

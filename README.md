@@ -1,28 +1,27 @@
+<img align="right" src="https://raw.githubusercontent.com/Majekdor/HexNicks/master/hexnicks.png" height="200" width="200">
+
 # HexNicks
 
-## What is HexNicks?
+HexNicks is a simple nickname plugin that allows players to set their nickname to anything they like containing normal colors, hex colors, and even gradients! It fully supports Spigot and Paper, though forks of those should work as well. There are only a few commands and permissions to limit what players use what commands. Though the plugin does have support for MySQL storage, it's mostly intended to be a simple nickname plugin for smaller Spigot/Paper servers.
 
-HexNicks gives players the ability to change their nickname to anything they like using both hex color codes and normal color codes. It also adds the ability to use hex color codes in chat.
+## Commands
 
-Why did I create such a basic plugin?
+There are 5 plugin commands:
+- `/nick <nickname>` - Set your own nickname.
+- `/nickother <player> <nickname>` - Set another player's nickname.
+- `/nonick [player]` - Remove your nickname or another player's nickname.
+- `/nickcolor <color>` - Change the color of your nickname.
+- `/nicksreload` - Reload the plugin.
 
-Because I hadn't seen one like it (doesn't mean there isn't one) and a lot of people seem quite taken with the added support for hex codes, so here's an easy way for small servers to implement them.
+## Permissions
 
-## Commands:
-
-`/nick <nickname>` - change your nickname
-
-`/nick help` - get help :p
-
-`/nonick` - remove your nickname
-
-## How to use:
-
-You can find the standard Minecraft color codes here, for hex color codes you must use the format &#rrggbb. I've left an image below displaying a lot of different color codes. Simply add the &# before one of the codes shown below to include that color in your name.
-
-## Permissions:
-
-By default, everyone can change their nicknames. If you want only a certain group to be able to, you can enable permissions in the config file and then only players with hexnicks.use will be able to change their nicknames.
+`hexnicks.nick`, `hexnicks.nonick`, and `hexnicks.nickcolor` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/).
+- `hexnicks.nick` - Permission to change your own nickname.
+- `hexnicks.nick.other` - Permissions to change other player's nicknames.
+- `hexnicks.nonick` - Permission to remove your own nickname.
+- `hexnicks.nonick.other` - Permission to remove other player's nicknames.
+- `hexnicks.nickcolor` - Permission to change your nickname color.
+- `hexnicks.reload` - Permission to reload the plugin.
 
 ## Introducing gradients!
 
@@ -41,6 +40,39 @@ I'll just leave this here for you :)
 
 <img align="middle" src="https://i.pinimg.com/originals/f2/08/30/f2083044743edea046c2bc16b082b4fe.gif" height="900" width="800">
 
-## Need Help?
+## For the nerds... I mean devs :P
 
-Message me through [discord](https://discord.majek.dev) or [spigot](https://www.spigotmc.org/resources/hexnicks-now-with-gradient-support.83554/) and I'll try to get back to you as soon as possible!
+PaperNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api). No JavaDocs yet.
+
+Event example:
+```java
+@EventHandler
+public void onNickname(SetNickEvent event) {
+  Player player = event.player();
+  player.sendMessage("Setting nickname...");
+  event.newNick(Component.text("New nickname"));
+}
+```
+
+There are multiple ways to retrieve nicknames, but the easiest way is:
+```java
+Nicks.api().getNick(player); // You can pass thru a player, offlineplayer, or uuid
+```
+
+## Support
+
+If you need help with the plugin and can't find the answer here or on Spigot, then the best way to get help is to join my [Discord](https://discord.gg/CGgvDUz). Make sure you read the frequently-asked channel before posting in the bug-reports channel (if it's a bug) or in the simple-homes channel (for general help).
+
+If you have discovered a bug you can either join my [Discord](https://discord.gg/CGgvDUz) and report it there or open an issue here on GitHub. Please do not message me on Spigot in regard to a bug, there are easier ways to communicate.
+
+
+## Contributing
+
+SimpleHomes is open-source and licensed under the [MIT License](https://github.com/Majekdor/SimpleHomes/blob/main/LICENSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
+
+If you've found a bug within the plugin and would like to just make the changes to fix it yourself, you're free to do so and make a pull request here on GitHub. If you make significant contributions to the project, and by significant I mean one little PR to fix a tiny bug doesn't count as significant, you can earn the Contributor role in my [Discord](https://discord.gg/CGgvDUz).
+
+
+## Donate
+
+I'm a full time college student who makes and supports these plugins in my free time (when I have any). As a long time supporter of open source, most of my plugins are free. If you enjoy my plugins and would like to support me, you can buy me coffee over on  [PayPal](https://paypal.com/paypalme/majekdor). Donations of any amount are appreciated and a donation of $10 or more will get you the Supporter role in my [Discord](https://discord.gg/CGgvDUz)!

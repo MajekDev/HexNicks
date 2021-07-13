@@ -23,7 +23,11 @@ There are 5 plugin commands:
 - `hexnicks.nickcolor` - Permission to change your nickname color.
 - `hexnicks.reload` - Permission to reload the plugin.
 
-## Introducing gradients!
+## Colors
+
+### Introducing gradients!
+
+Unless changed in the config, legacy color codes (&c, &l, etc.) are not supported. They can be losely supported when the config option is enabled, but the plugin uses [MiniMessage](https://docs.adventure.kyori.net/minimessage.html) for colors and formatting.
 
 <img align="middle" src="https://i.imgur.com/zdn80Qe.png">
 
@@ -34,7 +38,7 @@ Now HexNicks makes it easy to get beautiful gradients in your nicknames. The for
 The first gradient tag can also take more than 2 hex codes, though they must be in the standard six-character hex format.
 
 
-## Hex Colors:
+### Hex Colors:
 
 I'll just leave this here for you :)
 
@@ -42,7 +46,7 @@ I'll just leave this here for you :)
 
 ## For the nerds... I mean devs :P
 
-PaperNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api). No JavaDocs yet.
+HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api). No JavaDocs yet.
 
 Event example:
 ```java

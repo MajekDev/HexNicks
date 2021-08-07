@@ -73,7 +73,6 @@ public class SqlStorage implements StorageMethod {
         nickname = resultSet.getString("nickname");
         return GsonComponentSerializer.gson().deserialize(nickname);
       }
-      ps.executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();
     }

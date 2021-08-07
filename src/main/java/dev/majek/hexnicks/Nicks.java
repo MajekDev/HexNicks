@@ -316,7 +316,6 @@ public final class Nicks extends JavaPlugin {
     config().reload();
     storage().updateNicks();
     hooks().reloadHooks();
-
   }
 
   /**

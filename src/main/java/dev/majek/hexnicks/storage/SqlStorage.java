@@ -72,7 +72,7 @@ public class SqlStorage implements StorageMethod {
       if (resultSet.next()) {
         nickname = resultSet.getString("nickname");
         return GsonComponentSerializer.gson().deserialize(nickname);
-      }
+      }else {insertPlayer(uuid);}
     } catch (SQLException ex) {
       ex.printStackTrace();
     }
@@ -108,6 +108,19 @@ public class SqlStorage implements StorageMethod {
   public void updateNicks() {
     for (Player player : Bukkit.getOnlinePlayers()) {
       Nicks.software().setNick(player, getNick(player.getUniqueId()));
+    }
+  }
+  public void insertPlayer(@NotNull UUID uuid){
+    try {
+      PreparedStatement ps = Nicks.sql().getConnection()
+              .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
+      ps.setString(2, GsonComponentSerializer.gson().serialize(Component.text(Bukkit.getOfflinePlayer(uuid).getName())));
+      ps.setString(1, uuid.toString());
+      Nicks.log("nicksqldebug: "+ ps.toString());
+      //System.out.println("nicksqldebug: "+ ps.toString());
+      ps.executeUpdate();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
     }
   }
 }

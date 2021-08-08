@@ -30,16 +30,17 @@ import dev.majek.hexnicks.command.*;
 import dev.majek.hexnicks.config.ConfigUpdater;
 import dev.majek.hexnicks.config.JsonConfig;
 import dev.majek.hexnicks.config.NicksConfig;
+import dev.majek.hexnicks.config.NicksSql;
+import dev.majek.hexnicks.event.PlayerJoin;
+import dev.majek.hexnicks.hook.NicksHooks;
+import dev.majek.hexnicks.server.PaperServer;
+import dev.majek.hexnicks.server.ServerSoftware;
+import dev.majek.hexnicks.server.SpigotServer;
 import dev.majek.hexnicks.storage.JsonStorage;
 import dev.majek.hexnicks.storage.SqlStorage;
 import dev.majek.hexnicks.storage.StorageMethod;
-import dev.majek.hexnicks.event.PlayerJoin;
-import dev.majek.hexnicks.config.NicksSql;
-import dev.majek.hexnicks.hook.NicksHooks;
-import dev.majek.hexnicks.server.PaperServer;
-import dev.majek.hexnicks.server.SpigotServer;
 import dev.majek.hexnicks.util.NicksUtils;
-import dev.majek.hexnicks.server.ServerSoftware;
+import dev.majek.hexnicks.util.UpdateChecker;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -76,6 +77,7 @@ public final class Nicks extends JavaPlugin {
   private final JsonConfig            jsonConfig;
   private final Map<UUID, Component>  nickMap;
   private final Metrics               metrics;
+  private final UpdateChecker         updateChecker;
 
   /**
    * Initialize plugin.
@@ -97,6 +99,8 @@ public final class Nicks extends JavaPlugin {
     nickMap = new HashMap<>();
     // Track plugin metrics through bStats
     metrics = new Metrics(this, 8764);
+    // Check for new versions on Spigot
+    updateChecker = new UpdateChecker(this, 83554);
   }
 
   /**
@@ -106,7 +110,7 @@ public final class Nicks extends JavaPlugin {
   public void onEnable() {
     // Get server software
     software = (Bukkit.getName().equalsIgnoreCase("Paper") && Integer.parseInt(Bukkit.getMinecraftVersion()
-        .split("\\.")[1]) >= 17 )? new PaperServer() : new SpigotServer();
+        .split("\\.")[1]) >= 17) ? new PaperServer() : new SpigotServer();
     log("Running on " + software().softwareName() + " server software.");
 
     // Load nicknames from storage
@@ -157,6 +161,12 @@ public final class Nicks extends JavaPlugin {
     // Prompt to use Paper if on Spigot
     if (software instanceof SpigotServer) {
       log("This plugin will run better on PaperMC 1.17+!");
+    }
+
+    // Check for updates - prompt to update if there is one
+    if (updateChecker.isBehindSpigot()) {
+      log("There is a new version of the plugin available! " +
+          "Download it here: https://www.spigotmc.org/resources/83554/");
     }
   }
 

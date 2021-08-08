@@ -50,7 +50,7 @@ public class SqlStorage implements StorageMethod {
       String nickname;
       if (resultSet.next()) {
         nickname = resultSet.getString("nickname");
-        return nickname == null;
+        return nickname != null;
       } else {
         return false;
       }
@@ -92,13 +92,13 @@ public class SqlStorage implements StorageMethod {
   }
 
   @Override
-  public void saveNick(@NotNull UUID uuid) {
+  public void saveNick(@NotNull Player player) {
     try {
-      PreparedStatement ps = Nicks.sql().getConnection()
+      PreparedStatement update = Nicks.sql().getConnection()
           .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
-      ps.setString(1, GsonComponentSerializer.gson().serialize(getNick(uuid)));
-      ps.setString(2, uuid.toString());
-      ps.executeUpdate();
+      update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+      update.setString(2, player.getUniqueId().toString());
+      update.executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();
     }

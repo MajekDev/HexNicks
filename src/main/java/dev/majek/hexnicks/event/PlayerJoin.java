@@ -25,10 +25,16 @@
 package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.storage.SqlStorage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * <p>Handles the player join event.</p>
@@ -41,6 +47,16 @@ public class PlayerJoin implements Listener {
     Nicks.storage().updateNicks();
     if (Nicks.core().hasNick(event.getPlayer().getUniqueId())) {
       Nicks.core().setNick(event.getPlayer(), Nicks.core().getStoredNick(event.getPlayer().getUniqueId()));
+    } else if (Nicks.storage() instanceof SqlStorage) {
+      try {
+        PreparedStatement ps = Nicks.sql().getConnection()
+                .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
+        ps.setString(2, GsonComponentSerializer.gson().serialize(Component.text(event.getPlayer().getName())));
+        ps.setString(1, event.getPlayer().getUniqueId().toString());
+        ps.executeUpdate();
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+      }
     }
   }
 }

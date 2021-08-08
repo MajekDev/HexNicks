@@ -31,6 +31,7 @@ import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -65,14 +66,14 @@ public class JsonStorage implements StorageMethod {
   }
 
   @Override
-  public void saveNick(@NotNull UUID uuid) {
+  public void saveNick(@NotNull Player player) {
     Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
       try {
-        Nicks.core().jsonConfig().putInJsonObject(uuid.toString(),
-            JsonParser.parseString(GsonComponentSerializer.gson().serialize(getNick(uuid))));
-        Nicks.debug("Saved nickname from user " + uuid + " to json.");
+        Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(),
+            JsonParser.parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
+        Nicks.debug("Saved nickname from user " + player.getName() + " to json.");
       } catch (IOException e) {
-        Nicks.error("Error saving nickname to file \nUUID: " + uuid);
+        Nicks.error("Error saving nickname to file \nUUID: " + player.getUniqueId());
         e.printStackTrace();
       }
     });

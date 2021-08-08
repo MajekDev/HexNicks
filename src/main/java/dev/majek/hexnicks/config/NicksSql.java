@@ -97,7 +97,7 @@ public class NicksSql {
     PreparedStatement ps;
     try {
       ps = Nicks.sql().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS " +
-          "nicknameTable (uniqueId VARCHAR(100),nickname VARCHAR(1000),PRIMARY KEY (uniqueId))");
+          "nicknameTable (uniqueId VARCHAR(100),nickname VARCHAR(10000),PRIMARY KEY (uniqueId))");
       ps.executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();

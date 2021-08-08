@@ -26,6 +26,7 @@ package dev.majek.hexnicks.storage;
 
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -59,9 +60,9 @@ public interface StorageMethod {
   /**
    * Save a nickname in storage. This can be used to put it there initially or to update it.
    *
-   * @param uuid The unique id of the player who's nickname to save.
+   * @param player The player who's nickname to save.
    */
-  void saveNick(@NotNull UUID uuid);
+  void saveNick(@NotNull Player player);
 
   /**
    * Update the nickname of all online players from storage.

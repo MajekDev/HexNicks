@@ -57,14 +57,16 @@ public final class SpigotServer implements ServerSoftware {
 
   @Override
   public void setNick(@NotNull Player player, @NotNull Component nickname) {
-    nickname = Component.empty().color(NamedTextColor.WHITE)
-        .decoration(TextDecoration.BOLD, false).append(nickname);
+    if (!Nicks.storage().hasNick(player.getUniqueId())) {
+      nickname = Component.empty().color(NamedTextColor.WHITE)
+              .decoration(TextDecoration.BOLD, false).append(nickname);
+    }
     Nicks.core().getNickMap().put(player.getUniqueId(), nickname);
     player.setDisplayName(legacyComponentSerializer.serialize(nickname));
     if (Nicks.config().TAB_NICKS) {
       player.setPlayerListName(legacyComponentSerializer.serialize(nickname));
     }
-    Nicks.storage().saveNick(player.getUniqueId());
+    Nicks.storage().saveNick(player);
   }
 
   @Override

@@ -49,14 +49,16 @@ public final class PaperServer implements ServerSoftware {
 
   @Override
   public void setNick(@NotNull Player player, @NotNull Component nickname) {
-    nickname = Component.empty().color(NamedTextColor.WHITE)
-        .decoration(TextDecoration.BOLD, false).append(nickname);
+    if (!Nicks.storage().hasNick(player.getUniqueId())) {
+      nickname = Component.empty().color(NamedTextColor.WHITE)
+              .decoration(TextDecoration.BOLD, false).append(nickname);
+    }
     Nicks.core().getNickMap().put(player.getUniqueId(), nickname);
     player.displayName(nickname);
     if (Nicks.config().TAB_NICKS) {
       player.playerListName(nickname);
     }
-    Nicks.storage().saveNick(player.getUniqueId());
+    Nicks.storage().saveNick(player);
   }
 
   @Override

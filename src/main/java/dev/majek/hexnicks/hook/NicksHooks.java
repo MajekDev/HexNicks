@@ -28,7 +28,6 @@ import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles hooked plugins.

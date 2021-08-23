@@ -78,7 +78,7 @@ public class PapiHook extends PlaceholderExpansion {
         return player.getName();
       } else {
         return LegacyComponentSerializer.builder().hexColors()
-                .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
+            .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
       }
     }
     return null;

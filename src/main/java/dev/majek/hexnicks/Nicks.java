@@ -26,7 +26,11 @@ package dev.majek.hexnicks;
 
 import com.google.gson.JsonObject;
 import dev.majek.hexnicks.api.NicksApi;
-import dev.majek.hexnicks.command.*;
+import dev.majek.hexnicks.command.CommandNick;
+import dev.majek.hexnicks.command.CommandNickColor;
+import dev.majek.hexnicks.command.CommandNickOther;
+import dev.majek.hexnicks.command.CommandNicksReload;
+import dev.majek.hexnicks.command.CommandNoNick;
 import dev.majek.hexnicks.config.ConfigUpdater;
 import dev.majek.hexnicks.config.JsonConfig;
 import dev.majek.hexnicks.config.NicksConfig;
@@ -53,7 +57,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -109,8 +112,13 @@ public final class Nicks extends JavaPlugin {
   @Override
   public void onEnable() {
     // Get server software
-    software = (Bukkit.getName().equalsIgnoreCase("Paper") && Integer.parseInt(Bukkit.getMinecraftVersion()
-        .split("\\.")[1]) >= 17) ? new PaperServer() : new SpigotServer();
+    try {
+      Class.forName("io.papermc.paper.event.player.AsyncChatEvent");
+      software = new PaperServer();
+    } catch (ClassNotFoundException e) {
+      software = new SpigotServer();
+      log("This plugin will run better on PaperMC 1.17+!");
+    }
     log("Running on " + software().softwareName() + " server software.");
 
     // Load nicknames from storage
@@ -157,11 +165,6 @@ public final class Nicks extends JavaPlugin {
 
     // Register events
     registerEvents(new PlayerJoin(), software);
-
-    // Prompt to use Paper if on Spigot
-    if (software instanceof SpigotServer) {
-      log("This plugin will run better on PaperMC 1.17+!");
-    }
 
     // Check for updates - prompt to update if there is one
     if (updateChecker.isBehindSpigot()) {

@@ -19,7 +19,7 @@ chat-formatter: true
 
 # The format of chat messages. Must include {displayname} and {message} placeholders.
 # May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
-chat-format: "<{displayname}<white>> {message}"
+chat-format: "<{displayname}> {message}"
 
 # Whether or not to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false

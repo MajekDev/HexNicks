@@ -91,28 +91,32 @@ public final class SpigotServer implements ServerSoftware {
 
   @EventHandler(priority = EventPriority.LOWEST)
   public void onPlayerChatLow(AsyncPlayerChatEvent event) {
-    String format = Nicks.config().CHAT_FORMAT;
-    format = Nicks.utils().miniToLegacy(format)
-        .replace("{displayname}", "%1$s")
-        .replace("{message}", "%2$s");
-    event.setFormat(format);
-    Nicks.debug("low - " + event.getFormat());
+    if (Nicks.config().CHAT_FORMATTER) {
+      String format = Nicks.config().CHAT_FORMAT;
+      format = Nicks.utils().miniToLegacy(format)
+          .replace("{displayname}", "%1$s")
+          .replace("{message}", "%2$s");
+      event.setFormat(format);
+      Nicks.debug("low - " + event.getFormat());
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerChatHigh(AsyncPlayerChatEvent event) {
-    // Replace our placeholders on highest - just before
-    String format = event.getFormat();
+    if (Nicks.config().CHAT_FORMATTER) {
+      // Replace our placeholders on highest - just before
+      String format = event.getFormat();
 
-    // This is safe. If Vault isn't hooked then NicksHooks#vaultPrefix() will return ""
-    format = format.replace("{prefix}", Nicks.utils()
-        .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
-    format = format.replace("{suffix}", Nicks.utils()
-        .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
-    format = format.replace("{displayname}", Nicks.utils()
-        .applyLegacyColors(event.getPlayer().getDisplayName()));
+      // This is safe. If Vault isn't hooked then NicksHooks#vaultPrefix() will return ""
+      format = format.replace("{prefix}", Nicks.utils()
+          .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
+      format = format.replace("{suffix}", Nicks.utils()
+          .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
+      format = format.replace("{displayname}", Nicks.utils()
+          .applyLegacyColors(event.getPlayer().getDisplayName()));
 
-    event.setFormat(format);
-    Nicks.debug("high - " + event.getFormat());
+      event.setFormat(format);
+      Nicks.debug("high - " + event.getFormat());
+    }
   }
 }

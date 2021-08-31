@@ -108,10 +108,8 @@ public final class SpigotServer implements ServerSoftware {
       String format = event.getFormat();
 
       // This is safe. If Vault isn't hooked then NicksHooks#vaultPrefix() will return ""
-      format = format.replace("{prefix}", Nicks.utils()
-          .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
-      format = format.replace("{suffix}", Nicks.utils()
-          .applyLegacyColors(Nicks.hooks().vaultPrefix(event.getPlayer())));
+      format = format.replace("{prefix}", Nicks.hooks().vaultPrefix(event.getPlayer()));
+      format = format.replace("{suffix}", Nicks.hooks().vaultSuffix(event.getPlayer()));
       format = format.replace("{displayname}", Nicks.utils()
           .applyLegacyColors(event.getPlayer().getDisplayName()));
 

@@ -31,6 +31,7 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -92,8 +93,10 @@ public final class PaperServer implements ServerSoftware {
       Nicks.debug("paper chat event fired");
       event.renderer((source, sourceDisplayName, message, viewer) -> MiniMessage.get().parse(Nicks.config().CHAT_FORMAT)
           .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}").replacement(getNick(source)).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}").replacement(Nicks.hooks().vaultPrefix(source)).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}").replacement(Nicks.hooks().vaultSuffix(source)).build())
+          .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}").replacement(LegacyComponentSerializer.builder().hexColors()
+              .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultPrefix(source))).build())
+          .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}").replacement(LegacyComponentSerializer.builder().hexColors()
+              .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(message).build()));
     }
   }

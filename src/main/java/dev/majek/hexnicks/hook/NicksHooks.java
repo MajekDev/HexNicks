@@ -26,6 +26,7 @@ package dev.majek.hexnicks.hook;
 
 import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
@@ -109,10 +110,10 @@ public class NicksHooks {
   }
 
   public String vaultPrefix(Player player) {
-    return isVaultHooked() ? vaultHook.vaultChat().getPlayerPrefix(player) : "";
+    return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerPrefix(player)) : "";
   }
 
   public String vaultSuffix(Player player) {
-    return isVaultHooked() ? vaultHook.vaultChat().getPlayerSuffix(player) : "";
+    return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerSuffix(player)) : "";
   }
 }

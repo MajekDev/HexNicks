@@ -4,6 +4,17 @@
 
 HexNicks is a simple nickname plugin that allows players to set their nickname to anything they like containing normal colors, hex colors, and even gradients! It fully supports Spigot and Paper, though forks of those should work as well. There are only a few commands and permissions to limit what players use what commands. Though the plugin does have support for MySQL storage, it's mostly intended to be a simple nickname plugin for smaller Spigot/Paper servers.
 
+## Features
+
+- Parsing via [MiniMessage](https://docs.adventure.kyori.net/minimessage.html) - here's a [handy website](https://webui.adventure.kyori.net/) to pracitce.
+- Optimized support for Spigot and Paper. Forks of either should work as well.
+- [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) support with the placeholder `%hexnicks_nick%` for player's nicknames.
+- MySQL storage support for users on BungeeCord/Velocity.
+- Metrics through [bStats](https://bstats.org/plugin/bukkit/HexNicks/8764).
+- Active plugin and developer.
+- Ability to format chat on it's own, no external chat formatter needed.
+- Fully-featured [api](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api) for developers.
+
 ## Commands
 
 There are 5 plugin commands:
@@ -15,12 +26,15 @@ There are 5 plugin commands:
 
 ## Permissions
 
-`hexnicks.nick`, `hexnicks.nonick`, and `hexnicks.nickcolor` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/).
+All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, and `hexnicks.reload` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/).
 - `hexnicks.nick` - Permission to change your own nickname.
+- `hexnicks.nick.color` - Permission to use standard color codes in nicknames.
+- `hexnicks.nick.hex` - Permission to use hex color codes in nicknames.
+- `hexnicks.nick.gradient` - Permission to use gradients in nicknames.
 - `hexnicks.nick.other` - Permissions to change other player's nicknames.
 - `hexnicks.nonick` - Permission to remove your own nickname.
 - `hexnicks.nonick.other` - Permission to remove other player's nicknames.
-- `hexnicks.nickcolor` - Permission to change your nickname color.
+- `hexnicks.nickcolor` - Permission to use the nickcolor command to change only the nickname's color.
 - `hexnicks.reload` - Permission to reload the plugin.
 
 ## Colors
@@ -72,7 +86,7 @@ If you have discovered a bug you can either join my [Discord](https://discord.gg
 
 ## Contributing
 
-SimpleHomes is open-source and licensed under the [MIT License](https://github.com/Majekdor/SimpleHomes/blob/main/LICENSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
+HexNicks is open-source and licensed under the [MIT License](https://github.com/Majekdor/SimpleHomes/blob/main/LICENSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
 
 If you've found a bug within the plugin and would like to just make the changes to fix it yourself, you're free to do so and make a pull request here on GitHub. If you make significant contributions to the project, and by significant I mean one little PR to fix a tiny bug doesn't count as significant, you can earn the Contributor role in my [Discord](https://discord.gg/CGgvDUz).
 

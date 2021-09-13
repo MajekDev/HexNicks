@@ -103,11 +103,4 @@ public class SqlStorage implements StorageMethod {
       ex.printStackTrace();
     }
   }
-
-  @Override
-  public void updateNicks() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      Nicks.software().setNick(player, getNick(player.getUniqueId()));
-    }
-  }
 }

@@ -78,9 +78,4 @@ public class JsonStorage implements StorageMethod {
       }
     });
   }
-
-  @Override
-  public void updateNicks() {
-    // Nothing needed for json storage
-  }
 }

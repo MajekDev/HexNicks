@@ -25,7 +25,10 @@
 package dev.majek.hexnicks.storage;
 
 import java.util.UUID;
+
+import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +70,9 @@ public interface StorageMethod {
   /**
    * Update the nickname of all online players from storage.
    */
-  void updateNicks();
-
+  default void updateNicks() {
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      Nicks.software().setNick(player, getNick(player.getUniqueId()));
+    }
+  }
 }

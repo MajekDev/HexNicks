@@ -29,6 +29,8 @@ import dev.majek.hexnicks.api.NickColorEvent;
 import dev.majek.hexnicks.config.NicksMessages;
 import java.util.Collections;
 import java.util.List;
+
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -72,10 +74,23 @@ public class CommandNickColor implements TabExecutor {
       return true;
     }
 
+    MiniMessageWrapper wrapper = new MiniMessageWrapper(nickInput);
+
+    // Check permissions for colors
+    if(!player.hasPermission("hexnicks.nick.gradient")) {
+      wrapper.removeGradients();
+    }
+    if(!player.hasPermission("hexnicks.nick.hex")) {
+      wrapper.removeHex();
+    }
+    if(!player.hasPermission("hexnicks.nick.color")) {
+      wrapper.removeAllTokens();
+    }
+
     // Get the players current nickname to apply color codes to
     String plainTextNick = PlainTextComponentSerializer.plainText()
         .serialize(Nicks.core().getDisplayName(player));
-    Component nickname = MiniMessage.get().parse(nickInput + plainTextNick);
+    Component nickname = MiniMessage.get().parse(wrapper.mmString() + plainTextNick);
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,

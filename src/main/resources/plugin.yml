@@ -31,6 +31,15 @@ permissions:
   hexnicks.nick:
     description: Permission to change nicknames.
     default: true
+  hexnicks.nick.color:
+    description: Permission to use standard color codes in nicknames.
+    default: true
+  hexnicks.nick.hex:
+    description: Permission to use hex color codes in nicknames.
+    default: true
+  hexnicks.nick.gradient:
+    description: Permission to use gradients in nicknames.
+    default: true
   hexnicks.nick.other:
     description: Permission to change other player's nicknames.
     default: op
@@ -41,7 +50,7 @@ permissions:
     description: Permission to remove other player's nicknames.
     default: op
   hexnicks.nickcolor:
-    description: Permission to change color of nickname.
+    description: Permission to use the nickcolor command to change only the nickname's color.
     default: true
   hexnicks.reload:
     description: Permission to reload the plugin.

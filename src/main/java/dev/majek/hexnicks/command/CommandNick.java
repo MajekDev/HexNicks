@@ -29,6 +29,8 @@ import dev.majek.hexnicks.api.SetNickEvent;
 import dev.majek.hexnicks.config.NicksMessages;
 import java.util.Collections;
 import java.util.List;
+
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -64,7 +66,20 @@ public class CommandNick implements TabExecutor {
       nickInput = Nicks.utils().legacyToMini(nickInput);
     }
 
-    Component nickname = MiniMessage.get().parse(nickInput);
+    MiniMessageWrapper wrapper = new MiniMessageWrapper(nickInput);
+
+    // Check permissions for colors
+    if(!player.hasPermission("hexnicks.nick.gradient")) {
+      wrapper.removeGradients();
+    }
+    if(!player.hasPermission("hexnicks.nick.hex")) {
+      wrapper.removeHex();
+    }
+    if(!player.hasPermission("hexnicks.nick.color")) {
+      wrapper.removeAllTokens();
+    }
+
+    Component nickname = wrapper.mmParse();
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
     int maxLength = Nicks.config().MAX_LENGTH;
     int minLength = Nicks.config().MIN_LENGTH;

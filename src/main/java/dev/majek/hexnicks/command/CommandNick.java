@@ -32,7 +32,6 @@ import java.util.List;
 
 import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -91,6 +90,9 @@ public class CommandNick implements TabExecutor {
         return true;
       }
     }
+
+    // Set the nickname to the default color if there's no color specified
+    nickname = nickname.colorIfAbsent(Nicks.config().DEFAULT_NICK_COLOR);
 
     // Make sure the nickname isn't too short
     if (plainTextNick.length() < minLength) {

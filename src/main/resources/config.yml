@@ -24,6 +24,10 @@ chat-format: "<{displayname}> {message}"
 # Whether or not to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false
 
+# The default color of nicknames if no color code is provided on nickname creation.
+# This MUST be a hex code string. No color names or legacy codes.
+default-nick-color: "#FFFFFF"
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false

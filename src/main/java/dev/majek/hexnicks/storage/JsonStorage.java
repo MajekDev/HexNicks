@@ -54,28 +54,24 @@ public class JsonStorage implements StorageMethod {
   @Override
   public void removeNick(@NotNull UUID uuid) {
     Nicks.core().getNickMap().remove(uuid);
-    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
-      try {
-        Nicks.core().jsonConfig().removeFromJsonObject(uuid.toString());
-        Nicks.debug("Removed nickname from user " + uuid + " from json.");
-      } catch (IOException e) {
-        Nicks.error("Error removing nickname from file \nUUID: " + uuid);
-        e.printStackTrace();
-      }
-    });
+    try {
+      Nicks.core().jsonConfig().removeFromJsonObject(uuid.toString());
+      Nicks.debug("Removed nickname from user " + uuid + " from json.");
+    } catch (IOException e) {
+      Nicks.error("Error removing nickname from file \nUUID: " + uuid);
+      e.printStackTrace();
+    }
   }
 
   @Override
   public void saveNick(@NotNull Player player) {
-    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
-      try {
-        Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(),
-            JsonParser.parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
-        Nicks.debug("Saved nickname from user " + player.getName() + " to json.");
-      } catch (IOException e) {
-        Nicks.error("Error saving nickname to file \nUUID: " + player.getUniqueId());
-        e.printStackTrace();
-      }
-    });
+    try {
+      Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(),
+          JsonParser.parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
+      Nicks.debug("Saved nickname from user " + player.getName() + " to json.");
+    } catch (IOException e) {
+      Nicks.error("Error saving nickname to file \nUUID: " + player.getUniqueId());
+      e.printStackTrace();
+    }
   }
 }

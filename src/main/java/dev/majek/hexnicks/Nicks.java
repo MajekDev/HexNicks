@@ -160,7 +160,7 @@ public final class Nicks extends JavaPlugin {
     metrics.addCustomChart(new SimplePie("supporting_legacy",
         () -> String.valueOf(Nicks.config().LEGACY_COLORS)));
     // Custom chart to see what percentage of servers are using the built in chat formatter
-    metrics.addCustomChart(new SimplePie("using-chat-formatter",
+    metrics.addCustomChart(new SimplePie("using_chat_formatter",
         () -> String.valueOf(Nicks.config().CHAT_FORMATTER)));
 
     // Register events

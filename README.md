@@ -17,11 +17,12 @@ HexNicks is a simple nickname plugin that allows players to set their nickname t
 
 ## Commands
 
-There are 5 plugin commands:
+There are 6 plugin commands:
 - `/nick <nickname>` - Set your own nickname.
 - `/nickother <player> <nickname>` - Set another player's nickname.
 - `/nonick [player]` - Remove your nickname or another player's nickname.
 - `/nickcolor <color>` - Change the color of your nickname.
+- `/realname <nickname>` - Get the username of the player with a specific nickname.
 - `/nicksreload` - Reload the plugin.
 
 ## Permissions
@@ -35,6 +36,7 @@ All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, and `hexn
 - `hexnicks.nonick` - Permission to remove your own nickname.
 - `hexnicks.nonick.other` - Permission to remove other player's nicknames.
 - `hexnicks.nickcolor` - Permission to use the nickcolor command to change only the nickname's color.
+- `hexnicks.realname` - Permission to use the realname command.
 - `hexnicks.reload` - Permission to reload the plugin.
 
 ## Colors

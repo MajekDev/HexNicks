@@ -40,6 +40,7 @@ public class NicksConfig {
   public String     CHAT_FORMAT;
   public Boolean    LEGACY_COLORS;
   public TextColor  DEFAULT_NICK_COLOR;
+  public TextColor  DEFAULT_USERNAME_COLOR;
   public Boolean    DEBUG;
 
   public NicksConfig() {
@@ -58,6 +59,7 @@ public class NicksConfig {
     CHAT_FORMAT = Nicks.core().getConfig().getString("chat-format", "{displayname}: {message}");
     LEGACY_COLORS = Nicks.core().getConfig().getBoolean("legacy-colors", false);
     DEFAULT_NICK_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-nick-color", "#FFFFFF"));
+    DEFAULT_USERNAME_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
     DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
   }
 }

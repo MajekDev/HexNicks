@@ -28,6 +28,10 @@ legacy-colors: false
 # This MUST be a hex code string. No color names or legacy codes.
 default-nick-color: "#FFFFFF"
 
+# The default color of usernames for users without nicknames.
+# This MUST be a hex code string. No color names or legacy codes.
+default-username-color: "#FFFFFF"
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false

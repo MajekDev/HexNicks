@@ -368,7 +368,7 @@ public final class Nicks extends JavaPlugin {
    * @return Nickname/Display name.
    */
   public Component getDisplayName(@NotNull Player player) {
-    return software.getNick(player);
+    return software.getNick(player).colorIfAbsent(Nicks.config.DEFAULT_USERNAME_COLOR);
   }
 
   /**

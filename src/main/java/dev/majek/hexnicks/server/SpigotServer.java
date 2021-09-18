@@ -29,6 +29,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -90,31 +91,16 @@ public final class SpigotServer implements ServerSoftware {
   }
 
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onPlayerChatLow(AsyncPlayerChatEvent event) {
+  public void onChat(AsyncPlayerChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
       String format = Nicks.config().CHAT_FORMAT;
       format = Nicks.utils().miniToLegacy(format)
-          .replace("{displayname}", "%1$s")
-          .replace("{message}", "%2$s");
-      event.setFormat(format);
-      Nicks.debug("low - " + event.getFormat());
-    }
-  }
-
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPlayerChatHigh(AsyncPlayerChatEvent event) {
-    if (Nicks.config().CHAT_FORMATTER) {
-      // Replace our placeholders on highest - just before
-      String format = event.getFormat();
-
-      // This is safe. If Vault isn't hooked then NicksHooks#vaultPrefix() will return ""
-      format = format.replace("{prefix}", Nicks.hooks().vaultPrefix(event.getPlayer()));
-      format = format.replace("{suffix}", Nicks.hooks().vaultSuffix(event.getPlayer()));
-      format = format.replace("{displayname}", Nicks.utils()
-          .applyLegacyColors(event.getPlayer().getDisplayName()));
-
-      event.setFormat(format);
-      Nicks.debug("high - " + event.getFormat());
+          .replace("{displayname}", legacyComponentSerializer.serialize(Nicks.core().getDisplayName(event.getPlayer())))
+          .replace("{message}", legacyComponentSerializer.serialize(MiniMessage.get().parse(event.getMessage())))
+          .replace("{prefix}", Nicks.hooks().vaultPrefix(event.getPlayer()))
+          .replace("{suffix}", Nicks.hooks().vaultSuffix(event.getPlayer()));
+      event.setFormat(Nicks.utils().applyLegacyColors(format));
+      Nicks.debug("spigot chat event - " + event.getFormat());
     }
   }
 }

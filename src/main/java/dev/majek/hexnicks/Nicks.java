@@ -25,16 +25,13 @@
 package dev.majek.hexnicks;
 
 import com.google.gson.JsonObject;
+import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.majek.hexnicks.api.NicksApi;
-import dev.majek.hexnicks.command.CommandNick;
-import dev.majek.hexnicks.command.CommandNickColor;
-import dev.majek.hexnicks.command.CommandNickOther;
-import dev.majek.hexnicks.command.CommandNicksReload;
-import dev.majek.hexnicks.command.CommandNoNick;
-import dev.majek.hexnicks.config.ConfigUpdater;
+import dev.majek.hexnicks.command.*;
 import dev.majek.hexnicks.config.JsonConfig;
 import dev.majek.hexnicks.config.NicksConfig;
 import dev.majek.hexnicks.config.NicksSql;
+import dev.majek.hexnicks.event.PaperTabCompleteEvent;
 import dev.majek.hexnicks.event.PlayerJoin;
 import dev.majek.hexnicks.hook.NicksHooks;
 import dev.majek.hexnicks.server.PaperServer;
@@ -193,6 +190,8 @@ public final class Nicks extends JavaPlugin {
     getCommand("nick").setTabCompleter(new CommandNick());
     getCommand("nonick").setExecutor(new CommandNoNick());
     getCommand("nonick").setTabCompleter(new CommandNoNick());
+    getCommand("realname").setExecutor(new CommandRealName());
+    getCommand("realname").setTabCompleter(new CommandRealName());
     getCommand("nickother").setExecutor(new CommandNickOther());
     getCommand("nickother").setTabCompleter(new CommandNickOther());
     getCommand("nickcolor").setExecutor(new CommandNickColor());
@@ -207,6 +206,9 @@ public final class Nicks extends JavaPlugin {
   private void registerEvents(Listener... listeners) {
     for (Listener listener : listeners) {
       getServer().getPluginManager().registerEvents(listener, this);
+    }
+    if (software instanceof PaperServer) {
+      getServer().getPluginManager().registerEvents(new PaperTabCompleteEvent(), this);
     }
   }
 

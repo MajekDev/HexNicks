@@ -82,6 +82,11 @@ public interface NicksMessages {
 
   Args0 PLUGIN_RELOADED = () -> utils().configString("messages.pluginReloaded", "<green>Plugin reloaded.");
 
+  Args2<String, Component> REALNAME = (name, nickname) -> Nicks.utils()
+      .configString("messages.realname", "%nickname% <gray>is <aqua>%name%<gray>.")
+      .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
+      .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
+
   /**
    * A message that has no arguments that need to be replaced.
    */

@@ -72,7 +72,9 @@ public interface StorageMethod {
    */
   default void updateNicks() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      Nicks.software().setNick(player, getNick(player.getUniqueId()));
+      if (Nicks.core().hasNick(player.getUniqueId())) {
+        Nicks.software().setNick(player, getNick(player.getUniqueId()));
+      }
     }
   }
 }

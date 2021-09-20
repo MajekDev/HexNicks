@@ -94,9 +94,14 @@ public final class SpigotServer implements ServerSoftware {
   public void onChat(AsyncPlayerChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
       String format = Nicks.config().CHAT_FORMAT;
+      String message = event.getMessage();
+      if (Nicks.config().LEGACY_COLORS) {
+        message = Nicks.utils().legacyToMini(message);
+      }
+      message = legacyComponentSerializer.serialize(MiniMessage.get().parse(message));
       format = Nicks.utils().miniToLegacy(format)
           .replace("{displayname}", legacyComponentSerializer.serialize(Nicks.core().getDisplayName(event.getPlayer())))
-          .replace("{message}", legacyComponentSerializer.serialize(MiniMessage.get().parse(event.getMessage())))
+          .replace("{message}", message)
           .replace("{prefix}", Nicks.hooks().vaultPrefix(event.getPlayer()))
           .replace("{suffix}", Nicks.hooks().vaultSuffix(event.getPlayer()));
       event.setFormat(Nicks.utils().applyLegacyColors(format));

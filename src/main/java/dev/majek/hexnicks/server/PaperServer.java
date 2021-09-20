@@ -98,8 +98,11 @@ public final class PaperServer implements ServerSoftware {
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultPrefix(source))).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}").replacement(LegacyComponentSerializer.builder().hexColors()
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(MiniMessage.get()
-              .parse(PlainTextComponentSerializer.plainText().serialize(message))).build()));
+          .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(
+              Nicks.config().LEGACY_COLORS ?
+                  MiniMessage.get().parse(Nicks.utils().legacyToMini(PlainTextComponentSerializer.plainText().serialize(message))) :
+                  MiniMessage.get().parse(PlainTextComponentSerializer.plainText().serialize(message))
+          ).build()));
     }
   }
 }

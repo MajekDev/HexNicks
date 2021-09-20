@@ -71,11 +71,13 @@ public class PapiHook extends PlaceholderExpansion {
   }
 
   @Override
+  @SuppressWarnings("all")
   public String onRequest(OfflinePlayer player, @NotNull String identifier) {
     if (identifier.equalsIgnoreCase("nick")) {
       Component nick = Nicks.core().getStoredNick(player.getUniqueId());
       if (nick == null) {
-        return player.getName();
+        return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
+            .serialize(Component.text(player.getName()).colorIfAbsent(Nicks.config().DEFAULT_USERNAME_COLOR));
       } else {
         return LegacyComponentSerializer.builder().hexColors()
             .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);

@@ -27,7 +27,6 @@ package dev.majek.hexnicks.config;
 import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,10 +47,10 @@ public interface NicksMessages {
   Args0 NO_PERMISSION = () -> utils().configString("messages.noPermission",
       "<red>You do not have permission to execute this command.");
 
-  Args1<Integer> TOO_SHORT = minLength -> MiniMessage.get().parse(Nicks.core().getConfig()
-      .getString("messages.tooShort", "<red>That nickname is too short. Minimum length is "
-          + "%length% characters.")).replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
-      .replacement(String.valueOf(minLength)).build());
+  Args1<Integer> TOO_SHORT = minLength -> utils().configString("messages.tooShort",
+      "<red>That nickname is too short. Minimum length is %length% characters.")
+      .replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
+          .replacement(String.valueOf(minLength)).build());
 
   Args1<Integer> TOO_LONG = maxLength -> utils().configString("messages.tooLong",
       "<red>That nickname is too long. Maximum length is %length% characters.")

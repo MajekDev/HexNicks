@@ -100,7 +100,6 @@ public class NicksUtils {
     text = text.replace("<bold>", "&l");
     text = text.replace("<reset>", "&r");
     text = applyLegacyColors(text);
-    //text = MiniMessage.get().stripTokens(text);
     return text;
   }
 
@@ -114,7 +113,7 @@ public class NicksUtils {
    * @return Formatted component.
    */
   public Component configStringPlaceholders(String path, String def, Player player) {
-    return MiniMessage.get().parse(Nicks.hooks().applyPlaceHolders(player, Nicks.core()
+    return MiniMessage.miniMessage().parse(Nicks.hooks().applyPlaceHolders(player, Nicks.core()
         .getConfig().getString(path, def)));
   }
 
@@ -126,7 +125,7 @@ public class NicksUtils {
    * @return Formatted component.
    */
   public Component configString(String path, String def) {
-    return MiniMessage.get().parse(Nicks.core().getConfig().getString(path, def));
+    return MiniMessage.miniMessage().parse(Nicks.core().getConfig().getString(path, def));
   }
 
   /** Pattern matching "nicer" legacy hex chat color codes - &#rrggbb */

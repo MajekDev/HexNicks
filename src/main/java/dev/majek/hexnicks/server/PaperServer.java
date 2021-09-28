@@ -34,6 +34,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.transformation.Transformation;
+import net.kyori.adventure.text.minimessage.transformation.TransformationRegistry;
 import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -100,11 +101,10 @@ public final class PaperServer implements ServerSoftware {
       List<? extends TransformationType<? extends Transformation>> allTransformations = Arrays.asList(
           TransformationType.CLICK_EVENT, TransformationType.COLOR, TransformationType.DECORATION, TransformationType.FONT,
           TransformationType.GRADIENT, TransformationType.HOVER_EVENT, TransformationType.INSERTION, TransformationType.KEYBIND,
-          TransformationType.PRE, TransformationType.RAINBOW, TransformationType.RESET, TransformationType.TRANSLATABLE);
+          TransformationType.RAINBOW, TransformationType.TRANSLATABLE);
       List<? extends TransformationType<? extends Transformation>> colorTransformations = Arrays.asList(
-          TransformationType.COLOR, TransformationType.DECORATION, TransformationType.GRADIENT,
-          TransformationType.PRE, TransformationType.RAINBOW, TransformationType.RESET);
-      event.renderer((source, sourceDisplayName, message, viewer) -> MiniMessage.get().parse(Nicks.config().CHAT_FORMAT)
+          TransformationType.COLOR, TransformationType.DECORATION, TransformationType.GRADIENT, TransformationType.RAINBOW);
+      event.renderer((source, sourceDisplayName, message, viewer) -> MiniMessage.miniMessage().parse(Nicks.config().CHAT_FORMAT)
           .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}").replacement(Nicks.core().getDisplayName(source)).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}").replacement(LegacyComponentSerializer.builder().hexColors()
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultPrefix(source))).build())
@@ -112,11 +112,13 @@ public final class PaperServer implements ServerSoftware {
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(
               Nicks.config().LEGACY_COLORS ?
-                  MiniMessage.withTransformations(source.hasPermission("hexnicks.chat.advanced") ?
-                      allTransformations.toArray(new TransformationType[0]) : colorTransformations.toArray(new TransformationType[0]))
+                  MiniMessage.builder().transformations(TransformationRegistry.builder().add(
+                      source.hasPermission("hexnicks.chat.advanced") ? allTransformations.toArray(new TransformationType[0])
+                          : colorTransformations.toArray(new TransformationType[0])).build()).build()
                       .parse(Nicks.utils().legacyToMini(PlainTextComponentSerializer.plainText().serialize(message))) :
-                  MiniMessage.withTransformations(source.hasPermission("hexnicks.chat.advanced") ?
-                      allTransformations.toArray(new TransformationType[0]) : colorTransformations.toArray(new TransformationType[0]))
+                  MiniMessage.builder().transformations(TransformationRegistry.builder().add(
+                          source.hasPermission("hexnicks.chat.advanced") ? allTransformations.toArray(new TransformationType[0])
+                              : colorTransformations.toArray(new TransformationType[0])).build()).build()
                       .parse(PlainTextComponentSerializer.plainText().serialize(message))
           ).build()));
     }

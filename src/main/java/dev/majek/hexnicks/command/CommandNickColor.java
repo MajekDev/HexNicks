@@ -68,7 +68,7 @@ public class CommandNickColor implements TabExecutor {
 
     // If there are no colors the length should be 0
     String plainTextInput = PlainTextComponentSerializer.plainText()
-        .serialize(MiniMessage.get().parse(nickInput));
+        .serialize(MiniMessage.miniMessage().parse(nickInput));
     if (plainTextInput.length() > 0) {
       NicksMessages.ONLY_COLOR_CODES.send(player);
       return true;
@@ -90,7 +90,7 @@ public class CommandNickColor implements TabExecutor {
     // Get the players current nickname to apply color codes to
     String plainTextNick = PlainTextComponentSerializer.plainText()
         .serialize(Nicks.core().getDisplayName(player));
-    Component nickname = MiniMessage.get().parse(wrapper.mmString() + plainTextNick);
+    Component nickname = MiniMessage.miniMessage().parse(wrapper.mmString() + plainTextNick);
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,

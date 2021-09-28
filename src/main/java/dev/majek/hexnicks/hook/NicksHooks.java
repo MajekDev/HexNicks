@@ -25,9 +25,6 @@
 package dev.majek.hexnicks.hook;
 
 import dev.majek.hexnicks.Nicks;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
 /**
@@ -94,19 +91,6 @@ public class NicksHooks {
    */
   public String applyPlaceHolders(Player player, String string) {
     return isPapiHooked() ? PapiHook.applyPlaceholders(player, string) : string;
-  }
-
-  /**
-   * Get a player's "vault display name" including vault prefixes and suffixes.
-   *
-   * @param player The player.
-   * @return Display name as a Component.
-   */
-  public Component vaultDisplayName(Player player) {
-    return isVaultHooked() ? LegacyComponentSerializer.legacySection().deserialize(vaultHook.vaultChat()
-        .getPlayerPrefix(player)).append(Nicks.core().getDisplayName(player)).append(LegacyComponentSerializer
-        .legacySection().deserialize(vaultHook.vaultChat().getPlayerSuffix(player)))
-        : Nicks.core().getDisplayName(player);
   }
 
   public String vaultPrefix(Player player) {

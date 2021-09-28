@@ -69,7 +69,7 @@ public class CommandNickOther implements TabExecutor {
       nickInput = Nicks.utils().legacyToMini(nickInput);
     }
 
-    Component nickname = MiniMessage.get().parse(nickInput);
+    Component nickname = MiniMessage.miniMessage().parse(nickInput);
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
     int maxLength = Nicks.config().MAX_LENGTH;
     int minLength = Nicks.config().MIN_LENGTH;

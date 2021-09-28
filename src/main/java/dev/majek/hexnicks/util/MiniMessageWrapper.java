@@ -78,7 +78,7 @@ public class MiniMessageWrapper {
    * @return Wrapper.
    */
   public MiniMessageWrapper removeAllTokens() {
-    this.mmString = MiniMessage.get().stripTokens(mmString);
+    this.mmString = MiniMessage.miniMessage().stripTokens(mmString);
     return this;
   }
 
@@ -88,7 +88,7 @@ public class MiniMessageWrapper {
    * @return Parsed {@link Component}.
    */
   public Component mmParse() {
-    return MiniMessage.get().parse(mmString);
+    return MiniMessage.miniMessage().parse(mmString);
   }
 
   /**

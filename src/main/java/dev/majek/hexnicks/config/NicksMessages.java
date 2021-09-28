@@ -87,6 +87,9 @@ public interface NicksMessages {
       .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
       .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
 
+  Args0 UPDATE = () -> Nicks.utils().configString("messages.update",
+      "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>.");
+
   /**
    * A message that has no arguments that need to be replaced.
    */

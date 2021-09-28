@@ -401,4 +401,13 @@ public final class Nicks extends JavaPlugin {
   public void removeNick(@NotNull Player player) {
     software().removeNick(player);
   }
+
+  /**
+   * Check if the plugin has a new update on Spigot.
+   *
+   * @return Whether or not there's an update.
+   */
+  public boolean hasUpdate() {
+    return updateChecker.isBehindSpigot();
+  }
 }

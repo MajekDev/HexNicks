@@ -32,6 +32,9 @@ default-nick-color: "#FFFFFF"
 # This MUST be a hex code string. No color names or legacy codes.
 default-username-color: "#FFFFFF"
 
+# Whether or not to send opped players messages when the plugin has an update.
+update-prompt: true
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false
@@ -63,3 +66,4 @@ messages:
   onlyColorCodes: "<red>You may only include color codes."
   pluginReloaded: "<green>Plugin reloaded."
   realname: "%nickname% <gray>is <aqua>%name%<gray>."
+  update: "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."

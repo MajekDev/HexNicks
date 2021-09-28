@@ -62,3 +62,6 @@ permissions:
   hexnicks.realname:
     description: Permission to use the realname command.
     default: true
+  hexnicks.chat.advanced:
+    description: Permission to inject things like click events into chat messages via MiniMessage.
+    default: op

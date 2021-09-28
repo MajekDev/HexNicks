@@ -25,6 +25,7 @@
 package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.config.NicksMessages;
 import dev.majek.hexnicks.storage.SqlStorage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -47,7 +48,7 @@ public class PlayerJoin implements Listener {
     Nicks.storage().updateNicks();
     if (Nicks.core().hasNick(event.getPlayer().getUniqueId())) {
       Nicks.core().setNick(event.getPlayer(), Nicks.core().getStoredNick(event.getPlayer().getUniqueId()));
-    } else if (Nicks.storage() instanceof SqlStorage) {
+    } else if (Nicks.storage() instanceof SqlStorage && !Nicks.storage().hasNick(event.getPlayer().getUniqueId())) {
       try {
         PreparedStatement ps = Nicks.sql().getConnection()
                 .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
@@ -57,6 +58,11 @@ public class PlayerJoin implements Listener {
       } catch (SQLException ex) {
         ex.printStackTrace();
       }
+    }
+
+    // Update prompt
+    if (event.getPlayer().isOp() && Nicks.core().hasUpdate() && Nicks.config().UPDATE_PROMPT) {
+      NicksMessages.UPDATE.send(event.getPlayer());
     }
   }
 }

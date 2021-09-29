@@ -25,7 +25,6 @@
 package dev.majek.hexnicks;
 
 import dev.majek.hexnicks.util.MiniMessageWrapper;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,29 +32,31 @@ public class MiniMessageWrapperTest {
 
   @Test
   public void main() {
-    LegacyComponentSerializer serializer = LegacyComponentSerializer.builder()
-        .useUnusualXRepeatedCharacterHexFormat().hexColors().build();
-
     String gradient = "<gradient:#1eae98:#d8b5ff>Majekdor</gradient>";
-    MiniMessageWrapper gradientWrapper = new MiniMessageWrapper(gradient);
-    Assert.assertEquals("Majekdor", serializer.serialize(gradientWrapper.removeGradients().mmParse()));
+    Assert.assertEquals("Majekdor",
+        MiniMessageWrapper.builder().gradients(false).build().mmString(gradient));
 
-    String color = "<blue>Majek<aqua>dor";
-    MiniMessageWrapper colorWrapper = new MiniMessageWrapper(color);
-    Assert.assertEquals("§9Majek§bdor", serializer.serialize(colorWrapper.removeHex().mmParse()));
-    Assert.assertEquals("Majekdor", serializer.serialize(colorWrapper.removeAllTokens().mmParse()));
+    String color = "<blue>Majek<light_purple>dor";
+    Assert.assertEquals("<blue>Majek<light_purple>dor",
+        MiniMessageWrapper.builder().hexColors(false).build().mmString(color));
+    Assert.assertEquals("Majekdor",
+        MiniMessageWrapper.builder().standardColors(false).build().mmString(color));
 
     String hex = "<#1eae98>Majek<color:#d8b5ff>dor";
-    Assert.assertEquals("§x§1§e§a§e§9§8Majek§x§d§8§b§5§f§fdor",
-        serializer.serialize(new MiniMessageWrapper(hex).removeGradients().mmParse()));
-    Assert.assertEquals("Majekdor", serializer.serialize(new MiniMessageWrapper(hex).removeHex().mmParse()));
+    Assert.assertEquals("<#1eae98>Majek<color:#d8b5ff>dor",
+        MiniMessageWrapper.builder().gradients(false).build().mmString(hex));
+    Assert.assertEquals("Majekdor",
+        MiniMessageWrapper.builder().hexColors(false).build().mmString(hex));
 
     String everything = "<gradient:#1eae98:#d8b5ff>Majek</gradient><aqua>dor<#336633>!";
-    Assert.assertEquals("Majek§bdor§x§3§3§6§6§3§3!",
-        serializer.serialize(new MiniMessageWrapper(everything).removeGradients().mmParse()));
-    Assert.assertEquals("§x§1§e§a§e§9§8M§x§4§3§a§f§a§da§x§6§8§b§1§c§1j§x§8§e§b§2§d§6e§x§b§3§b§4§e§ak§bdor!",
-        serializer.serialize(new MiniMessageWrapper(everything).removeHex().mmParse()));
-    Assert.assertEquals("Majekdor!", serializer.serialize(new MiniMessageWrapper(everything)
-        .removeAllTokens().mmParse()));
+    Assert.assertEquals("Majek<aqua>dor<#336633>!",
+        MiniMessageWrapper.builder().gradients(false).build().mmString(everything));
+    Assert.assertEquals("<gradient:#1eae98:#d8b5ff>Majek</gradient><aqua>dor!",
+        MiniMessageWrapper.builder().hexColors(false).build().mmString(everything));
+    Assert.assertEquals("Majekdor!",
+        MiniMessageWrapper.builder().gradients(false).hexColors(false)
+            .standardColors(false).build().mmString(everything));
+
+    // TODO: 9/29/2021 add legacy and advanced transformation tests
   }
 }

@@ -26,77 +26,111 @@ package dev.majek.hexnicks.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.transformation.TransformationType;
+import net.kyori.adventure.util.Buildable;
 import org.jetbrains.annotations.NotNull;
 
-public class MiniMessageWrapper {
-
-  private String mmString;
+/**
+ * A wrapper for {@link MiniMessage} to add a few more methods for more customization.
+ *
+ * @since 2.1.2
+ */
+public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMessageWrapper.Builder> {
 
   /**
-   * Create a new wrapper with a string with {@link MiniMessage} tags to eventually be parsed.
+   * Gets a simple instance with legacy code support.
    *
-   * @param mmString String with {@link MiniMessage} tags.
+   * @return a simple instance
+   * @since 2.1.2
    */
-  public MiniMessageWrapper(@NotNull String mmString) {
-    this.mmString = mmString;
+  static @NotNull MiniMessageWrapper legacy() {
+    return MiniMessageWrapperImpl.LEGACY;
   }
 
   /**
-   * Remove {@link MiniMessage}'s hex color code tokens.
+   * Parse a string into a {@link Component} using {@link MiniMessage}.
    *
-   * @return Wrapper.
+   * @param mmString the string to parse
+   * @return component
+   * @since 2.1.2
    */
-  public MiniMessageWrapper removeHex() {
-    this.mmString = this.mmString.replaceAll("<#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("<c:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</c:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</c>", "");
-    this.mmString = this.mmString.replaceAll("<color:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</color:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</color>", "");
-    this.mmString = this.mmString.replaceAll("<colour:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</colour:#([0-9a-fA-F]{6})>", "");
-    this.mmString = this.mmString.replaceAll("</colour>", "");
-    return this;
+  @NotNull Component mmParse(@NotNull String mmString);
+
+  /**
+   * Get the modified string.
+   *
+   * @param mmString string to modify with settings from builder
+   * @return modified string
+   * @since 2.1.2
+   */
+  @NotNull String mmString(@NotNull String mmString);
+
+  /**
+   * Creates a new {@link MiniMessageWrapper.Builder}.
+   *
+   * @return a builder
+   * @since 2.1.2
+   */
+  static @NotNull Builder builder() {
+    return new MiniMessageWrapperImpl.BuilderImpl();
   }
 
   /**
-   * Remove {@link MiniMessage}'s gradient tokens.
+   * A builder for {@link MiniMessageWrapper}.
    *
-   * @return Wrapper.
+   * @since 2.1.2
    */
-  public MiniMessageWrapper removeGradients() {
-    this.mmString = this.mmString.replaceAll("<gradient([:#0-9a-fA-F]{8})+>", "");
-    this.mmString = this.mmString.replaceAll("</gradient>", "");
-    return this;
-  }
+  interface Builder extends Buildable.Builder<MiniMessageWrapper> {
 
-  /**
-   * Remove all of {@link MiniMessage}'s tokens.
-   *
-   * @return Wrapper.
-   */
-  public MiniMessageWrapper removeAllTokens() {
-    this.mmString = MiniMessage.miniMessage().stripTokens(mmString);
-    return this;
-  }
+    /**
+     * Whether gradients on the final string should be parsed.
+     * Default is true.
+     *
+     * @param parse whether to parse
+     * @return this builder
+     * @since 2.1.2
+     */
+    @NotNull Builder gradients(boolean parse);
 
-  /**
-   * Parse the string passed through in the constructor with {@link MiniMessage}.
-   *
-   * @return Parsed {@link Component}.
-   */
-  public Component mmParse() {
-    return MiniMessage.miniMessage().parse(mmString);
-  }
+    /**
+     * Whether hex colors on the final string should be parsed.
+     * Default is true.
+     *
+     * @param parse whether to parse
+     * @return this builder
+     * @since 2.1.2
+     */
+    @NotNull Builder hexColors(boolean parse);
 
-  /**
-   * Return the modified string passed through in the constructor.
-   *
-   * @return Modified string.
-   */
-  public String mmString() {
-    return mmString;
+    /**
+     * Whether all standard color codes on the final string should be parsed.
+     * Default is true.
+     *
+     * @param parse whether to parse
+     * @return this builder
+     * @since 2.1.2
+     */
+    @NotNull Builder standardColors(boolean parse);
+
+    /**
+     * Whether legacy color codes on the final string should be parsed.
+     * Default is false.
+     *
+     * @param parse whether to parse
+     * @return this builder
+     * @since 2.1.2
+     */
+    @NotNull Builder legacyColors(boolean parse);
+
+    /**
+     * Whether to parse advanced {@link TransformationType}s on the final string to be parsed.
+     * This includes click events, hover events, fonts, etc.
+     * Default is false.
+     *
+     * @param advancedTransformations whether to parse
+     * @return this builder
+     * @since 2.1.2
+     */
+    @NotNull Builder advancedTransformations(boolean advancedTransformations);
   }
 }

@@ -25,17 +25,13 @@
 package dev.majek.hexnicks.server;
 
 import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import java.util.Arrays;
-import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.transformation.Transformation;
-import net.kyori.adventure.text.minimessage.transformation.TransformationRegistry;
-import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
@@ -94,16 +90,9 @@ public final class PaperServer implements ServerSoftware {
    * @param event AsyncChatEvent.
    */
   @EventHandler(priority = EventPriority.LOWEST)
-  @SuppressWarnings("unchecked")
   public void onChat(AsyncChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
       Nicks.debug("paper chat event fired");
-      List<? extends TransformationType<? extends Transformation>> allTransformations = Arrays.asList(
-          TransformationType.CLICK_EVENT, TransformationType.COLOR, TransformationType.DECORATION, TransformationType.FONT,
-          TransformationType.GRADIENT, TransformationType.HOVER_EVENT, TransformationType.INSERTION, TransformationType.KEYBIND,
-          TransformationType.RAINBOW, TransformationType.TRANSLATABLE);
-      List<? extends TransformationType<? extends Transformation>> colorTransformations = Arrays.asList(
-          TransformationType.COLOR, TransformationType.DECORATION, TransformationType.GRADIENT, TransformationType.RAINBOW);
       event.renderer((source, sourceDisplayName, message, viewer) -> MiniMessage.miniMessage().parse(Nicks.config().CHAT_FORMAT)
           .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}").replacement(Nicks.core().getDisplayName(source)).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}").replacement(LegacyComponentSerializer.builder().hexColors()
@@ -112,14 +101,12 @@ public final class PaperServer implements ServerSoftware {
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(
               Nicks.config().LEGACY_COLORS ?
-                  MiniMessage.builder().transformations(TransformationRegistry.builder().add(
-                      source.hasPermission("hexnicks.chat.advanced") ? allTransformations.toArray(new TransformationType[0])
-                          : colorTransformations.toArray(new TransformationType[0])).build()).build()
-                      .parse(Nicks.utils().legacyToMini(PlainTextComponentSerializer.plainText().serialize(message))) :
-                  MiniMessage.builder().transformations(TransformationRegistry.builder().add(
-                          source.hasPermission("hexnicks.chat.advanced") ? allTransformations.toArray(new TransformationType[0])
-                              : colorTransformations.toArray(new TransformationType[0])).build()).build()
-                      .parse(PlainTextComponentSerializer.plainText().serialize(message))
+                  MiniMessageWrapper.builder().legacyColors(true)
+                      .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
+                      .mmParse(PlainTextComponentSerializer.plainText().serialize(message)) :
+                  MiniMessageWrapper.builder()
+                      .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
+                      .mmParse(PlainTextComponentSerializer.plainText().serialize(message))
           ).build()));
     }
   }

@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 public class NicksUtils {
 
   /**
-   * Convert a string with legacy codes into a string with MiniMessage tags.
+   * Convert a string with legacy codes into a string with {@link MiniMessage} tags.
    *
    * @param text Text to search
    * @return String with MiniMessage tags.
@@ -71,7 +71,7 @@ public class NicksUtils {
   }
 
   /**
-   * Convert a string with MiniMessage tags into a string with legacy codes..
+   * Convert a string with {@link MiniMessage} tags into a string with legacy codes.
    *
    * @param text Text to search
    * @return String with legacy codes.
@@ -99,6 +99,7 @@ public class NicksUtils {
     text = text.replace("<italic>", "&o");
     text = text.replace("<bold>", "&l");
     text = text.replace("<reset>", "&r");
+    text = MiniMessage.miniMessage().stripTokens(text);
     text = applyLegacyColors(text);
     return text;
   }

@@ -292,7 +292,7 @@ public final class Nicks extends JavaPlugin {
    * @param x Object to log.
    */
   public static void log(@NotNull Object x) {
-    core().getLogger().info(x.toString());
+    core().getSLF4JLogger().info(x.toString());
   }
 
   /**
@@ -302,7 +302,7 @@ public final class Nicks extends JavaPlugin {
    */
   public static void debug(@NotNull Object x) {
     if (config().DEBUG) {
-      core().getLogger().warning(x.toString());
+      core().getSLF4JLogger().debug(x.toString());
     }
   }
 
@@ -312,7 +312,7 @@ public final class Nicks extends JavaPlugin {
    * @param x Object to log.
    */
   public static void error(@NotNull Object x) {
-    core().getLogger().severe(x.toString());
+    core().getSLF4JLogger().error(x.toString());
   }
 
   /**

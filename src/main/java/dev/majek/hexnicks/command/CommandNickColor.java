@@ -74,23 +74,17 @@ public class CommandNickColor implements TabExecutor {
       return true;
     }
 
-    MiniMessageWrapper wrapper = new MiniMessageWrapper(nickInput);
-
-    // Check permissions for colors
-    if(!player.hasPermission("hexnicks.nick.gradient")) {
-      wrapper.removeGradients();
-    }
-    if(!player.hasPermission("hexnicks.nick.hex")) {
-      wrapper.removeHex();
-    }
-    if(!player.hasPermission("hexnicks.nick.color")) {
-      wrapper.removeAllTokens();
-    }
+    MiniMessageWrapper wrapper = MiniMessageWrapper.builder()
+        .gradients(player.hasPermission("hexnicks.nick.gradient"))
+        .hexColors(player.hasPermission("hexnicks.nick.hex"))
+        .standardColors(player.hasPermission("hexnicks.nick.color"))
+        .legacyColors(Nicks.config().LEGACY_COLORS)
+        .build();
 
     // Get the players current nickname to apply color codes to
     String plainTextNick = PlainTextComponentSerializer.plainText()
         .serialize(Nicks.core().getDisplayName(player));
-    Component nickname = MiniMessage.miniMessage().parse(wrapper.mmString() + plainTextNick);
+    Component nickname = wrapper.mmParse(wrapper.mmString(nickInput) + plainTextNick);
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,

@@ -24,6 +24,7 @@
 
 package dev.majek.hexnicks.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,6 +42,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.1.2
  */
 final class MiniMessageWrapperImpl implements MiniMessageWrapper {
+
+  static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(true, true,
+      true, false, false);
 
   static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(true, true,
       true, true, false);
@@ -73,87 +77,6 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
   @Override
   public @NotNull String mmString(@NotNull String mmString) {
-    if (!gradients) {
-      mmString = mmString.replaceAll("<gradient([:#0-9a-fA-F]{8})+>", "");
-      mmString = mmString.replaceAll("</gradient>", "");
-    }
-
-    if (!hexColors) {
-      mmString = mmString.replaceAll("<#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("<c:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</c:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</c>", "");
-      mmString = mmString.replaceAll("<color:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</color:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</color>", "");
-      mmString = mmString.replaceAll("<colour:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</colour:#([0-9a-fA-F]{6})>", "");
-      mmString = mmString.replaceAll("</colour>", "");
-    }
-
-    // can't use regex, it would mess with placeholders
-    if (!standardColors) {
-      mmString = mmString.replace("<black>", "");
-      mmString = mmString.replace("<dark_blue>", "");
-      mmString = mmString.replace("<dark_green>", "");
-      mmString = mmString.replace("<dark_aqua>", "");
-      mmString = mmString.replace("<dark_red>", "");
-      mmString = mmString.replace("<dark_purple>", "");
-      mmString = mmString.replace("<gold>", "");
-      mmString = mmString.replace("<gray>", "");
-      mmString = mmString.replace("<dark_gray>", "");
-      mmString = mmString.replace("<blue>", "");
-      mmString = mmString.replace("<green>", "");
-      mmString = mmString.replace("<aqua>", "");
-      mmString = mmString.replace("<red>", "");
-      mmString = mmString.replace("<light_purple>", "");
-      mmString = mmString.replace("<yellow>", "");
-      mmString = mmString.replace("<white>", "");
-      mmString = mmString.replace("<underlined>", "");
-      mmString = mmString.replace("<strikethrough>", "");
-      mmString = mmString.replace("<st>", "");
-      mmString = mmString.replace("<obfuscated>", "");
-      mmString = mmString.replace("<obf>", "");
-      mmString = mmString.replace("<italic>", "");
-      mmString = mmString.replace("<em>", "");
-      mmString = mmString.replace("<i>", "");
-      mmString = mmString.replace("<bold>", "");
-      mmString = mmString.replace("<b>", "");
-      mmString = mmString.replace("<reset>", "");
-      mmString = mmString.replace("<r>", "");
-      mmString = mmString.replace("<pre>", "");
-      mmString = mmString.replace("</black>", "");
-      mmString = mmString.replace("</dark_blue>", "");
-      mmString = mmString.replace("</dark_green>", "");
-      mmString = mmString.replace("</dark_aqua>", "");
-      mmString = mmString.replace("</dark_red>", "");
-      mmString = mmString.replace("</dark_purple>", "");
-      mmString = mmString.replace("</gold>", "");
-      mmString = mmString.replace("</gray>", "");
-      mmString = mmString.replace("</dark_gray>", "");
-      mmString = mmString.replace("</blue>", "");
-      mmString = mmString.replace("</green>", "");
-      mmString = mmString.replace("</aqua>", "");
-      mmString = mmString.replace("</red>", "");
-      mmString = mmString.replace("</light_purple>", "");
-      mmString = mmString.replace("</yellow>", "");
-      mmString = mmString.replace("</white>", "");
-      mmString = mmString.replace("</underlined>", "");
-      mmString = mmString.replace("</strikethrough>", "");
-      mmString = mmString.replace("</st>", "");
-      mmString = mmString.replace("</obfuscated>", "");
-      mmString = mmString.replace("</obf>", "");
-      mmString = mmString.replace("</italic>", "");
-      mmString = mmString.replace("</em>", "");
-      mmString = mmString.replace("</i>", "");
-      mmString = mmString.replace("</bold>", "");
-      mmString = mmString.replace("</b>", "");
-      mmString = mmString.replace("</reset>", "");
-      mmString = mmString.replace("</r>", "");
-      mmString = mmString.replace("</pre>", "");
-    }
-
     if (legacyColors) {
       mmString = mmString.replace("&0", "<black>");
       mmString = mmString.replace("&1", "<dark_blue>");
@@ -213,6 +136,40 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       }
     } else {
       mmString = mmString.replaceAll("(&[0-9a-fA-Fxklmnor])+", "");
+    }
+
+    if (!gradients) {
+      mmString = mmString.replaceAll("<gradient([:#0-9a-fA-F]{8})+>", "");
+      mmString = mmString.replaceAll("</gradient>", "");
+    }
+
+    if (!hexColors) {
+      mmString = mmString.replaceAll("<#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("<c:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</c:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</c>", "");
+      mmString = mmString.replaceAll("<color:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</color:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</color>", "");
+      mmString = mmString.replaceAll("<colour:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</colour:#([0-9a-fA-F]{6})>", "");
+      mmString = mmString.replaceAll("</colour>", "");
+    }
+
+    // can't use regex, it would mess with placeholders
+    if (!standardColors) {
+      List<String> mmColorTags = new ArrayList<>(Arrays.asList("<black>", "<dark_blue>", "<dark_green>", "<dark_aqua>",
+          "<dark_red>", "<dark_purple>", "<gold>", "<gray>", "<dark_gray>", "<blue>", "<green>", "<aqua>", "<red>",
+          "<light_purple>", "<yellow>", "<white>", "<underlined>", "<strikethrough>", "<st>", "<obfuscated>", "<obf>",
+          "<italic>", "<em>", "<i>", "<bold>", "<b>", "<reset>", "<r>", "<pre>", "</black>", "</dark_blue>",
+          "</dark_green>", "</dark_aqua>", "</dark_red>", "</dark_purple>", "</gold>", "</gray>", "</dark_gray>",
+          "</blue>", "</green>", "</aqua>", "</red>", "</light_purple>", "</yellow>", "</white>", "</underlined>",
+          "</strikethrough>", "</st>", "</obfuscated>", "</obf>", "</italic>", "</em>", "</i>", "</bold>", "</b>",
+          "</reset>", "</r>", "</pre>"));
+      for (String tag : mmColorTags) {
+        mmString = mmString.replace(tag, "");
+      }
     }
 
     return mmString;

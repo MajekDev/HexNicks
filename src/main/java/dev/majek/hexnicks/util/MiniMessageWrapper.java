@@ -38,7 +38,36 @@ import org.jetbrains.annotations.NotNull;
 public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMessageWrapper.Builder> {
 
   /**
-   * Gets a simple instance with legacy code support.
+   * <p>Gets a simple instance.</p>
+   * <p>This will parse everything like {@link MiniMessage} will except for advanced transformations.</p>
+   * <p>Builder options with this instance:</p>
+   * <ul>
+   *   <li>Gradients: True</li>
+   *   <li>Hex Colors: True</li>
+   *   <li>Standard Colors: True</li>
+   *   <li>Legacy Colors: False</li>
+   *   <li>Advanced Transformations: False</li>
+   * </ul>
+   *
+   * @return a simple instance
+   * @since 2.1.2
+   */
+  static @NotNull MiniMessageWrapper standard() {
+    return MiniMessageWrapperImpl.STANDARD;
+  }
+
+  /**
+   * <p>Gets a simple instance with legacy code support.</p>
+   * <p>This will parse everything like {@link MiniMessage} will with the addition of
+   * legacy code support and the subtraction of advanced transformation support.</p>
+   * <p>Builder options with this instance:</p>
+   * <ul>
+   *   <li>Gradients: True</li>
+   *   <li>Hex Colors: True</li>
+   *   <li>Standard Colors: True</li>
+   *   <li>Legacy Colors: True</li>
+   *   <li>Advanced Transformations: False</li>
+   * </ul>
    *
    * @return a simple instance
    * @since 2.1.2
@@ -59,14 +88,22 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
   /**
    * Get the modified string.
    *
-   * @param mmString string to modify with settings from builder
+   * @param mmString string to modify
    * @return modified string
    * @since 2.1.2
    */
   @NotNull String mmString(@NotNull String mmString);
 
   /**
-   * Creates a new {@link MiniMessageWrapper.Builder}.
+   * <p>Creates a new {@link MiniMessageWrapper.Builder}.</p>
+   * <p>Default builder options:</p>
+   * <ul>
+   *   <li>Gradients: True</li>
+   *   <li>Hex Colors: True</li>
+   *   <li>Standard Colors: True</li>
+   *   <li>Legacy Colors: False</li>
+   *   <li>Advanced Transformations: False</li>
+   * </ul>
    *
    * @return a builder
    * @since 2.1.2
@@ -74,6 +111,15 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
   static @NotNull Builder builder() {
     return new MiniMessageWrapperImpl.BuilderImpl();
   }
+
+  /**
+   * Create a {@link MiniMessageWrapper.Builder} to modify options.
+   *
+   * @return a builder
+   * @since 2.1.2
+   */
+  @Override
+  @NotNull Builder toBuilder();
 
   /**
    * A builder for {@link MiniMessageWrapper}.
@@ -84,7 +130,6 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
 
     /**
      * Whether gradients on the final string should be parsed.
-     * Default is true.
      *
      * @param parse whether to parse
      * @return this builder
@@ -94,7 +139,6 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
 
     /**
      * Whether hex colors on the final string should be parsed.
-     * Default is true.
      *
      * @param parse whether to parse
      * @return this builder
@@ -104,7 +148,6 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
 
     /**
      * Whether all standard color codes on the final string should be parsed.
-     * Default is true.
      *
      * @param parse whether to parse
      * @return this builder
@@ -114,7 +157,6 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
 
     /**
      * Whether legacy color codes on the final string should be parsed.
-     * Default is false.
      *
      * @param parse whether to parse
      * @return this builder
@@ -125,12 +167,20 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
     /**
      * Whether to parse advanced {@link TransformationType}s on the final string to be parsed.
      * This includes click events, hover events, fonts, etc.
-     * Default is false.
      *
      * @param advancedTransformations whether to parse
      * @return this builder
      * @since 2.1.2
      */
     @NotNull Builder advancedTransformations(boolean advancedTransformations);
+
+    /**
+     * Build the {@link MiniMessageWrapper} ready to parse.
+     *
+     * @return the wrapper
+     * @since 2.1.2
+     */
+    @Override
+    @NotNull MiniMessageWrapper build();
   }
 }

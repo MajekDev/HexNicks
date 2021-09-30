@@ -31,23 +31,52 @@ import org.junit.Test;
 public class MiniMessageWrapperTest {
 
   @Test
-  public void main() {
+  public void gradients() {
     String gradient = "<gradient:#1eae98:#d8b5ff>Majekdor</gradient>";
     Assert.assertEquals("Majekdor",
         MiniMessageWrapper.builder().gradients(false).build().mmString(gradient));
+  }
 
-    String color = "<blue>Majek<light_purple>dor";
-    Assert.assertEquals("<blue>Majek<light_purple>dor",
-        MiniMessageWrapper.builder().hexColors(false).build().mmString(color));
-    Assert.assertEquals("Majekdor",
-        MiniMessageWrapper.builder().standardColors(false).build().mmString(color));
-
+  @Test
+  public void hexColors() {
     String hex = "<#1eae98>Majek<color:#d8b5ff>dor";
     Assert.assertEquals("<#1eae98>Majek<color:#d8b5ff>dor",
         MiniMessageWrapper.builder().gradients(false).build().mmString(hex));
     Assert.assertEquals("Majekdor",
         MiniMessageWrapper.builder().hexColors(false).build().mmString(hex));
+  }
 
+  @Test
+  public void standardColors() {
+    String color = "<blue>Majek<light_purple>dor";
+    Assert.assertEquals("<blue>Majek<light_purple>dor",
+        MiniMessageWrapper.builder().hexColors(false).build().mmString(color));
+    Assert.assertEquals("Majekdor",
+        MiniMessageWrapper.builder().standardColors(false).build().mmString(color));
+  }
+
+  @Test
+  public void legacyColors() {
+    String legacy = "&9&lMajek&b&odor";
+    Assert.assertEquals("<blue><bold>Majek<aqua><italic>dor",
+        MiniMessageWrapper.legacy().mmString(legacy));
+    Assert.assertEquals("Majekdor",
+        MiniMessageWrapper.standard().mmString(legacy));
+  }
+
+  @Test
+  public void legacyHexColors() {
+    String legacyHex = "&#336633Majek<blue>dor&a!";
+    Assert.assertEquals("<#336633>Majekdor!",
+        MiniMessageWrapper.builder().standardColors(false).legacyColors(true).build().mmString(legacyHex));
+    Assert.assertEquals("&#336633Majek<blue>dor!",
+        MiniMessageWrapper.standard().toBuilder().build().mmString(legacyHex));
+    Assert.assertEquals("Majek<blue>dor<green>!",
+        MiniMessageWrapper.builder().legacyColors(true).hexColors(false).build().mmString(legacyHex));
+  }
+
+  @Test
+  public void everything() {
     String everything = "<gradient:#1eae98:#d8b5ff>Majek</gradient><aqua>dor<#336633>!";
     Assert.assertEquals("Majek<aqua>dor<#336633>!",
         MiniMessageWrapper.builder().gradients(false).build().mmString(everything));
@@ -56,7 +85,5 @@ public class MiniMessageWrapperTest {
     Assert.assertEquals("Majekdor!",
         MiniMessageWrapper.builder().gradients(false).hexColors(false)
             .standardColors(false).build().mmString(everything));
-
-    // TODO: 9/29/2021 add legacy and advanced transformation tests
   }
 }

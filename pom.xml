@@ -165,21 +165,21 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.9.1</version>
+            <version>4.9.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- Adventure Gson Serializer -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.9.1</version>
+            <version>4.9.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- Adventure Plain Text Serializer -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.9.1</version>
+            <version>4.9.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- PlaceholderAPI -->

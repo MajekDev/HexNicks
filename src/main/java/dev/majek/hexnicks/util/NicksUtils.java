@@ -25,13 +25,12 @@
 package dev.majek.hexnicks.util;
 
 import dev.majek.hexnicks.Nicks;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Handles general utility methods.

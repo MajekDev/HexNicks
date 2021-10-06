@@ -26,12 +26,15 @@ package dev.majek.hexnicks.event;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import dev.majek.hexnicks.Nicks;
+import java.util.stream.Collectors;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.stream.Collectors;
-
+/**
+ * Handles tab completion for <code>/realname</code> if the {@link dev.majek.hexnicks.server.ServerSoftware}
+ * is an instanceof {@link dev.majek.hexnicks.server.PaperServer}.
+ */
 public class PaperTabCompleteEvent implements Listener {
 
   @EventHandler

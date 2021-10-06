@@ -27,11 +27,10 @@ package dev.majek.hexnicks.command;
 import dev.majek.hexnicks.Nicks;
 import dev.majek.hexnicks.api.SetNickEvent;
 import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
-import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -67,11 +66,8 @@ public class CommandNick implements TabExecutor {
         .legacyColors(Nicks.config().LEGACY_COLORS)
         .build().mmParse(nickInput);
 
-    String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
-    int maxLength = Nicks.config().MAX_LENGTH;
-    int minLength = Nicks.config().MIN_LENGTH;
-
     // Make sure the nickname is alphanumeric if that's enabled
+    String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
     if (Nicks.config().REQUIRE_ALPHANUMERIC) {
       if (!plainTextNick.matches("[a-zA-Z0-9]+")) {
         NicksMessages.NON_ALPHANUMERIC.send(player);
@@ -83,12 +79,14 @@ public class CommandNick implements TabExecutor {
     nickname = nickname.colorIfAbsent(Nicks.config().DEFAULT_NICK_COLOR);
 
     // Make sure the nickname isn't too short
+    int minLength = Nicks.config().MIN_LENGTH;
     if (plainTextNick.length() < minLength) {
       NicksMessages.TOO_SHORT.send(player, minLength);
       return true;
     }
 
     // Make sure the nickname isn't too long
+    int maxLength = Nicks.config().MAX_LENGTH;
     if (plainTextNick.length() > maxLength) {
       NicksMessages.TOO_LONG.send(player, maxLength);
       return true;

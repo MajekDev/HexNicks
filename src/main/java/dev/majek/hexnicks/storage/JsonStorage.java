@@ -66,8 +66,8 @@ public class JsonStorage implements StorageMethod {
   @Override
   public void saveNick(@NotNull Player player) {
     try {
-      Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(),
-          JsonParser.parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
+      Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(), JsonParser
+          .parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
       Nicks.debug("Saved nickname from user " + player.getName() + " to json.");
     } catch (IOException e) {
       Nicks.error("Error saving nickname to file \nUUID: " + player.getUniqueId());

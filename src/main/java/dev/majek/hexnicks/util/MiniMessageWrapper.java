@@ -1,7 +1,7 @@
 /*
- * This file is part of HexNicks, licensed under the MIT License.
+ * This file is part of MiniMessageWrapper, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2021 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A wrapper for {@link MiniMessage} to add a few more methods for more customization.
  *
- * @since 2.1.2
+ * @since 1.0.0
  */
 public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMessageWrapper.Builder> {
 
@@ -50,7 +50,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a simple instance
-   * @since 2.1.2
+   * @since 1.0.0
    */
   static @NotNull MiniMessageWrapper standard() {
     return MiniMessageWrapperImpl.STANDARD;
@@ -70,7 +70,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a simple instance
-   * @since 2.1.2
+   * @since 1.0.0
    */
   static @NotNull MiniMessageWrapper legacy() {
     return MiniMessageWrapperImpl.LEGACY;
@@ -81,7 +81,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    *
    * @param mmString the string to parse
    * @return component
-   * @since 2.1.2
+   * @since 1.0.0
    */
   @NotNull Component mmParse(@NotNull String mmString);
 
@@ -90,12 +90,12 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    *
    * @param mmString string to modify
    * @return modified string
-   * @since 2.1.2
+   * @since 1.0.0
    */
   @NotNull String mmString(@NotNull String mmString);
 
   /**
-   * <p>Creates a new {@link MiniMessageWrapper.Builder}.</p>
+   * <p>Creates a new {@link Builder}.</p>
    * <p>Default builder options:</p>
    * <ul>
    *   <li>Gradients: True</li>
@@ -106,17 +106,17 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a builder
-   * @since 2.1.2
+   * @since 1.0.0
    */
   static @NotNull Builder builder() {
     return new MiniMessageWrapperImpl.BuilderImpl();
   }
 
   /**
-   * Create a {@link MiniMessageWrapper.Builder} to modify options.
+   * Create a {@link Builder} to modify options.
    *
    * @return a builder
-   * @since 2.1.2
+   * @since 1.0.0
    */
   @Override
   @NotNull Builder toBuilder();
@@ -124,7 +124,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
   /**
    * A builder for {@link MiniMessageWrapper}.
    *
-   * @since 2.1.2
+   * @since 1.0.0
    */
   interface Builder extends Buildable.Builder<MiniMessageWrapper> {
 
@@ -133,7 +133,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 2.1.2
+     * @since 1.0.0
      */
     @NotNull Builder gradients(boolean parse);
 
@@ -142,7 +142,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 2.1.2
+     * @since 1.0.0
      */
     @NotNull Builder hexColors(boolean parse);
 
@@ -151,7 +151,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 2.1.2
+     * @since 1.0.0
      */
     @NotNull Builder standardColors(boolean parse);
 
@@ -160,7 +160,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 2.1.2
+     * @since 1.0.0
      */
     @NotNull Builder legacyColors(boolean parse);
 
@@ -168,17 +168,17 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * Whether to parse advanced {@link TransformationType}s on the final string to be parsed.
      * This includes click events, hover events, fonts, etc.
      *
-     * @param advancedTransformations whether to parse
+     * @param parse whether to parse
      * @return this builder
-     * @since 2.1.2
+     * @since 1.0.0
      */
-    @NotNull Builder advancedTransformations(boolean advancedTransformations);
+    @NotNull Builder advancedTransformations(boolean parse);
 
     /**
      * Build the {@link MiniMessageWrapper} ready to parse.
      *
      * @return the wrapper
-     * @since 2.1.2
+     * @since 1.0.0
      */
     @Override
     @NotNull MiniMessageWrapper build();

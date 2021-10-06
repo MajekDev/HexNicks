@@ -25,7 +25,6 @@
 package dev.majek.hexnicks.config;
 
 import com.google.gson.*;
-
 import java.io.*;
 
 /**

@@ -24,9 +24,8 @@
 
 package dev.majek.hexnicks.storage;
 
-import java.util.UUID;
-
 import dev.majek.hexnicks.Nicks;
+import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

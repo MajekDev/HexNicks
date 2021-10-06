@@ -1,7 +1,7 @@
 /*
- * This file is part of HexNicks, licensed under the MIT License.
+ * This file is part of MiniMessageWrapper, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2021 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -73,6 +73,13 @@ public class MiniMessageWrapperTest {
         MiniMessageWrapper.standard().toBuilder().build().mmString(legacyHex));
     Assert.assertEquals("Majek<blue>dor<green>!",
         MiniMessageWrapper.builder().legacyColors(true).hexColors(false).build().mmString(legacyHex));
+  }
+
+  @Test
+  public void threeCharHex() {
+    String threeCharHex = "&#363Majek<blue>dor";
+    Assert.assertEquals("<#336633>Majekdor",
+        MiniMessageWrapper.builder().legacyColors(true).standardColors(false).build().mmString(threeCharHex));
   }
 
   @Test

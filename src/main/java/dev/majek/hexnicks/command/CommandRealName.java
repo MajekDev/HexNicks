@@ -26,9 +26,9 @@ package dev.majek.hexnicks.command;
 
 import dev.majek.hexnicks.Nicks;
 import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.List;
 import java.util.stream.Collectors;
-import dev.majek.hexnicks.util.TabCompleterBase;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -37,6 +37,9 @@ import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Handles <code>/realname</code> command execution and tab completion.
+ */
 public class CommandRealName implements TabExecutor {
 
   @Override

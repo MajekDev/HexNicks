@@ -46,7 +46,7 @@ public final class SpigotServer implements ServerSoftware {
 
   private final LegacyComponentSerializer legacyComponentSerializer;
 
-  public SpigotServer(){
+  public SpigotServer() {
     legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors()
         .useUnusualXRepeatedCharacterHexFormat().build();
   }

@@ -41,32 +41,32 @@ public class PapiHook extends PlaceholderExpansion {
 
   private final JavaPlugin plugin;
 
-  public PapiHook(JavaPlugin plugin){
+  public PapiHook(JavaPlugin plugin) {
     this.plugin = plugin;
   }
 
   @Override
-  public boolean canRegister(){
+  public boolean canRegister() {
     return true;
   }
 
   @Override
-  public boolean persist(){
+  public boolean persist() {
     return true;
   }
 
   @Override
-  public @NotNull String getAuthor(){
+  public @NotNull String getAuthor() {
     return plugin.getDescription().getAuthors().get(0);
   }
 
   @Override
-  public @NotNull String getIdentifier(){
+  public @NotNull String getIdentifier() {
     return plugin.getDescription().getName().toLowerCase();
   }
 
   @Override
-  public @NotNull String getVersion(){
+  public @NotNull String getVersion() {
     return plugin.getDescription().getVersion();
   }
 

@@ -46,7 +46,7 @@ public interface ServerSoftware extends Listener {
   /**
    * Set a player's display name to their nickname.
    *
-   * @param player The player who's display name should be modified.
+   * @param player The player whose display name should be modified.
    * @param nickname The nickname to set.
    */
   void setNick(@NotNull Player player, @NotNull Component nickname);
@@ -66,6 +66,10 @@ public interface ServerSoftware extends Listener {
    */
   void sendMessage(CommandSender sender, Component message);
 
+  /**
+   * Get the name of the software implementation.
+   *
+   * @return name
+   */
   String softwareName();
-
 }

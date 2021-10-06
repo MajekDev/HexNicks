@@ -24,17 +24,16 @@
 
 package dev.majek.hexnicks.util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.bukkit.Bukkit;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 /**
- * Handles some static utility methods available to tab completer
+ * Handles some static utility methods available to tab completer.
  */
 public abstract class TabCompleterBase implements TabCompleter {
   /**

@@ -27,10 +27,9 @@ package dev.majek.hexnicks.command;
 import dev.majek.hexnicks.Nicks;
 import dev.majek.hexnicks.api.NickColorEvent;
 import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
-
-import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

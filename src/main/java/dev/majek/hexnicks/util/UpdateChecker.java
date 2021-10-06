@@ -25,14 +25,13 @@
 package dev.majek.hexnicks.util;
 
 import com.google.gson.JsonParser;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Used to check for plugin updates from the Spigot plugin page.
@@ -46,6 +45,7 @@ public class UpdateChecker {
 
   /**
    * Construct a new update checker.
+   *
    * @param plugin The main class of the plugin.
    * @param resourceId Plugin's resource id on Spigot.
    */
@@ -66,7 +66,7 @@ public class UpdateChecker {
   private String getSpigotVersion() throws ExecutionException, InterruptedException {
     CompletableFuture<String> spigotVersion = CompletableFuture.supplyAsync(() -> {
       try {
-        URL url = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id="+resourceId);
+        URL url = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         String str = br.readLine();
         return JsonParser.parseString(str).getAsJsonObject().get("current_version").getAsString();

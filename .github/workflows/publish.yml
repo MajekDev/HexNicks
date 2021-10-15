@@ -1,11 +1,11 @@
-name: publish to majek-repo
+name: publish
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
-  build:
+  publish:
 
     runs-on: ubuntu-latest
     permissions:
@@ -23,9 +23,17 @@ jobs:
           settings-path: ${{ github.workspace }}
 
       - name: build with maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml -DskipTests
+
+      - name: setup settings.xml
+        uses: s4u/maven-settings-action@v2.4.1
+        with:
+          servers: |
+            [{
+                "id": "majek-repo",
+                "username": "${{ secrets.MAVEN_USERNAME }}",
+                "password": "${{ secrets.MAVEN_PASSWORD }}"
+            }]
 
       - name: publish to majek-repo
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        run: mvn deploy

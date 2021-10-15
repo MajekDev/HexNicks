@@ -1,4 +1,6 @@
-<img align="right" src="https://raw.githubusercontent.com/Majekdor/HexNicks/master/hexnicks.png" height="200" width="200">
+[![build](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml/badge.svg)](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml)
+[![publish](https://github.com/Majekdor/HexNicks/actions/workflows/publish.yml/badge.svg)](https://repo.majek.dev/releases/dev/majek/hexnicks/HexNicks)
+<img align="right" src="https://raw.githubusercontent.com/Majekdor/HexNicks/master/hexnicks.png" height="250" width="250">
 
 # HexNicks
 
@@ -82,16 +84,16 @@ Nicks.api().getNick(player); // You can pass thru a player, offlineplayer, or uu
 
 ## Support
 
-If you need help with the plugin and can't find the answer here or on Spigot, then the best way to get help is to join my [Discord](https://discord.gg/CGgvDUz). Make sure you read the frequently-asked channel before posting in the bug-reports channel (if it's a bug) or in the simple-homes channel (for general help).
+If you need help with the plugin and can't find the answer here, then the best way to get help is to either join my [Discord](https://discord.gg/CGgvDUz) or post in [discussions](https://github.com/Majekdor/HexNicks/discussions/categories/q-a). If you join Discord make sure you read the frequently-asked channel before posting in the bug-reports channel (if it's a bug) or in the hexnicks channel (for general help). 
 
-If you have discovered a bug you can either join my [Discord](https://discord.gg/CGgvDUz) and report it there or open an issue here on GitHub. Please do not message me on Spigot in regard to a bug, there are easier ways to communicate.
+If you have discovered a bug you can either join my [Discord](https://discord.gg/CGgvDUz) to tell me about it and then open an issue here on GitHub. An open issue is the quickest way to get me to fix it. Please do not message me on Spigot in regard to a bug, there are easier ways to communicate.
 
 
 ## Contributing
 
-HexNicks is open-source and licensed under the [MIT License](https://github.com/Majekdor/SimpleHomes/blob/main/LICENSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
+HexNicks is open-source and licensed under the [MIT License](https://github.com/Majekdor/HexNicks/blob/main/LICENSSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
 
-If you've found a bug within the plugin and would like to just make the changes to fix it yourself, you're free to do so and make a pull request here on GitHub. If you make significant contributions to the project, and by significant I mean one little PR to fix a tiny bug doesn't count as significant, you can earn the Contributor role in my [Discord](https://discord.gg/CGgvDUz).
+If you've found a bug within the plugin and would like to just make the changes to fix it yourself, you're free to do so and make a pull request here on GitHub. If you make significant contributions to the project, and by significant I mean one PR to fix a typo doesn't count as significant, you can earn the Contributor role in my [Discord](https://discord.gg/CGgvDUz).
 
 
 ## Donate

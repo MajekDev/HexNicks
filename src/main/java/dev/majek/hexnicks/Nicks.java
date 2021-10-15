@@ -352,7 +352,7 @@ public final class Nicks extends JavaPlugin {
   }
 
   /**
-   * Check whether or not there is a nickname stored for a unique id.
+   * Check whether there is a nickname stored for a unique id.
    *
    * @param uuid The unique id.
    * @return True if there is a nickname stored.
@@ -396,7 +396,7 @@ public final class Nicks extends JavaPlugin {
    * Remove a nickname from the map and from Json storage.
    * It will be asynchronously removed from the file.
    *
-   * @param player The player who's nickname to remove.
+   * @param player The player whose nickname to remove.
    */
   public void removeNick(@NotNull Player player) {
     software().removeNick(player);
@@ -405,7 +405,7 @@ public final class Nicks extends JavaPlugin {
   /**
    * Check if the plugin has a new update on Spigot.
    *
-   * @return Whether or not there's an update.
+   * @return Whether there's an update.
    */
   public boolean hasUpdate() {
     return updateChecker.isBehindSpigot();

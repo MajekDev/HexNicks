@@ -49,9 +49,9 @@ public class CommandRealName implements TabExecutor {
       return false;
     }
 
-    OfflinePlayer player = Nicks.api().playerFromNick(args[0]);
+    OfflinePlayer player = Nicks.api().playerFromNick(String.join(" ", args));
     if (player == null) {
-      NicksMessages.UNKNOWN_PLAYER.send(sender, args[0]);
+      NicksMessages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
       return true;
     }
 

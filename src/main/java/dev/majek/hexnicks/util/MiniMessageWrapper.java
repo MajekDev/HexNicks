@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A wrapper for {@link MiniMessage} to add a few more methods for more customization.
  *
- * @since 1.0.0
+ * @since 2.1.2
  */
 public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMessageWrapper.Builder> {
 
@@ -50,7 +50,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a simple instance
-   * @since 1.0.0
+   * @since 2.1.2
    */
   static @NotNull MiniMessageWrapper standard() {
     return MiniMessageWrapperImpl.STANDARD;
@@ -70,7 +70,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a simple instance
-   * @since 1.0.0
+   * @since 2.1.2
    */
   static @NotNull MiniMessageWrapper legacy() {
     return MiniMessageWrapperImpl.LEGACY;
@@ -81,7 +81,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    *
    * @param mmString the string to parse
    * @return component
-   * @since 1.0.0
+   * @since 2.1.2
    */
   @NotNull Component mmParse(@NotNull String mmString);
 
@@ -90,7 +90,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    *
    * @param mmString string to modify
    * @return modified string
-   * @since 1.0.0
+   * @since 2.1.2
    */
   @NotNull String mmString(@NotNull String mmString);
 
@@ -106,7 +106,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * </ul>
    *
    * @return a builder
-   * @since 1.0.0
+   * @since 2.1.2
    */
   static @NotNull Builder builder() {
     return new MiniMessageWrapperImpl.BuilderImpl();
@@ -116,7 +116,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * Create a {@link Builder} to modify options.
    *
    * @return a builder
-   * @since 1.0.0
+   * @since 2.1.2
    */
   @Override
   @NotNull Builder toBuilder();
@@ -124,7 +124,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
   /**
    * A builder for {@link MiniMessageWrapper}.
    *
-   * @since 1.0.0
+   * @since 2.1.2
    */
   interface Builder extends Buildable.Builder<MiniMessageWrapper> {
 
@@ -133,7 +133,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @NotNull Builder gradients(boolean parse);
 
@@ -142,7 +142,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @NotNull Builder hexColors(boolean parse);
 
@@ -151,7 +151,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @NotNull Builder standardColors(boolean parse);
 
@@ -160,7 +160,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @NotNull Builder legacyColors(boolean parse);
 
@@ -170,7 +170,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      *
      * @param parse whether to parse
      * @return this builder
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @NotNull Builder advancedTransformations(boolean parse);
 
@@ -178,7 +178,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * Build the {@link MiniMessageWrapper} ready to parse.
      *
      * @return the wrapper
-     * @since 1.0.0
+     * @since 2.1.2
      */
     @Override
     @NotNull MiniMessageWrapper build();

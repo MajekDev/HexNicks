@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Not public api.
  *
- * @since 1.0.0
+ * @since 2.1.2
  */
 @ApiStatus.Internal
 final class MiniMessageWrapperImpl implements MiniMessageWrapper {

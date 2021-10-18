@@ -47,6 +47,7 @@ public class NoNickOtherEvent extends Event implements Cancellable {
    * Fires when a player removes another player's nickname using <code>/nonick</code>.
    *
    * @param deleter The player or console removing the player's nickname.
+   * @param target  The player whose nickname is being removed.
    * @param oldNick The player's old nickname being removed.
    */
   public NoNickOtherEvent(@NotNull CommandSender deleter, @NotNull Player target,

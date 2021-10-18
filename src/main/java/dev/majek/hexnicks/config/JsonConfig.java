@@ -54,6 +54,8 @@ public class JsonConfig {
   /**
    * This creates the configuration file. If the data folder is invalid,
    * it will be created along with the config file.
+   *
+   * @throws FileNotFoundException if the file is somehow not found.
    */
   public void createConfig() throws FileNotFoundException {
     if (!configFile.exists()) {

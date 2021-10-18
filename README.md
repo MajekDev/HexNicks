@@ -1,5 +1,6 @@
+<!--[![publish](https://github.com/Majekdor/HexNicks/actions/workflows/publish.yml/badge.svg)](https://repo.majek.dev/releases/dev/majek/hexnicks/HexNicks)-->
 [![build](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml/badge.svg)](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml)
-[![publish](https://github.com/Majekdor/HexNicks/actions/workflows/publish.yml/badge.svg)](https://repo.majek.dev/releases/dev/majek/hexnicks/HexNicks)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Majekdor/HexNicks)](https://github.com/Majekdor/HexNicks/releases/latest)
 [![chat](https://img.shields.io/discord/753727849860432076?color=%237289da)](https://discord.majek.dev)
 [![](https://img.shields.io/spiget/rating/83554?color=%23ff781f&label=Spigot)](https://www.spigotmc.org/resources/83554/)
 <img align="right" src="https://raw.githubusercontent.com/Majekdor/HexNicks/master/hexnicks.png" height="250" width="250">

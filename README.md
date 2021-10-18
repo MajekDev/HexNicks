@@ -63,9 +63,9 @@ I'll just leave this here for you :)
 
 <img align="middle" src="https://i.pinimg.com/originals/f2/08/30/f2083044743edea046c2bc16b082b4fe.gif" height="900" width="800">
 
-## For the nerds... I mean devs :P
+## Developers
 
-HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api). No JavaDocs yet.
+HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://jd.hexnicks.majek.dev/dev/majek/hexnicks/api/package-summary.html) and all JavaDocs [here](https://jd.hexnicks.majek.dev/).
 
 Event example:
 ```java

@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Handles PlaceholderAPI hook methods.
  */
-public class PapiHook extends PlaceholderExpansion {
+class PapiHook extends PlaceholderExpansion {
 
   private final JavaPlugin plugin;
 

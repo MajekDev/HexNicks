@@ -390,6 +390,7 @@ public final class Nicks extends JavaPlugin {
    */
   public void setNick(@NotNull Player player, @NotNull Component nick) {
     software().setNick(player, nick);
+    hooks().setEssNick(player, nick);
   }
 
   /**
@@ -400,6 +401,7 @@ public final class Nicks extends JavaPlugin {
    */
   public void removeNick(@NotNull Player player) {
     software().removeNick(player);
+    hooks().setEssNick(player, Component.text(player.getName()));
   }
 
   /**

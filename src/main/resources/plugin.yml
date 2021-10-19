@@ -4,7 +4,7 @@ main: dev.majek.hexnicks.Nicks
 api-version: 1.13
 authors: [Majekdor]
 description: ${project.description}
-softdepend: [PlaceholderAPI, Vault]
+softdepend: [PlaceholderAPI, Vault, Essentials]
 commands:
   nick:
     description: Change your nickname.

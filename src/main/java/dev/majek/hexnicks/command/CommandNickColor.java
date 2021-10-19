@@ -83,6 +83,15 @@ public class CommandNickColor implements TabExecutor {
     // Get the players current nickname to apply color codes to
     String plainTextNick = PlainTextComponentSerializer.plainText()
         .serialize(Nicks.core().getDisplayName(player));
+
+    // Remove nickname prefix if essentials is hooked
+    if (Nicks.hooks().isEssentialsHooked()) {
+      String nickPrefix = Nicks.hooks().getEssNickPrefix();
+      if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
+        plainTextNick = plainTextNick.substring(nickPrefix.length());
+      }
+    }
+
     Component nickname = wrapper.mmParse(wrapper.mmString(nickInput) + plainTextNick);
 
     // Call event

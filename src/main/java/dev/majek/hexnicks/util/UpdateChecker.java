@@ -52,7 +52,8 @@ public class UpdateChecker {
   public UpdateChecker(JavaPlugin plugin, int resourceId) {
     this.plugin = plugin;
     this.resourceId = resourceId;
-    this.currentVersion = Integer.parseInt(plugin.getDescription().getVersion().replace(".", ""));
+    this.currentVersion = Integer.parseInt(plugin.getDescription().getVersion()
+        .replace(".", "").replace("-SNAPSHOT", ""));
     try {
       this.spigotVersion = Integer.parseInt(getSpigotVersion().replace(".", ""));
     } catch (ExecutionException | InterruptedException e) {

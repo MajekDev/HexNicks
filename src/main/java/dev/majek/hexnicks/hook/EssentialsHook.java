@@ -24,32 +24,44 @@
 
 package dev.majek.hexnicks.hook;
 
+import com.earth2me.essentials.Essentials;
 import dev.majek.hexnicks.Nicks;
-import net.milkbowl.vault.chat.Chat;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Handles Vault hook methods.
+ * Handles Essentials hook methods.
  */
-class VaultHook {
+class EssentialsHook {
 
-  private Chat vaultChat;
+  private final Essentials essentials;
+  private final LegacyComponentSerializer legacyComponentSerializer;
 
-  public VaultHook() {
-    RegisteredServiceProvider<Chat> rsp = Nicks.core().getServer().getServicesManager().getRegistration(Chat.class);
-    if (rsp == null) {
-      Nicks.error("Error hooking into Vault!");
-      return;
-    }
-    vaultChat = rsp.getProvider();
+  public EssentialsHook() {
+    this.essentials = (Essentials) Nicks.core().getServer().getPluginManager().getPlugin("Essentials");
+    legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors()
+        .useUnusualXRepeatedCharacterHexFormat().build();
   }
 
   /**
-   * Get the vault chat class.
+   * Set a player's Essentials nickname.
    *
-   * @return Chat.
+   * @param player The player.
+   * @param nickname The nickname.
    */
-  public Chat vaultChat() {
-    return vaultChat;
+  public void setEssentialsNick(@NotNull Player player, @NotNull Component nickname) {
+    essentials.getUser(player).setNickname(legacyComponentSerializer.serialize(nickname));
+  }
+
+  /**
+   * Get Essentials' nickname prefix.
+   *
+   * @return Nickname prefix.
+   */
+  public @Nullable String getNickPrefix() {
+    return essentials.getConfig().getString("nickname-prefix");
   }
 }

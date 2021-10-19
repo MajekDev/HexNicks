@@ -25,7 +25,10 @@
 package dev.majek.hexnicks.hook;
 
 import dev.majek.hexnicks.Nicks;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles hooked plugins.
@@ -34,14 +37,18 @@ public class NicksHooks {
 
   private boolean papiHooked;
   private boolean vaultHooked;
+  private boolean essentialsHooked;
   private PapiHook papiHook;
   private VaultHook vaultHook;
+  private EssentialsHook essentialsHook;
 
   public NicksHooks() {
     papiHooked = false;
     vaultHooked = false;
+    essentialsHooked = false;
     papiHook = null;
     vaultHook = null;
+    essentialsHook = null;
   }
 
   /**
@@ -61,6 +68,12 @@ public class NicksHooks {
       Nicks.log("Hooking into Vault...");
       vaultHooked = true;
       vaultHook = new VaultHook();
+    }
+    if (Nicks.core().getServer().getPluginManager().isPluginEnabled("Essentials") &&
+        Nicks.core().getServer().getPluginManager().getPlugin("Essentials") != null) {
+      Nicks.log("Hooking into Essentials...");
+      essentialsHooked = true;
+      essentialsHook = new EssentialsHook();
     }
   }
 
@@ -83,21 +96,67 @@ public class NicksHooks {
   }
 
   /**
+   * Check if the plugin is hooked into Essentials.
+   *
+   * @return True if hooked.
+   */
+  public boolean isEssentialsHooked() {
+    return essentialsHooked;
+  }
+
+  /**
    * Apply placeholders from PlaceholderAPI to a string.
    *
    * @param player The player referenced in the string.
    * @param string The string to search.
    * @return Formatted string.
    */
-  public String applyPlaceHolders(Player player, String string) {
+  public @NotNull String applyPlaceHolders(@NotNull Player player, @NotNull String string) {
     return isPapiHooked() ? PapiHook.applyPlaceholders(player, string) : string;
   }
 
-  public String vaultPrefix(Player player) {
+  /**
+   * Get a player's Vault prefix if Vault is hooked.
+   *
+   * @param player The player.
+   * @return Player's prefix.
+   */
+  public @NotNull String vaultPrefix(@NotNull Player player) {
     return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerPrefix(player)) : "";
   }
 
-  public String vaultSuffix(Player player) {
+  /**
+   * Get a player's Vault suffix if Vault is hooked.
+   *
+   * @param player The player.
+   * @return Player's suffix.
+   */
+  public @NotNull String vaultSuffix(@NotNull Player player) {
     return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerSuffix(player)) : "";
+  }
+
+  /**
+   * Set a player's Essentials nickname if Essentials is hooked.
+   *
+   * @param player The player.
+   * @param nickname The nickname.
+   */
+  public void setEssNick(@NotNull Player player, @NotNull Component nickname) {
+    if (isEssentialsHooked()) {
+      essentialsHook.setEssentialsNick(player, nickname);
+    }
+  }
+
+  /**
+   * Get Essentials' nickname prefix if Essentials is hooked.
+   *
+   * @return Nickname prefix.
+   */
+  public @Nullable String getEssNickPrefix() {
+    if (isEssentialsHooked()) {
+      return essentialsHook.getNickPrefix();
+    } else {
+      return null;
+    }
   }
 }

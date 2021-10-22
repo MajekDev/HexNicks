@@ -42,6 +42,7 @@ public class NicksConfig {
   public TextColor  DEFAULT_NICK_COLOR;
   public TextColor  DEFAULT_USERNAME_COLOR;
   public Boolean    UPDATE_PROMPT;
+  public Boolean    OVERRIDE_ESSENTIALS;
   public Boolean    DEBUG;
 
   public NicksConfig() {
@@ -62,6 +63,7 @@ public class NicksConfig {
     DEFAULT_NICK_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-nick-color", "#FFFFFF"));
     DEFAULT_USERNAME_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
     UPDATE_PROMPT = Nicks.core().getConfig().getBoolean("update-prompt", true);
+    OVERRIDE_ESSENTIALS = Nicks.core().getConfig().getBoolean("override-essentials", true);
     DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
   }
 }

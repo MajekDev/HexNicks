@@ -1,7 +1,7 @@
 # Config file for HexNicks by Majekdor | Have questions? Ask here: https://discord.majek.dev
 # For colors this config uses MiniMessage (https://docs.adventure.kyori.net/minimessage.html#the-components)
 
-# Whether or not nicknames should show in the tab list
+# Whether nicknames should show in the tab list
 tab-nicks: false
 
 # The maximum number of characters (excluding color codes) a nickname may be
@@ -10,7 +10,7 @@ max-length: 20
 # The minimum number of characters (excluding color codes) a nickname may be
 min-length: 3
 
-# Whether or not nicknames must be alphanumeric - Regex: [a-zA-Z0-9]+
+# Whether nicknames must be alphanumeric - Regex: [a-zA-Z0-9]+
 require-alphanumeric: true
 
 # The plugin needs a chat formatter for nicknames to format properly in chat
@@ -21,7 +21,7 @@ chat-formatter: true
 # May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
 chat-format: "<{displayname}> {message}"
 
-# Whether or not to support legacy nicknames (&a, &l, etc.)
+# Whether to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false
 
 # The default color of nicknames if no color code is provided on nickname creation.
@@ -32,8 +32,11 @@ default-nick-color: "#FFFFFF"
 # This MUST be a hex code string. No color names or legacy codes.
 default-username-color: "#FFFFFF"
 
-# Whether or not to send opped players messages when the plugin has an update.
+# Whether to send opped players messages when the plugin has an update.
 update-prompt: true
+
+# Whether to set a user's Essentials nickname on /nick to fix some Essentials compatibility
+override-essentials: true
 
 # Database settings
 # Only enable this if you know what you're doing and have an existing database

@@ -53,7 +53,9 @@ class EssentialsHook {
    * @param nickname The nickname.
    */
   public void setEssentialsNick(@NotNull Player player, @NotNull Component nickname) {
-    essentials.getUser(player).setNickname(legacyComponentSerializer.serialize(nickname));
+    if (Nicks.config().OVERRIDE_ESSENTIALS) {
+      essentials.getUser(player).setNickname(legacyComponentSerializer.serialize(nickname));
+    }
   }
 
   /**

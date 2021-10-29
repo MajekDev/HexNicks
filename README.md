@@ -1,9 +1,9 @@
 <!--[![publish](https://github.com/Majekdor/HexNicks/actions/workflows/publish.yml/badge.svg)](https://repo.majek.dev/releases/dev/majek/hexnicks/HexNicks)-->
-[![build](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml/badge.svg)](https://github.com/Majekdor/HexNicks/actions/workflows/build.yml)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Majekdor/HexNicks)](https://github.com/Majekdor/HexNicks/releases/latest)
+[![build](https://github.com/MajekDev/HexNicks/actions/workflows/build.yml/badge.svg)](https://github.com/MajekDev/HexNicks/actions/workflows/build.yml)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MajekDev/HexNicks)](https://github.com/MajekDev/HexNicks/releases/latest)
 [![chat](https://img.shields.io/discord/753727849860432076?color=%237289da)](https://discord.majek.dev)
 [![](https://img.shields.io/spiget/rating/83554?color=%23ff781f&label=Spigot)](https://www.spigotmc.org/resources/83554/)
-<img align="right" src="https://raw.githubusercontent.com/Majekdor/HexNicks/master/hexnicks.png" height="250" width="250">
+<img align="right" src="https://raw.githubusercontent.com/MajekDev/HexNicks/main/hexnicks.png" height="250" width="250">
 
 # HexNicks
 
@@ -18,7 +18,7 @@ HexNicks is a simple nickname plugin that allows players to set their nickname t
 - Metrics through [bStats](https://bstats.org/plugin/bukkit/HexNicks/8764).
 - Active plugin and developer.
 - Ability to format chat on it's own, no external chat formatter needed.
-- Fully-featured [api](https://github.com/Majekdor/HexNicks/tree/master/src/main/java/dev/majek/hexnicks/api) for developers.
+- Fully-featured [api](https://github.com/MajekDev/HexNicks/tree/main/src/main/java/dev/majek/hexnicks/api) for developers.
 
 ## Commands
 
@@ -87,14 +87,14 @@ Nicks.api().getNick(player); // You can pass thru a player, offlineplayer, or uu
 
 ## Support
 
-If you need help with the plugin and can't find the answer here, then the best way to get help is to either join my [Discord](https://discord.gg/CGgvDUz) or post in [discussions](https://github.com/Majekdor/HexNicks/discussions/categories/q-a). If you join Discord make sure you read the frequently-asked channel before posting in the bug-reports channel (if it's a bug) or in the hexnicks channel (for general help). 
+If you need help with the plugin and can't find the answer here, then the best way to get help is to either join my [Discord](https://discord.gg/CGgvDUz) or post in [discussions](https://github.com/MajekDev/HexNicks/discussions/categories/q-a). If you join Discord make sure you read the frequently-asked channel before posting in the bug-reports channel (if it's a bug) or in the hexnicks channel (for general help). 
 
 If you have discovered a bug you can either join my [Discord](https://discord.gg/CGgvDUz) to tell me about it and then open an issue here on GitHub. An open issue is the quickest way to get me to fix it. Please do not message me on Spigot in regard to a bug, there are easier ways to communicate.
 
 
 ## Contributing
 
-HexNicks is open-source and licensed under the [MIT License](https://github.com/Majekdor/HexNicks/blob/main/LICENSSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
+HexNicks is open-source and licensed under the [MIT License](https://github.com/MajekDev/HexNicks/blob/main/LICENSE), so if you want to use any code contained in the plugin or clone the repository and make some changes, go ahead!
 
 If you've found a bug within the plugin and would like to just make the changes to fix it yourself, you're free to do so and make a pull request here on GitHub. If you make significant contributions to the project, and by significant I mean one PR to fix a typo doesn't count as significant, you can earn the Contributor role in my [Discord](https://discord.gg/CGgvDUz).
 

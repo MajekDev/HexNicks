@@ -25,28 +25,33 @@
 package dev.majek.hexnicks.config;
 
 import dev.majek.hexnicks.Nicks;
+import java.util.HashSet;
+import java.util.Set;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 /**
  * Handles all config options in the plugin.
  */
 public class NicksConfig {
 
-  public Boolean    TAB_NICKS;
-  public Integer    MAX_LENGTH;
-  public Integer    MIN_LENGTH;
-  public Boolean    REQUIRE_ALPHANUMERIC;
-  public Boolean    CHAT_FORMATTER;
-  public String     CHAT_FORMAT;
-  public Boolean    LEGACY_COLORS;
-  public TextColor  DEFAULT_NICK_COLOR;
-  public TextColor  DEFAULT_USERNAME_COLOR;
-  public Boolean    UPDATE_PROMPT;
-  public Boolean    OVERRIDE_ESSENTIALS;
-  public Boolean    DEBUG;
+  public Boolean              TAB_NICKS;
+  public Integer              MAX_LENGTH;
+  public Integer              MIN_LENGTH;
+  public Boolean              REQUIRE_ALPHANUMERIC;
+  public Boolean              CHAT_FORMATTER;
+  public String               CHAT_FORMAT;
+  public Boolean              LEGACY_COLORS;
+  public TextColor            DEFAULT_NICK_COLOR;
+  public TextColor            DEFAULT_USERNAME_COLOR;
+  public Boolean              UPDATE_PROMPT;
+  public Boolean              OVERRIDE_ESSENTIALS;
+  public Set<TextDecoration>  DISABLED_DECORATIONS;
+  public Boolean              DEBUG;
 
   public NicksConfig() {
     reload();
+    DISABLED_DECORATIONS = new HashSet<>();
   }
 
   /**
@@ -64,6 +69,11 @@ public class NicksConfig {
     DEFAULT_USERNAME_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
     UPDATE_PROMPT = Nicks.core().getConfig().getBoolean("update-prompt", true);
     OVERRIDE_ESSENTIALS = Nicks.core().getConfig().getBoolean("override-essentials", true);
+    Nicks.core().getConfig().getStringList("disabled-decorations").forEach(string -> {
+      try {
+        DISABLED_DECORATIONS.add(TextDecoration.valueOf(string.toUpperCase()));
+      } catch (IllegalArgumentException | NullPointerException ignored) {}
+    });
     DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
   }
 }

@@ -100,13 +100,9 @@ public final class PaperServer implements ServerSoftware {
           .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}").replacement(LegacyComponentSerializer.builder().hexColors()
               .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(
-              Nicks.config().LEGACY_COLORS ?
-                  MiniMessageWrapper.builder().legacyColors(true)
-                      .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
-                      .mmParse(PlainTextComponentSerializer.plainText().serialize(message)) :
-                  MiniMessageWrapper.builder()
-                      .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
-                      .mmParse(PlainTextComponentSerializer.plainText().serialize(message))
+              MiniMessageWrapper.builder().legacyColors(Nicks.config().LEGACY_COLORS)
+                  .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
+                  .mmParse(PlainTextComponentSerializer.plainText().serialize(message))
           ).build()));
     }
   }

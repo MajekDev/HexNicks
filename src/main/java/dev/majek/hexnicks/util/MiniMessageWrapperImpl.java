@@ -24,12 +24,11 @@
 
 package dev.majek.hexnicks.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.transformation.TransformationRegistry;
 import net.kyori.adventure.text.minimessage.transformation.TransformationType;
@@ -46,11 +45,11 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
   @ApiStatus.Internal
   static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(true, true,
-      true, false, false);
+      true, false, false, new HashSet<>());
 
   @ApiStatus.Internal
   static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(true, true,
-      true, true, false);
+      true, true, false, new HashSet<>());
 
   @SuppressWarnings("all")
   private final TransformationRegistry allTransformations = TransformationRegistry.builder().add(
@@ -67,26 +66,33 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   ).build();
 
   private final boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+  private final Set<TextDecoration> removedTextDecorations;
 
-  MiniMessageWrapperImpl(boolean gradients, boolean hexColors, boolean standardColors,
-                         boolean legacyColors, boolean advancedTransformations) {
+  MiniMessageWrapperImpl(final boolean gradients, final boolean hexColors, final boolean standardColors,
+                         final boolean legacyColors, final boolean advancedTransformations,
+                         final Set<TextDecoration> removedTextDecorations) {
     this.gradients = gradients;
     this.hexColors = hexColors;
     this.standardColors = standardColors;
     this.legacyColors = legacyColors;
     this.advancedTransformations = advancedTransformations;
+    this.removedTextDecorations = removedTextDecorations;
   }
 
   @Override
   public @NotNull Component mmParse(@NotNull String mmString) {
+    Map<TextDecoration, TextDecoration.State> decorationStateMap = new HashMap<>();
+    for (TextDecoration decoration : removedTextDecorations) {
+      decorationStateMap.put(decoration, TextDecoration.State.FALSE);
+    }
     return MiniMessage.builder().transformations(
-        advancedTransformations ? allTransformations : colorTransformations
-    ).build().parse(mmString(mmString));
+        this.advancedTransformations ? this.allTransformations : this.colorTransformations
+    ).build().parse(this.mmString(mmString)).decorations(decorationStateMap);
   }
 
   @Override
   public @NotNull String mmString(@NotNull String mmString) {
-    if (legacyColors) {
+    if (this.legacyColors) {
       mmString = mmString
           .replace("&0", "<black>")
           .replace("&1", "<dark_blue>")
@@ -111,14 +117,14 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
           .replace("&l", "<bold>")
           .replace("&r", "<reset>");
 
-      if (hexColors) {
+      if (this.hexColors) {
         // parse the nicer pattern: '&#rrggbb' to spigot's: '&x&r&r&g&g&b&b'
-        Pattern sixCharHex = Pattern.compile("&#([0-9a-fA-F]{6})");
+        final Pattern sixCharHex = Pattern.compile("&#([0-9a-fA-F]{6})");
         Matcher matcher = sixCharHex.matcher(mmString);
         StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
-          StringBuilder replacement = new StringBuilder(14).append("&x");
-          for (char character : matcher.group(1).toCharArray()) {
+          final StringBuilder replacement = new StringBuilder(14).append("&x");
+          for (final char character : matcher.group(1).toCharArray()) {
             replacement.append('&').append(character);
           }
           matcher.appendReplacement(sb, replacement.toString());
@@ -127,12 +133,12 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
         mmString = sb.toString();
 
         // convert three char nicer hex '&#rgb' to spigot's: '&x&r&r&g&g&b&b'
-        Pattern threeCharHex = Pattern.compile("&#([0-9a-fA-F]{3})");
+        final Pattern threeCharHex = Pattern.compile("&#([0-9a-fA-F]{3})");
         matcher = threeCharHex.matcher(mmString);
         sb = new StringBuilder();
         while (matcher.find()) {
-          StringBuilder replacement = new StringBuilder(14).append("&x");
-          for (char character : matcher.group(1).toCharArray()) {
+          final StringBuilder replacement = new StringBuilder(14).append("&x");
+          for (final char character : matcher.group(1).toCharArray()) {
             replacement.append('&').append(character).append("&").append(character);
           }
           matcher.appendReplacement(sb, replacement.toString());
@@ -141,12 +147,12 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
         mmString = sb.toString();
 
         // parse spigot's hex pattern '&x&r&r&g&g&b&b' to mini message's '<#rrggbb>'
-        Pattern spigotHexPattern = Pattern.compile("&x(&[0-9a-fA-F]){6}");
+        final Pattern spigotHexPattern = Pattern.compile("&x(&[0-9a-fA-F]){6}");
         matcher = spigotHexPattern.matcher(mmString);
         sb = new StringBuilder();
         while (matcher.find()) {
-          StringBuilder replacement = new StringBuilder(9).append("<#");
-          for (char character : matcher.group().toCharArray()) {
+          final StringBuilder replacement = new StringBuilder(9).append("<#");
+          for (final char character : matcher.group().toCharArray()) {
             if (character != '&' && character != 'x') {
               replacement.append(character);
             }
@@ -164,12 +170,12 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       mmString = mmString.replaceAll("(&[0-9a-fA-Fk-oK-OxXrR])+", "");
     }
 
-    if (!gradients) {
+    if (!this.gradients) {
       mmString = mmString.replaceAll("<gradient([:#0-9a-fA-F]{8})+>", "");
       mmString = mmString.replaceAll("</gradient>", "");
     }
 
-    if (!hexColors) {
+    if (!this.hexColors) {
       mmString = mmString.replaceAll("<#([0-9a-fA-F]{6})>", "");
       mmString = mmString.replaceAll("</#([0-9a-fA-F]{6})>", "");
       mmString = mmString.replaceAll("<c:#([0-9a-fA-F]{6})>", "");
@@ -184,7 +190,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
     }
 
     // can't use regex, it would mess with placeholders
-    if (!standardColors) {
+    if (!this.standardColors) {
       List<String> mmColorTags = new ArrayList<>(Arrays.asList("<black>", "<dark_blue>", "<dark_green>",
           "<dark_aqua>", "<dark_red>", "<dark_purple>", "<gold>", "<gray>", "<dark_gray>", "<blue>", "<green>",
           "<aqua>", "<red>", "<light_purple>", "<yellow>", "<white>", "<underlined>", "<strikethrough>", "<st>",
@@ -210,58 +216,68 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   static final class BuilderImpl implements Builder {
 
     private boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+    private final Set<TextDecoration> removedTextDecorations;
 
     @ApiStatus.Internal
     BuilderImpl() {
-      gradients = true;
-      hexColors = true;
-      standardColors = true;
-      legacyColors = false;
-      advancedTransformations = false;
+      this.gradients = true;
+      this.hexColors = true;
+      this.standardColors = true;
+      this.legacyColors = false;
+      this.advancedTransformations = false;
+      this.removedTextDecorations = new HashSet<>();
     }
 
     @ApiStatus.Internal
-    BuilderImpl(MiniMessageWrapperImpl wrapper) {
-      gradients = wrapper.gradients;
-      hexColors = wrapper.hexColors;
-      standardColors = wrapper.standardColors;
-      legacyColors = wrapper.legacyColors;
-      advancedTransformations = wrapper.advancedTransformations;
+    BuilderImpl(final MiniMessageWrapperImpl wrapper) {
+      this.gradients = wrapper.gradients;
+      this.hexColors = wrapper.hexColors;
+      this.standardColors = wrapper.standardColors;
+      this.legacyColors = wrapper.legacyColors;
+      this.advancedTransformations = wrapper.advancedTransformations;
+      this.removedTextDecorations = wrapper.removedTextDecorations;
     }
 
     @Override
-    public @NotNull Builder gradients(boolean parse) {
-      gradients = parse;
+    public @NotNull Builder gradients(final boolean parse) {
+      this.gradients = parse;
       return this;
     }
 
     @Override
-    public @NotNull Builder hexColors(boolean parse) {
-      hexColors = parse;
+    public @NotNull Builder hexColors(final boolean parse) {
+      this.hexColors = parse;
       return this;
     }
 
     @Override
-    public @NotNull Builder standardColors(boolean parse) {
-      standardColors = parse;
+    public @NotNull Builder standardColors(final boolean parse) {
+      this.standardColors = parse;
       return this;
     }
 
     @Override
-    public @NotNull Builder legacyColors(boolean parse) {
-      legacyColors = parse;
+    public @NotNull Builder legacyColors(final boolean parse) {
+      this.legacyColors = parse;
       return this;
     }
 
     @Override
-    public @NotNull Builder advancedTransformations(boolean parse) {
-      advancedTransformations = parse;
+    public @NotNull Builder advancedTransformations(final boolean parse) {
+      this.advancedTransformations = parse;
+      return this;
+    }
+
+    @Override
+    public @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations) {
+      this.removedTextDecorations.addAll(Arrays.asList(decorations));
       return this;
     }
 
     @Override
     public @NotNull MiniMessageWrapper build() {
-      return new MiniMessageWrapperImpl(gradients, hexColors, standardColors, legacyColors, advancedTransformations);
+      return new MiniMessageWrapperImpl(this.gradients, this.hexColors, this.standardColors,
+          this.legacyColors, this.advancedTransformations, this.removedTextDecorations);
     }
   }
 }

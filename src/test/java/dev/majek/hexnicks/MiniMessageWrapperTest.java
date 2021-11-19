@@ -25,6 +25,9 @@
 package dev.majek.hexnicks;
 
 import dev.majek.hexnicks.util.MiniMessageWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -91,6 +94,16 @@ public class MiniMessageWrapperTest {
         MiniMessageWrapper.builder().hexColors(false).build().mmString(everything));
     Assert.assertEquals("Majekdor!",
         MiniMessageWrapper.builder().gradients(false).hexColors(false)
-            .standardColors(false).build().mmString(everything));
+            .standardColors(false).advancedTransformations(false).build().mmString(everything));
+    Assert.assertEquals(Component.text("Majekdor!"),
+        MiniMessageWrapper.builder().gradients(false).hexColors(false)
+            .standardColors(false).advancedTransformations(false).build().mmParse(everything));
+  }
+
+  @Test
+  public void removedDecorations() {
+    String string = "<bold><blue>Majekdor";
+    Assert.assertEquals(MiniMessageWrapper.builder().removeTextDecorations(TextDecoration.BOLD).build().mmParse(string),
+        Component.text("Majekdor").color(NamedTextColor.BLUE).decoration(TextDecoration.BOLD, false));
   }
 }

@@ -35,8 +35,13 @@ default-username-color: "#FFFFFF"
 # Whether to send opped players messages when the plugin has an update.
 update-prompt: true
 
-# Whether to set a user's Essentials nickname on /nick to fix some Essentials compatibility
+# Whether to set a user's Essentials nickname on /nick to fix some Essentials compatibility.
 override-essentials: true
+
+# Disabled text decorations for nicknames.
+# Accepted values: italic, bold, strikethrough, obfuscated, underlined
+disabled-decorations:
+  - "example (replace this)"
 
 # Database settings
 # Only enable this if you know what you're doing and have an existing database

@@ -25,6 +25,7 @@
 package dev.majek.hexnicks.util;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import net.kyori.adventure.util.Buildable;
@@ -135,7 +136,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * @return this builder
      * @since 2.1.2
      */
-    @NotNull Builder gradients(boolean parse);
+    @NotNull Builder gradients(final boolean parse);
 
     /**
      * Whether hex colors on the final string should be parsed.
@@ -144,7 +145,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * @return this builder
      * @since 2.1.2
      */
-    @NotNull Builder hexColors(boolean parse);
+    @NotNull Builder hexColors(final boolean parse);
 
     /**
      * Whether all standard color codes on the final string should be parsed.
@@ -153,7 +154,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * @return this builder
      * @since 2.1.2
      */
-    @NotNull Builder standardColors(boolean parse);
+    @NotNull Builder standardColors(final boolean parse);
 
     /**
      * Whether legacy color codes on the final string should be parsed.
@@ -162,7 +163,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * @return this builder
      * @since 2.1.2
      */
-    @NotNull Builder legacyColors(boolean parse);
+    @NotNull Builder legacyColors(final boolean parse);
 
     /**
      * Whether to parse advanced {@link TransformationType}s on the final string to be parsed.
@@ -172,7 +173,9 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      * @return this builder
      * @since 2.1.2
      */
-    @NotNull Builder advancedTransformations(boolean parse);
+    @NotNull Builder advancedTransformations(final boolean parse);
+
+    @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations);
 
     /**
      * Build the {@link MiniMessageWrapper} ready to parse.

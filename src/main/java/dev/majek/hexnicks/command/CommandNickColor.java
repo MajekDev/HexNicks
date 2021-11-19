@@ -31,6 +31,7 @@ import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
@@ -78,6 +79,7 @@ public class CommandNickColor implements TabExecutor {
         .hexColors(player.hasPermission("hexnicks.nick.hex"))
         .standardColors(player.hasPermission("hexnicks.nick.color"))
         .legacyColors(Nicks.config().LEGACY_COLORS)
+        .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
         .build();
 
     // Get the players current nickname to apply color codes to

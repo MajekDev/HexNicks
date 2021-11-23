@@ -28,8 +28,10 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import dev.majek.hexnicks.Nicks;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles tab completion for <code>/realname</code> if the {@link dev.majek.hexnicks.server.ServerSoftware}
@@ -39,21 +41,28 @@ public class PaperTabCompleteEvent implements Listener {
 
   @EventHandler
   public void onTabComplete(AsyncTabCompleteEvent event) {
+    String[] args = event.getBuffer().split(" ");
+    if (event.completions().isEmpty()) {
+      nickCompletions(event, args);
+    }
     if (!event.isCommand()) {
       return;
     }
-    String[] args = event.getBuffer().split(" ");
     if (args[0].contains("realname")) {
-      if (args.length > 1) {
-        event.completions(Nicks.core().getNickMap().values().stream().filter(nickname ->
-            PlainTextComponentSerializer.plainText().serialize(nickname).startsWith(args[1])).map(nickname ->
-            AsyncTabCompleteEvent.Completion.completion(PlainTextComponentSerializer.plainText()
-                .serialize(nickname), nickname)).collect(Collectors.toList()));
-      } else {
-        event.completions(Nicks.core().getNickMap().values().stream().map(nickname -> AsyncTabCompleteEvent
-            .Completion.completion(PlainTextComponentSerializer.plainText().serialize(nickname), nickname))
-            .collect(Collectors.toList()));
-      }
+      nickCompletions(event, args);
+    }
+  }
+
+  public void nickCompletions(@NotNull AsyncTabCompleteEvent event, String[] args) {
+    if (args.length > 1) {
+      event.completions(Nicks.core().getNickMap().values().stream().filter(nickname ->
+          PlainTextComponentSerializer.plainText().serialize(nickname).startsWith(args[1])).map(nickname ->
+          AsyncTabCompleteEvent.Completion.completion(PlainTextComponentSerializer.plainText()
+              .serialize(nickname), nickname)).collect(Collectors.toList()));
+    } else {
+      event.completions(Nicks.core().getNickMap().values().stream().map(nickname -> AsyncTabCompleteEvent
+              .Completion.completion(PlainTextComponentSerializer.plainText().serialize(nickname), nickname))
+          .collect(Collectors.toList()));
     }
   }
 }

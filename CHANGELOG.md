@@ -1,5 +1,15 @@
 # Plugin Changelog
 
+# 2.2.0 - Async Everything
+
+- Switched access to MySQL database from synchronous to asynchronous.
+- Added support for `autoReconnect` flag for MySQL.
+- Implemented feature requested in #36. Options for disabling text decorations.
+- Did some normal code cleanup.
+- Fixed bug with overflowing colors in chat on Spigot.
+
+Okay not async *everything* but a lot of stuff that should be async now is!
+
 # 2.1.4 - Essentials Compatibility
 
 - New EssentialsHook should allow HexNicks and Essentials to work with one another out of the box.

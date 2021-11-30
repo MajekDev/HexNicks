@@ -28,12 +28,14 @@ import dev.majek.hexnicks.Nicks;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,8 +82,12 @@ public class NicksApi {
    *
    * @param uuid The unique id.
    * @return Nickname if it exists.
+   * @deprecated for removal - this method will take a while to return when using SQL storage
+   * @see #getStoredNick(UUID)
    */
   @Nullable
+  @Deprecated
+  @ApiStatus.ScheduledForRemoval
   public Component getNick(@NotNull UUID uuid) {
     return Nicks.core().getStoredNick(uuid);
   }
@@ -91,8 +97,12 @@ public class NicksApi {
    *
    * @param player Player.
    * @return Nickname if it exists.
+   * @deprecated for removal - this method will take a while to return when using SQL storage
+   * @see #getStoredNick(Player)
    */
   @Nullable
+  @Deprecated
+  @ApiStatus.ScheduledForRemoval
   public Component getNick(@NotNull Player player) {
     return Nicks.core().getStoredNick(player.getUniqueId());
   }
@@ -102,9 +112,46 @@ public class NicksApi {
    *
    * @param player OfflinePlayer.
    * @return Nickname if it exists.
+   * @deprecated for removal - this method will take a while to return when using SQL storage
+   * @see #getStoredNick(OfflinePlayer)
    */
   @Nullable
+  @Deprecated
+  @ApiStatus.ScheduledForRemoval
   public Component getNick(@NotNull OfflinePlayer player) {
     return Nicks.core().getStoredNick(player.getUniqueId());
+  }
+
+  /**
+   * Get a nickname from a player's unique id.
+   *
+   * @param uuid The unique id.
+   * @return Nickname if it exists.
+   */
+  @Nullable
+  public CompletableFuture<Component> getStoredNick(@NotNull UUID uuid) {
+    return Nicks.storage().getNick(uuid);
+  }
+
+  /**
+   * Get a nickname from an online {@link Player}.
+   *
+   * @param player Player.
+   * @return Nickname if it exists.
+   */
+  @Nullable
+  public CompletableFuture<Component> getStoredNick(@NotNull Player player) {
+    return Nicks.storage().getNick(player.getUniqueId());
+  }
+
+  /**
+   * Get a nickname from an {@link OfflinePlayer}.
+   *
+   * @param player OfflinePlayer.
+   * @return Nickname if it exists.
+   */
+  @Nullable
+  public CompletableFuture<Component> getStoredNick(@NotNull OfflinePlayer player) {
+    return Nicks.storage().getNick(player.getUniqueId());
   }
 }

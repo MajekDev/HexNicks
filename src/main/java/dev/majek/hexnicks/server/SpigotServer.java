@@ -27,8 +27,6 @@ package dev.majek.hexnicks.server;
 import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
@@ -58,14 +56,11 @@ public final class SpigotServer implements ServerSoftware {
 
   @Override
   public void setNick(@NotNull Player player, @NotNull Component nickname) {
-    if (!Nicks.storage().hasNick(player.getUniqueId())) {
-      nickname = Component.empty().color(NamedTextColor.WHITE)
-              .decoration(TextDecoration.BOLD, false).append(nickname);
-    }
+    String nick = legacyComponentSerializer.serialize(nickname) + "§r";
     Nicks.core().getNickMap().put(player.getUniqueId(), nickname);
-    player.setDisplayName(legacyComponentSerializer.serialize(nickname));
+    player.setDisplayName(nick);
     if (Nicks.config().TAB_NICKS) {
-      player.setPlayerListName(legacyComponentSerializer.serialize(nickname));
+      player.setPlayerListName(nick);
     }
     Nicks.storage().saveNick(player);
   }

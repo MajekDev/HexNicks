@@ -26,11 +26,7 @@ package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.Nicks;
 import dev.majek.hexnicks.config.NicksMessages;
-import dev.majek.hexnicks.storage.SqlStorage;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,19 +41,16 @@ public class PlayerJoin implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Nicks.storage().updateNicks();
-    if (Nicks.core().hasNick(event.getPlayer().getUniqueId())) {
-      Nicks.core().setNick(event.getPlayer(), Nicks.core().getStoredNick(event.getPlayer().getUniqueId()));
-    } else if (Nicks.storage() instanceof SqlStorage && !Nicks.storage().hasNick(event.getPlayer().getUniqueId())) {
-      try {
-        PreparedStatement ps = Nicks.sql().getConnection()
-                .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
-        ps.setString(2, GsonComponentSerializer.gson().serialize(Component.text(event.getPlayer().getName())));
-        ps.setString(1, event.getPlayer().getUniqueId().toString());
-        ps.executeUpdate();
-      } catch (SQLException ex) {
-        ex.printStackTrace();
+    Player player = event.getPlayer();
+
+    // Set the joining player's nickname to their stored nickname if they have one
+    Nicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
+      if (aBoolean) {
+        Nicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) -> {
+          Nicks.core().setNick(player, component);
+        });
       }
-    }
+    });
 
     // Update prompt
     if (event.getPlayer().isOp() && Nicks.core().hasUpdate() && Nicks.config().UPDATE_PROMPT) {

@@ -29,8 +29,6 @@ import dev.majek.hexnicks.util.MiniMessageWrapper;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -52,10 +50,6 @@ public final class PaperServer implements ServerSoftware {
 
   @Override
   public void setNick(@NotNull Player player, @NotNull Component nickname) {
-    if (!Nicks.storage().hasNick(player.getUniqueId())) {
-      nickname = Component.empty().color(NamedTextColor.WHITE)
-              .decoration(TextDecoration.BOLD, false).append(nickname);
-    }
     Nicks.core().getNickMap().put(player.getUniqueId(), nickname);
     player.displayName(nickname);
     if (Nicks.config().TAB_NICKS) {

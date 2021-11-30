@@ -26,6 +26,7 @@ package dev.majek.hexnicks.storage;
 
 import dev.majek.hexnicks.Nicks;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public interface StorageMethod {
    * @param uuid The unique id to check.
    * @return True if nickname stored.
    */
-  boolean hasNick(@NotNull UUID uuid);
+  CompletableFuture<Boolean> hasNick(@NotNull UUID uuid);
 
   /**
    * Get the nickname stored for a specific unique id. {@link #hasNick(UUID)} should be checked first.
@@ -50,7 +51,7 @@ public interface StorageMethod {
    * @param uuid The unique id to fetch.
    * @return Nickname.
    */
-  Component getNick(@NotNull UUID uuid);
+  CompletableFuture<Component> getNick(@NotNull UUID uuid);
 
   /**
    * Remove a nickname from storage.
@@ -71,9 +72,12 @@ public interface StorageMethod {
    */
   default void updateNicks() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      if (Nicks.core().hasNick(player.getUniqueId())) {
-        Nicks.software().setNick(player, getNick(player.getUniqueId()));
-      }
+      hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
+        if (aBoolean) {
+          getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
+              Nicks.software().setNick(player, component));
+        }
+      });
     }
   }
 }

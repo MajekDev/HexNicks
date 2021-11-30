@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bstats.bukkit.Metrics;
@@ -57,6 +58,7 @@ import org.bstats.charts.SimplePie;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -356,9 +358,18 @@ public final class Nicks extends JavaPlugin {
    *
    * @param uuid The unique id.
    * @return True if there is a nickname stored.
+   * @deprecated for removal - this method will take a while to return when using SQL storage
    */
+  @Deprecated
+  @ApiStatus.ScheduledForRemoval
   public boolean hasNick(@NotNull UUID uuid) {
-    return storage.hasNick(uuid);
+    try {
+      debug("hasNick: " + storage().hasNick(uuid).get());
+      return storage().hasNick(uuid).get();
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+      return false;
+    }
   }
 
   /**
@@ -368,7 +379,7 @@ public final class Nicks extends JavaPlugin {
    * @return Nickname/Display name.
    */
   public Component getDisplayName(@NotNull Player player) {
-    return software.getNick(player).colorIfAbsent(Nicks.config.DEFAULT_USERNAME_COLOR);
+    return software().getNick(player).colorIfAbsent(Nicks.config.DEFAULT_USERNAME_COLOR);
   }
 
   /**
@@ -376,9 +387,18 @@ public final class Nicks extends JavaPlugin {
    *
    * @param uuid Unique id.
    * @return Nickname if it exists.
+   * @deprecated for removal - this method will take a while to return when using SQL storage
    */
+  @Deprecated
+  @ApiStatus.ScheduledForRemoval
   public Component getStoredNick(@NotNull UUID uuid) {
-    return storage().getNick(uuid);
+    try {
+      debug("storedNick: " + storage().getNick(uuid).get());
+      return storage().getNick(uuid).get();
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+      return Component.empty();
+    }
   }
 
   /**

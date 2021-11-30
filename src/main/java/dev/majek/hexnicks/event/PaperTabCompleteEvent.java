@@ -28,7 +28,8 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import dev.majek.hexnicks.Nicks;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.event.Event;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,9 @@ public class PaperTabCompleteEvent implements Listener {
   @EventHandler
   public void onTabComplete(AsyncTabCompleteEvent event) {
     String[] args = event.getBuffer().split(" ");
-    if (event.completions().isEmpty()) {
+    // Replace if the event was returning online players
+    if (event.completions().stream().map(AsyncTabCompleteEvent.Completion::suggestion).collect(Collectors.toList())
+        .equals(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()))) {
       nickCompletions(event, args);
     }
     if (!event.isCommand()) {

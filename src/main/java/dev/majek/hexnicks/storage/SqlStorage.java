@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
@@ -41,66 +42,84 @@ import org.jetbrains.annotations.NotNull;
 public class SqlStorage implements StorageMethod {
 
   @Override
-  public boolean hasNick(@NotNull UUID uuid) {
-    try {
-      PreparedStatement ps = Nicks.sql().getConnection()
-          .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
-      ps.setString(1, uuid.toString());
-      ResultSet resultSet = ps.executeQuery();
-      String nickname;
-      if (resultSet.next()) {
-        nickname = resultSet.getString("nickname");
-        return nickname != null;
-      } else {
-        return false;
-      }
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-      return false;
-    }
+  public CompletableFuture<Boolean> hasNick(@NotNull UUID uuid) {
+    return CompletableFuture.supplyAsync(() -> {
+          try {
+            PreparedStatement ps = Nicks.sql().getConnection()
+                .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
+            ps.setString(1, uuid.toString());
+            ResultSet resultSet = ps.executeQuery();
+            String nickname;
+            if (resultSet.next()) {
+              nickname = resultSet.getString("nickname");
+              return nickname != null;
+            } else {
+              return false;
+            }
+          } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+          }
+        });
   }
 
   @Override
   @SuppressWarnings("ConstantConditions")
-  public Component getNick(@NotNull UUID uuid) {
-    try {
-      PreparedStatement ps = Nicks.sql().getConnection()
-          .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
-      ps.setString(1, uuid.toString());
-      ResultSet resultSet = ps.executeQuery();
-      String nickname;
-      if (resultSet.next()) {
-        nickname = resultSet.getString("nickname");
-        return GsonComponentSerializer.gson().deserialize(nickname);
+  public CompletableFuture<Component> getNick(@NotNull UUID uuid) {
+    return CompletableFuture.supplyAsync(() -> {
+      try {
+        PreparedStatement ps = Nicks.sql().getConnection()
+            .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
+        ps.setString(1, uuid.toString());
+        ResultSet resultSet = ps.executeQuery();
+        String nickname;
+        if (resultSet.next()) {
+          nickname = resultSet.getString("nickname");
+          return GsonComponentSerializer.gson().deserialize(nickname);
+        }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
       }
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-    }
-    return Component.text(Bukkit.getOfflinePlayer(uuid).getName());
+      return Component.text(Bukkit.getOfflinePlayer(uuid).getName());
+    });
   }
 
   @Override
   public void removeNick(@NotNull UUID uuid) {
-    try {
-      PreparedStatement ps = Nicks.sql().getConnection()
-          .prepareStatement("DELETE FROM nicknameTable WHERE uniqueId=?");
-      ps.setString(1, uuid.toString());
-      ps.executeUpdate();
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-    }
+    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
+      try {
+        PreparedStatement ps = Nicks.sql().getConnection()
+            .prepareStatement("DELETE FROM nicknameTable WHERE uniqueId=?");
+        ps.setString(1, uuid.toString());
+        ps.executeUpdate();
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+      }
+    });
   }
 
   @Override
   public void saveNick(@NotNull Player player) {
-    try {
-      PreparedStatement update = Nicks.sql().getConnection()
-          .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
-      update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
-      update.setString(2, player.getUniqueId().toString());
-      update.executeUpdate();
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-    }
+    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
+      hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
+        try {
+          PreparedStatement update;
+          if (aBoolean) {
+            update = Nicks.sql().getConnection()
+                .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
+            update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+            update.setString(2, player.getUniqueId().toString());
+          } else {
+            update = Nicks.sql().getConnection()
+                .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
+            update.setString(1, player.getUniqueId().toString());
+            update.setString(2, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+          }
+          update.executeUpdate();
+        } catch (SQLException ex) {
+          ex.printStackTrace();
+        }
+      });
+    });
   }
 }

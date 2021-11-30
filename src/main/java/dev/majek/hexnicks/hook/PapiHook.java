@@ -34,6 +34,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Handles PlaceholderAPI hook methods.
  */
@@ -74,13 +76,18 @@ class PapiHook extends PlaceholderExpansion {
   @SuppressWarnings("all")
   public String onRequest(OfflinePlayer player, @NotNull String identifier) {
     if (identifier.equalsIgnoreCase("nick")) {
-      Component nick = Nicks.core().getStoredNick(player.getUniqueId());
-      if (nick == null) {
-        return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
-            .serialize(Component.text(player.getName()).colorIfAbsent(Nicks.config().DEFAULT_USERNAME_COLOR));
-      } else {
-        return LegacyComponentSerializer.builder().hexColors()
-            .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
+      try {
+        Component nick = Nicks.storage().getNick(player.getUniqueId()).get();
+        if (nick == null) {
+          return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
+              .serialize(Component.text(player.getName()).colorIfAbsent(Nicks.config().DEFAULT_USERNAME_COLOR));
+        } else {
+          return LegacyComponentSerializer.builder().hexColors()
+              .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
+        }
+      } catch (InterruptedException | ExecutionException ex) {
+        Nicks.error("Error retrieving nickname for Papi: ");
+        ex.printStackTrace();
       }
     }
     return null;

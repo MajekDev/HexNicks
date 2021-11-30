@@ -52,6 +52,7 @@ database: ''
 username: ''
 password: ''
 use-ssl: false
+auto-reconnect: false
 # This is the time, in seconds, for how often the plugin should check the database for updated nicknames.
 update-interval: 300
 

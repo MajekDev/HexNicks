@@ -42,6 +42,7 @@ public class NicksSql {
   private final String username = Nicks.core().getConfig().getString("username");
   private final String password = Nicks.core().getConfig().getString("password");
   private final boolean useSSL = Nicks.core().getConfig().getBoolean("use-ssl");
+  private final boolean autoReconnect = Nicks.core().getConfig().getBoolean("auto-reconnect");
   private final int updateInterval = Nicks.core().getConfig().getInt("update-interval", 300);
 
   private Connection connection;
@@ -63,7 +64,7 @@ public class NicksSql {
   public void connect() throws SQLException {
     if (!isConnected()) {
       connection = DriverManager.getConnection("jdbc:mysql://" +
-              host + ":" + port + "/" + database + "?useSSL=" + useSSL, username, password);
+              host + ":" + port + "/" + database + "?useSSL=" + useSSL + "&autoReconnect=" + autoReconnect, username, password);
     }
     Bukkit.getScheduler().scheduleSyncRepeatingTask(Nicks.core(), () -> Nicks.storage().updateNicks(), 200L, updateInterval * 20L);
   }

@@ -28,6 +28,7 @@ import com.google.gson.JsonParser;
 import dev.majek.hexnicks.Nicks;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
@@ -40,15 +41,15 @@ import org.jetbrains.annotations.NotNull;
 public class JsonStorage implements StorageMethod {
 
   @Override
-  public boolean hasNick(@NotNull UUID uuid) {
-    return Nicks.core().getNickMap().containsKey(uuid);
+  public CompletableFuture<Boolean> hasNick(@NotNull UUID uuid) {
+    return CompletableFuture.supplyAsync(() -> Nicks.core().getNickMap().containsKey(uuid));
   }
 
   @Override
   @SuppressWarnings("ConstantConditions")
-  public Component getNick(@NotNull UUID uuid) {
-    return hasNick(uuid) ? Nicks.core().getNickMap().get(uuid)
-        : Component.text(Bukkit.getOfflinePlayer(uuid).getName());
+  public CompletableFuture<Component> getNick(@NotNull UUID uuid) {
+    return hasNick(uuid).thenApplyAsync(b -> b ? Nicks.core().getNickMap().get(uuid)
+        : Component.text(Bukkit.getOfflinePlayer(uuid).getName()));
   }
 
   @Override

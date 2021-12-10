@@ -68,7 +68,7 @@ public class CommandNoNick implements TabExecutor {
     } else {
 
       // Make sure the sender has permission to remove another player's nickname
-      if (!sender.hasPermission("papernicks.nonick.other")) {
+      if (!sender.hasPermission("hexnicks.nonick.other")) {
         NicksMessages.NO_PERMISSION.send(sender);
         return true;
       }

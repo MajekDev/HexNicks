@@ -89,6 +89,9 @@ public interface NicksMessages {
   Args0 UPDATE = () -> Nicks.utils().configString("messages.update",
       "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>.");
 
+  Args0 NICKNAME_TAKEN = () -> Nicks.utils().configString("messages.nicknameTaken",
+      "<red>That nickname is taken by another player! Please choose a different one.");
+
   /**
    * A message that has no arguments that need to be replaced.
    */

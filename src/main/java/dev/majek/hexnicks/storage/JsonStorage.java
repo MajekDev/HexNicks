@@ -75,4 +75,9 @@ public class JsonStorage implements StorageMethod {
       e.printStackTrace();
     }
   }
+
+  @Override
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname) {
+    return CompletableFuture.supplyAsync(() -> Nicks.core().getNickMap().containsValue(nickname));
+  }
 }

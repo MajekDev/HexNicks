@@ -25,12 +25,19 @@
 package dev.majek.hexnicks.util;
 
 import dev.majek.hexnicks.Nicks;
+
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dev.majek.hexnicks.config.NicksMessages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles general utility methods.
@@ -155,5 +162,28 @@ public class NicksUtils {
 
     // Translate from '&' to '§' (section symbol)
     return ChatColor.translateAlternateColorCodes('&', sb.toString());
+  }
+
+  /**
+   * Check if a nickname is taken and prevent it.
+   *
+   * @param nickname the nickname to check
+   * @param player the player trying to set the nickname
+   * @return true if the nickname was a duplicate and the message was sent
+   */
+  public boolean preventDuplicates(@NotNull Component nickname, @NotNull CommandSender player) {
+    if (Nicks.config().PREVENT_DUPLICATE_NICKS) {
+      boolean taken = false;
+      try {
+        taken = Nicks.storage().nicknameExists(nickname).get();
+      } catch (InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+      }
+      if (taken) {
+        NicksMessages.NICKNAME_TAKEN.send(player);
+        return true;
+      }
+    }
+    return false;
   }
 }

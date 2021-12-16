@@ -30,6 +30,8 @@ import dev.majek.hexnicks.config.NicksMessages;
 import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -95,6 +97,11 @@ public class CommandNickColor implements TabExecutor {
     }
 
     Component nickname = wrapper.mmParse(wrapper.mmString(nickInput) + plainTextNick);
+
+    // Make sure the nickname isn't taken
+    if (Nicks.utils().preventDuplicates(nickname, player)) {
+      return true;
+    }
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,

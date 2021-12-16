@@ -43,6 +43,9 @@ override-essentials: true
 disabled-decorations:
   - "example (replace this)"
 
+# When enabled this will prevent a player from nicknaming themselves a nickname already in use by another player.
+prevent-duplicate-nicks: true
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false
@@ -76,3 +79,4 @@ messages:
   pluginReloaded: "<green>Plugin reloaded."
   realname: "%nickname% <gray>is <aqua>%name%<gray>."
   update: "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."
+  nicknameTaken: "<red>That nickname is taken by another player! Please choose a different one."

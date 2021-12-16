@@ -63,7 +63,7 @@ public interface StorageMethod {
   /**
    * Save a nickname in storage. This can be used to put it there initially or to update it.
    *
-   * @param player The player who's nickname to save.
+   * @param player The player whose nickname to save.
    */
   void saveNick(@NotNull Player player);
 
@@ -80,4 +80,12 @@ public interface StorageMethod {
       });
     }
   }
+
+  /**
+   * Check if a nickname is already taken by a player.
+   *
+   * @param nickname the nickname to check
+   * @return whether it's taken
+   */
+  CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname);
 }

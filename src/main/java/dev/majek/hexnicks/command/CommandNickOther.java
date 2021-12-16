@@ -101,6 +101,10 @@ public class CommandNickOther implements TabExecutor {
       return true;
     }
 
+    // Make sure the nickname isn't taken
+    if (Nicks.utils().preventDuplicates(nickname, sender)) {
+      return true;
+    }
 
     // Call event
     SetNickOtherEvent nickEvent = new SetNickOtherEvent(sender, target,

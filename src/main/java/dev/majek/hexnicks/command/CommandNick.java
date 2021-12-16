@@ -30,6 +30,9 @@ import dev.majek.hexnicks.config.NicksMessages;
 import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -91,6 +94,11 @@ public class CommandNick implements TabExecutor {
     int maxLength = Nicks.config().MAX_LENGTH;
     if (plainTextNick.length() > maxLength) {
       NicksMessages.TOO_LONG.send(player, maxLength);
+      return true;
+    }
+
+    // Make sure the nickname isn't taken
+    if (Nicks.utils().preventDuplicates(nickname, player)) {
       return true;
     }
 

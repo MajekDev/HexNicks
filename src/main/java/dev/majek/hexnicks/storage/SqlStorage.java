@@ -122,4 +122,22 @@ public class SqlStorage implements StorageMethod {
       });
     });
   }
+
+  @Override
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname) {
+    return CompletableFuture.supplyAsync(() -> {
+      try {
+        PreparedStatement ps = Nicks.sql().getConnection()
+            .prepareStatement("SELECT nickname FROM nicknameTable WHERE nickname=?");
+        ps.setString(1, GsonComponentSerializer.gson().serialize(nickname));
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()) {
+          return true;
+        }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+      }
+      return false;
+    });
+  }
 }

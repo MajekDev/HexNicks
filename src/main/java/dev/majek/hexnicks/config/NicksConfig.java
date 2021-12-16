@@ -47,6 +47,7 @@ public class NicksConfig {
   public Boolean              UPDATE_PROMPT;
   public Boolean              OVERRIDE_ESSENTIALS;
   public Set<TextDecoration>  DISABLED_DECORATIONS;
+  public Boolean              PREVENT_DUPLICATE_NICKS;
   public Boolean              DEBUG;
 
   public NicksConfig() {
@@ -74,6 +75,7 @@ public class NicksConfig {
         DISABLED_DECORATIONS.add(TextDecoration.valueOf(string.toUpperCase()));
       } catch (IllegalArgumentException | NullPointerException ignored) {}
     });
+    PREVENT_DUPLICATE_NICKS = Nicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
     DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
   }
 }

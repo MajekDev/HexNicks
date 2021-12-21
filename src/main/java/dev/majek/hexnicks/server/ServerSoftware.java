@@ -41,7 +41,7 @@ public interface ServerSoftware extends Listener {
    * @param player The player.
    * @return Their nickname as a Component.
    */
-  Component getNick(Player player);
+  @NotNull Component getNick(@NotNull Player player);
 
   /**
    * Set a player's display name to their nickname.
@@ -64,12 +64,12 @@ public interface ServerSoftware extends Listener {
    * @param sender The message recipient.
    * @param message The message.
    */
-  void sendMessage(CommandSender sender, Component message);
+  void sendMessage(@NotNull CommandSender sender, @NotNull Component message);
 
   /**
    * Get the name of the software implementation.
    *
    * @return name
    */
-  String softwareName();
+  @NotNull String softwareName();
 }

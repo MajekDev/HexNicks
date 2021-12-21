@@ -91,18 +91,18 @@ public final class Nicks extends JavaPlugin {
     config = new NicksConfig();
     sql = new NicksSql();
     hooks = new NicksHooks();
-    jsonConfig = new JsonConfig(getDataFolder(), "nicknames.json");
+    this.jsonConfig = new JsonConfig(this.getDataFolder(), "nicknames.json");
     try {
-      jsonConfig.createConfig();
-    } catch (FileNotFoundException e) {
+      this.jsonConfig.createConfig();
+    } catch (final FileNotFoundException ex) {
       error("Error creating nicknames.json file:");
-      e.printStackTrace();
+      ex.printStackTrace();
     }
-    nickMap = new HashMap<>();
+    this.nickMap = new HashMap<>();
     // Track plugin metrics through bStats
-    metrics = new Metrics(this, 8764);
+    this.metrics = new Metrics(this, 8764);
     // Check for new versions on Spigot
-    updateChecker = new UpdateChecker(this, 83554);
+    this.updateChecker = new UpdateChecker(this, 83554);
   }
 
   /**
@@ -114,19 +114,19 @@ public final class Nicks extends JavaPlugin {
     try {
       Class.forName("io.papermc.paper.event.player.AsyncChatEvent");
       software = new PaperServer();
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException ignored) {
       software = new SpigotServer();
       log("This plugin will run better on PaperMC 1.17+!");
     }
-    log("Running on " + software().softwareName() + " server software.");
+    log("Running on " + software.softwareName() + " server software.");
 
     // Load nicknames from storage
-    if (getConfig().getBoolean("database-enabled")) {
+    if (this.getConfig().getBoolean("database-enabled")) {
       try {
         sql.connect();
-      } catch (SQLException e) {
+      } catch (final SQLException ex) {
         error("Failed to connect to MySQL database:");
-        e.printStackTrace();
+        ex.printStackTrace();
       }
     }
     if (sql.isConnected()) {
@@ -137,36 +137,36 @@ public final class Nicks extends JavaPlugin {
     } else {
       try {
         storage = new JsonStorage();
-        JsonObject jsonObject = jsonConfig.toJsonObject();
-        for (String key : jsonObject.keySet()) {
-          nickMap.put(UUID.fromString(key), GsonComponentSerializer.gson()
+        final JsonObject jsonObject = this.jsonConfig.toJsonObject();
+        for (final String key : jsonObject.keySet()) {
+          this.nickMap.put(UUID.fromString(key), GsonComponentSerializer.gson()
               .deserializeFromTree(jsonObject.get(key)));
         }
-      } catch (IOException e) {
+      } catch (final IOException ex) {
         error("Error loading nickname data from nicknames.json file:");
-        e.printStackTrace();
+        ex.printStackTrace();
       }
       log("Successfully loaded nicknames from Json storage.");
     }
 
     // Register plugin commands
-    registerCommands();
+    this.registerCommands();
 
     // Initialize configuration file
-    reload();
+    this.reload();
 
     // Custom chart to see what percentage of servers are supporting legacy
-    metrics.addCustomChart(new SimplePie("supporting_legacy",
-        () -> String.valueOf(Nicks.config().LEGACY_COLORS)));
-    // Custom chart to see what percentage of servers are using the built in chat formatter
-    metrics.addCustomChart(new SimplePie("using_chat_formatter",
-        () -> String.valueOf(Nicks.config().CHAT_FORMATTER)));
+    this.metrics.addCustomChart(new SimplePie("supporting_legacy",
+        () -> String.valueOf(config.LEGACY_COLORS)));
+    // Custom chart to see what percentage of servers are using the built-in chat formatter
+    this.metrics.addCustomChart(new SimplePie("using_chat_formatter",
+        () -> String.valueOf(config.CHAT_FORMATTER)));
 
     // Register events
-    registerEvents(new PlayerJoin(), software);
+    this.registerEvents(new PlayerJoin(), software);
 
     // Check for updates - prompt to update if there is one
-    if (updateChecker.isBehindSpigot()) {
+    if (this.updateChecker.isBehindSpigot()) {
       log("There is a new version of the plugin available! " +
           "Download it here: https://www.spigotmc.org/resources/83554/");
     }
@@ -188,29 +188,29 @@ public final class Nicks extends JavaPlugin {
    */
   @SuppressWarnings("ConstantConditions")
   private void registerCommands() {
-    getCommand("nick").setExecutor(new CommandNick());
-    getCommand("nick").setTabCompleter(new CommandNick());
-    getCommand("nonick").setExecutor(new CommandNoNick());
-    getCommand("nonick").setTabCompleter(new CommandNoNick());
-    getCommand("realname").setExecutor(new CommandRealName());
-    getCommand("realname").setTabCompleter(new CommandRealName());
-    getCommand("nickother").setExecutor(new CommandNickOther());
-    getCommand("nickother").setTabCompleter(new CommandNickOther());
-    getCommand("nickcolor").setExecutor(new CommandNickColor());
-    getCommand("nickcolor").setTabCompleter(new CommandNickColor());
-    getCommand("nicksreload").setExecutor(new CommandNicksReload());
-    getCommand("nicksreload").setTabCompleter(new CommandNicksReload());
+    this.getCommand("nick").setExecutor(new CommandNick());
+    this.getCommand("nick").setTabCompleter(new CommandNick());
+    this.getCommand("nonick").setExecutor(new CommandNoNick());
+    this.getCommand("nonick").setTabCompleter(new CommandNoNick());
+    this.getCommand("realname").setExecutor(new CommandRealName());
+    this.getCommand("realname").setTabCompleter(new CommandRealName());
+    this.getCommand("nickother").setExecutor(new CommandNickOther());
+    this.getCommand("nickother").setTabCompleter(new CommandNickOther());
+    this.getCommand("nickcolor").setExecutor(new CommandNickColor());
+    this.getCommand("nickcolor").setTabCompleter(new CommandNickColor());
+    this.getCommand("nicksreload").setExecutor(new CommandNicksReload());
+    this.getCommand("nicksreload").setTabCompleter(new CommandNicksReload());
   }
 
   /**
    * Register plugin events.
    */
   private void registerEvents(Listener... listeners) {
-    for (Listener listener : listeners) {
-      getServer().getPluginManager().registerEvents(listener, this);
+    for (final Listener listener : listeners) {
+      this.getServer().getPluginManager().registerEvents(listener, this);
     }
     if (software instanceof PaperServer) {
-      getServer().getPluginManager().registerEvents(new PaperTabCompleteEvent(), this);
+      this.getServer().getPluginManager().registerEvents(new PaperTabCompleteEvent(), this);
     }
   }
 
@@ -294,7 +294,7 @@ public final class Nicks extends JavaPlugin {
    * @param x Object to log.
    */
   public static void log(@NotNull Object x) {
-    core().getLogger().info(x.toString());
+    core.getLogger().info(x.toString());
   }
 
   /**
@@ -303,8 +303,8 @@ public final class Nicks extends JavaPlugin {
    * @param x Object to log.
    */
   public static void debug(@NotNull Object x) {
-    if (config().DEBUG) {
-      core().getLogger().warning(x.toString());
+    if (config.DEBUG) {
+      core.getLogger().warning(x.toString());
     }
   }
 
@@ -314,7 +314,7 @@ public final class Nicks extends JavaPlugin {
    * @param x Object to log.
    */
   public static void error(@NotNull Object x) {
-    core().getLogger().severe(x.toString());
+    core.getLogger().severe(x.toString());
   }
 
   /**
@@ -322,17 +322,17 @@ public final class Nicks extends JavaPlugin {
    */
   public void reload() {
     debug("Reloading plugin...");
-    saveDefaultConfig();
-    File configFile = new File(core().getDataFolder(), "config.yml");
+    this.saveDefaultConfig();
+    final File configFile = new File(this.getDataFolder(), "config.yml");
     try {
-      ConfigUpdater.update(core(), "config.yml", configFile, Collections.emptyList());
-    } catch (IOException e) {
-      e.printStackTrace();
+      ConfigUpdater.update(core, "config.yml", configFile, Collections.emptyList());
+    } catch (final IOException ex) {
+      ex.printStackTrace();
     }
-    reloadConfig();
-    config().reload();
-    storage().updateNicks();
-    hooks().reloadHooks();
+    this.reloadConfig();
+    config.reload();
+    storage.updateNicks();
+    hooks.reloadHooks();
   }
 
   /**
@@ -340,8 +340,8 @@ public final class Nicks extends JavaPlugin {
    *
    * @return JsonConfig.
    */
-  public JsonConfig jsonConfig() {
-    return jsonConfig;
+  public @NotNull JsonConfig jsonConfig() {
+    return this.jsonConfig;
   }
 
   /**
@@ -349,8 +349,8 @@ public final class Nicks extends JavaPlugin {
    *
    * @return NickMap.
    */
-  public Map<UUID, Component> getNickMap() {
-    return nickMap;
+  public @NotNull Map<UUID, Component> getNickMap() {
+    return this.nickMap;
   }
 
   /**
@@ -364,10 +364,10 @@ public final class Nicks extends JavaPlugin {
   @ApiStatus.ScheduledForRemoval
   public boolean hasNick(@NotNull UUID uuid) {
     try {
-      debug("hasNick: " + storage().hasNick(uuid).get());
-      return storage().hasNick(uuid).get();
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
+      debug("hasNick: " + storage.hasNick(uuid).get());
+      return storage.hasNick(uuid).get();
+    } catch (final InterruptedException | ExecutionException ex) {
+      ex.printStackTrace();
       return false;
     }
   }
@@ -378,8 +378,8 @@ public final class Nicks extends JavaPlugin {
    * @param player The player.
    * @return Nickname/Display name.
    */
-  public Component getDisplayName(@NotNull Player player) {
-    return software().getNick(player).colorIfAbsent(Nicks.config.DEFAULT_USERNAME_COLOR);
+  public @NotNull Component getDisplayName(@NotNull Player player) {
+    return software.getNick(player).colorIfAbsent(config.DEFAULT_USERNAME_COLOR);
   }
 
   /**
@@ -393,10 +393,10 @@ public final class Nicks extends JavaPlugin {
   @ApiStatus.ScheduledForRemoval
   public Component getStoredNick(@NotNull UUID uuid) {
     try {
-      debug("storedNick: " + storage().getNick(uuid).get());
-      return storage().getNick(uuid).get();
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
+      debug("storedNick: " + storage.getNick(uuid).get());
+      return storage.getNick(uuid).get();
+    } catch (final InterruptedException | ExecutionException ex) {
+      ex.printStackTrace();
       return Component.empty();
     }
   }
@@ -409,8 +409,8 @@ public final class Nicks extends JavaPlugin {
    * @param nick Player's new nickname.
    */
   public void setNick(@NotNull Player player, @NotNull Component nick) {
-    software().setNick(player, nick);
-    hooks().setEssNick(player, nick);
+    software.setNick(player, nick);
+    hooks.setEssNick(player, nick);
   }
 
   /**
@@ -420,8 +420,8 @@ public final class Nicks extends JavaPlugin {
    * @param player The player whose nickname to remove.
    */
   public void removeNick(@NotNull Player player) {
-    software().removeNick(player);
-    hooks().setEssNick(player, Component.text(player.getName()));
+    software.removeNick(player);
+    hooks.setEssNick(player, Component.text(player.getName()));
   }
 
   /**
@@ -430,6 +430,6 @@ public final class Nicks extends JavaPlugin {
    * @return Whether there's an update.
    */
   public boolean hasUpdate() {
-    return updateChecker.isBehindSpigot();
+    return this.updateChecker.isBehindSpigot();
   }
 }

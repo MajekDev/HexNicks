@@ -50,7 +50,7 @@ public final class SpigotServer implements ServerSoftware {
   }
 
   @Override
-  public Component getNick(Player player) {
+  public @NotNull Component getNick(@NotNull Player player) {
     return legacyComponentSerializer.deserialize(player.getDisplayName());
   }
 
@@ -76,12 +76,12 @@ public final class SpigotServer implements ServerSoftware {
   }
 
   @Override
-  public void sendMessage(CommandSender sender, Component message) {
+  public void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
     BukkitAudiences.create(Nicks.core()).sender(sender).sendMessage(message);
   }
 
   @Override
-  public String softwareName() {
+  public @NotNull String softwareName() {
     return "SpigotMC";
   }
 

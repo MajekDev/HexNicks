@@ -29,7 +29,8 @@ import dev.majek.hexnicks.util.MiniMessageWrapper;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PaperServer implements ServerSoftware {
 
   @Override
-  public Component getNick(Player player) {
+  public @NotNull Component getNick(@NotNull Player player) {
     return player.displayName();
   }
 
@@ -69,12 +70,12 @@ public final class PaperServer implements ServerSoftware {
   }
 
   @Override
-  public void sendMessage(CommandSender sender, Component message) {
+  public void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
     sender.sendMessage(message);
   }
 
   @Override
-  public String softwareName() {
+  public @NotNull String softwareName() {
     return "PaperMC";
   }
 
@@ -84,20 +85,35 @@ public final class PaperServer implements ServerSoftware {
    * @param event AsyncChatEvent.
    */
   @EventHandler(priority = EventPriority.LOWEST)
-  public void onChat(AsyncChatEvent event) {
+  public void onChat(final AsyncChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
       Nicks.debug("paper chat event fired");
-      event.renderer((source, sourceDisplayName, message, viewer) -> MiniMessage.miniMessage().parse(Nicks.config().CHAT_FORMAT)
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}").replacement(Nicks.core().getDisplayName(source)).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}").replacement(LegacyComponentSerializer.builder().hexColors()
-              .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultPrefix(source))).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}").replacement(LegacyComponentSerializer.builder().hexColors()
-              .useUnusualXRepeatedCharacterHexFormat().build().deserialize(Nicks.hooks().vaultSuffix(source))).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{message}").replacement(
-              MiniMessageWrapper.builder().legacyColors(Nicks.config().LEGACY_COLORS)
-                  .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
-                  .mmParse(PlainTextComponentSerializer.plainText().serialize(message))
-          ).build()));
+      final LegacyComponentSerializer legacySerializer = LegacyComponentSerializer.builder().hexColors()
+          .useUnusualXRepeatedCharacterHexFormat().build();
+      event.renderer((source, sourceDisplayName, message, viewer) ->
+          // Format entire configured chat format with legacy and mini messages codes
+          MiniMessageWrapper.legacy().mmParse(Nicks.config().CHAT_FORMAT)
+              // Replace display name placeholder with HexNicks nick
+              .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
+                  .replacement(Nicks.core().getDisplayName(source)).build()
+              )
+              // Replace prefix placeholder with Vault prefix
+              .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
+                  .replacement(legacySerializer.deserialize(Nicks.hooks().vaultPrefix(source))).build()
+              )
+              // Replace suffix placeholder with Vault Suffix
+              .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
+                  .replacement(legacySerializer.deserialize(Nicks.hooks().vaultSuffix(source))).build()
+              )
+              // Replace message placeholder with the formatted message from the event
+              .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")
+                  .replacement(
+                      MiniMessageWrapper.builder().legacyColors(Nicks.config().LEGACY_COLORS)
+                          .advancedTransformations(source.hasPermission("hexnicks.chat.advanced")).build()
+                          .mmParse(PlainTextComponentSerializer.plainText().serialize(message))
+                  ).build()
+              )
+      );
     }
   }
 }

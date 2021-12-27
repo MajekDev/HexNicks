@@ -26,18 +26,24 @@ package dev.majek.hexnicks.util;
 
 import dev.majek.hexnicks.Nicks;
 
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.majek.hexnicks.config.NicksMessages;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 /**
  * Handles general utility methods.
@@ -185,5 +191,53 @@ public class NicksUtils {
       }
     }
     return false;
+  }
+
+  public @Nullable Character legacyCodeFromNamed(@NotNull NamedTextColor color) {
+    if (BLACK.equals(color)) {
+      return '0';
+    } else if (DARK_BLUE.equals(color)) {
+      return '1';
+    } else if (DARK_GREEN.equals(color)) {
+      return '2';
+    } else if (DARK_AQUA.equals(color)) {
+      return '3';
+    } else if (DARK_RED.equals(color)) {
+      return '4';
+    } else if (DARK_PURPLE.equals(color)) {
+      return '5';
+    } else if (GOLD.equals(color)) {
+      return '6';
+    } else if (GRAY.equals(color)) {
+      return '7';
+    } else if (DARK_GRAY.equals(color)) {
+      return '8';
+    } else if (BLUE.equals(color)) {
+      return '9';
+    } else if (GREEN.equals(color)) {
+      return 'a';
+    } else if (AQUA.equals(color)) {
+      return 'b';
+    } else if (RED.equals(color)) {
+      return 'c';
+    } else if (LIGHT_PURPLE.equals(color)) {
+      return 'd';
+    } else if (YELLOW.equals(color)) {
+      return 'e';
+    } else if (WHITE.equals(color)) {
+      return 'f';
+    }
+    System.out.println("What the fuck");
+    return null;
+  }
+
+  public Set<NamedTextColor> blockedColors(@NotNull CommandSender sender) {
+    Set<NamedTextColor> set = new HashSet<>();
+    for (NamedTextColor color : NamedTextColor.NAMES.values()) {
+      if (sender.hasPermission("hexnicks.color." + color.toString().toLowerCase(Locale.ROOT) + ".block")) {
+        set.add(color);
+      }
+    }
+    return set;
   }
 }

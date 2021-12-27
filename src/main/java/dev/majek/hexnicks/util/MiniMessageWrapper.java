@@ -25,8 +25,10 @@
 package dev.majek.hexnicks.util;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import net.kyori.adventure.util.Buildable;
 import org.jetbrains.annotations.NotNull;
@@ -175,7 +177,32 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
      */
     @NotNull Builder advancedTransformations(final boolean parse);
 
+    /**
+     * The {@link TextDecoration}s that should not be parsed.
+     *
+     * @param decorations the decorations
+     * @return this builder
+     * @since 2.2.0
+     */
     @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations);
+
+    /**
+     * Set the {@link PlaceholderResolver} for the {@link MiniMessage} instance.
+     *
+     * @param placeholderResolver the placeholder resolver
+     * @return this builder
+     * @since 2.2.1
+     */
+    @NotNull Builder placeholderResolver(final @NotNull PlaceholderResolver placeholderResolver);
+
+    /**
+     * The {@link NamedTextColor}s that should not be parsed.
+     *
+     * @param colors the colors
+     * @return this builder
+     * @since 2.2.1
+     */
+    @NotNull Builder removeColors(final @NotNull NamedTextColor... colors);
 
     /**
      * Build the {@link MiniMessageWrapper} ready to parse.

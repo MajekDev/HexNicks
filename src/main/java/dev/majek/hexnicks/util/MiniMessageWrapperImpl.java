@@ -27,9 +27,13 @@ package dev.majek.hexnicks.util;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
 import net.kyori.adventure.text.minimessage.transformation.TransformationRegistry;
 import net.kyori.adventure.text.minimessage.transformation.TransformationType;
 import org.jetbrains.annotations.ApiStatus;
@@ -44,12 +48,12 @@ import org.jetbrains.annotations.NotNull;
 final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
   @ApiStatus.Internal
-  static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(true, true,
-      true, false, false, new HashSet<>());
+  static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(true, true, true,
+      false, false, PlaceholderResolver.empty(), new HashSet<>(), new HashSet<>());
 
   @ApiStatus.Internal
-  static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(true, true,
-      true, true, false, new HashSet<>());
+  static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(true, true, true,
+      true, false, PlaceholderResolver.empty(), new HashSet<>(), new HashSet<>());
 
   @SuppressWarnings("all")
   private final TransformationRegistry allTransformations = TransformationRegistry.builder().add(
@@ -66,17 +70,23 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   ).build();
 
   private final boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+  private final PlaceholderResolver placeholderResolver;
   private final Set<TextDecoration> removedTextDecorations;
+  private final Set<NamedTextColor> removedColors;
 
   MiniMessageWrapperImpl(final boolean gradients, final boolean hexColors, final boolean standardColors,
                          final boolean legacyColors, final boolean advancedTransformations,
-                         final Set<TextDecoration> removedTextDecorations) {
+                         final PlaceholderResolver placeholderResolver,
+                         final Set<TextDecoration> removedTextDecorations,
+                         final Set<NamedTextColor> removedColors) {
     this.gradients = gradients;
     this.hexColors = hexColors;
     this.standardColors = standardColors;
     this.legacyColors = legacyColors;
     this.advancedTransformations = advancedTransformations;
+    this.placeholderResolver = placeholderResolver;
     this.removedTextDecorations = removedTextDecorations;
+    this.removedColors = removedColors;
   }
 
   @Override
@@ -85,13 +95,19 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
     for (TextDecoration decoration : removedTextDecorations) {
       decorationStateMap.put(decoration, TextDecoration.State.FALSE);
     }
-    return MiniMessage.builder().transformations(
+    return MiniMessage.builder().placeholderResolver(this.placeholderResolver).transformations(
         this.advancedTransformations ? this.allTransformations : this.colorTransformations
     ).build().parse(this.mmString(mmString)).decorations(decorationStateMap);
   }
 
   @Override
   public @NotNull String mmString(@NotNull String mmString) {
+    for (NamedTextColor color : this.removedColors) {
+      mmString = mmString.replace("<" + color.toString().toLowerCase(Locale.ROOT) + ">", "");
+      mmString = mmString.replace("</" + color.toString().toLowerCase(Locale.ROOT) + ">", "");
+      mmString = mmString.replace("&" + new NicksUtils().legacyCodeFromNamed(color), "");
+    }
+
     if (this.legacyColors) {
       mmString = mmString
           .replace("&0", "<black>")
@@ -110,7 +126,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
           .replace("&d", "<light_purple>")
           .replace("&e", "<yellow>")
           .replace("&f", "<white>")
-          .replace("&m", "<underlined>")
+          .replace("&n", "<underlined>")
           .replace("&m", "<strikethrough>")
           .replace("&k", "<obfuscated>")
           .replace("&o", "<italic>")
@@ -216,7 +232,9 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   static final class BuilderImpl implements Builder {
 
     private boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+    private PlaceholderResolver placeholderResolver;
     private final Set<TextDecoration> removedTextDecorations;
+    private final Set<NamedTextColor> removedColors;
 
     @ApiStatus.Internal
     BuilderImpl() {
@@ -225,7 +243,9 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       this.standardColors = true;
       this.legacyColors = false;
       this.advancedTransformations = false;
+      this.placeholderResolver = PlaceholderResolver.empty();
       this.removedTextDecorations = new HashSet<>();
+      this.removedColors = new HashSet<>();
     }
 
     @ApiStatus.Internal
@@ -235,7 +255,9 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       this.standardColors = wrapper.standardColors;
       this.legacyColors = wrapper.legacyColors;
       this.advancedTransformations = wrapper.advancedTransformations;
+      this.placeholderResolver = wrapper.placeholderResolver;
       this.removedTextDecorations = wrapper.removedTextDecorations;
+      this.removedColors = wrapper.removedColors;
     }
 
     @Override
@@ -270,14 +292,26 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
     @Override
     public @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations) {
-      this.removedTextDecorations.addAll(Arrays.asList(decorations));
+      this.removedTextDecorations.addAll(List.of(decorations));
+      return this;
+    }
+
+    @Override
+    public @NotNull Builder placeholderResolver(final @NotNull PlaceholderResolver placeholderResolver) {
+      this.placeholderResolver = placeholderResolver;
+      return this;
+    }
+
+    @Override
+    public @NotNull Builder removeColors(final @NotNull NamedTextColor... colors) {
+      this.removedColors.addAll(List.of(colors));
       return this;
     }
 
     @Override
     public @NotNull MiniMessageWrapper build() {
-      return new MiniMessageWrapperImpl(this.gradients, this.hexColors, this.standardColors,
-          this.legacyColors, this.advancedTransformations, this.removedTextDecorations);
+      return new MiniMessageWrapperImpl(this.gradients, this.hexColors, this.standardColors, this.legacyColors,
+          this.advancedTransformations, this.placeholderResolver, this.removedTextDecorations, this.removedColors);
     }
   }
 }

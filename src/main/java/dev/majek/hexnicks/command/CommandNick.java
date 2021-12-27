@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
@@ -69,6 +70,7 @@ public class CommandNick implements TabExecutor {
         .standardColors(player.hasPermission("hexnicks.nick.color"))
         .legacyColors(Nicks.config().LEGACY_COLORS)
         .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
+        .removeColors(Nicks.utils().blockedColors(player).toArray(new NamedTextColor[0]))
         .build().mmParse(nickInput);
 
     // Make sure the nickname is alphanumeric if that's enabled

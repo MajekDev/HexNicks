@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -82,6 +83,7 @@ public class CommandNickColor implements TabExecutor {
         .standardColors(player.hasPermission("hexnicks.nick.color"))
         .legacyColors(Nicks.config().LEGACY_COLORS)
         .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
+        .removeColors(Nicks.utils().blockedColors(player).toArray(new NamedTextColor[0]))
         .build();
 
     // Get the players current nickname to apply color codes to

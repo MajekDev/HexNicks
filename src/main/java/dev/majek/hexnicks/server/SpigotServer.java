@@ -93,7 +93,7 @@ public final class SpigotServer implements ServerSoftware {
       if (Nicks.config().LEGACY_COLORS) {
         message = Nicks.utils().legacyToMini(message);
       }
-      message = legacyComponentSerializer.serialize(MiniMessage.get().parse(message));
+      message = legacyComponentSerializer.serialize(MiniMessage.miniMessage().parse(message));
       format = Nicks.utils().miniToLegacy(format)
           .replace("{displayname}", legacyComponentSerializer.serialize(Nicks.core().getDisplayName(event.getPlayer())))
           .replace("{message}", message)

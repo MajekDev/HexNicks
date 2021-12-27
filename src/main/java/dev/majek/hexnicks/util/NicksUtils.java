@@ -175,7 +175,7 @@ public class NicksUtils {
     if (Nicks.config().PREVENT_DUPLICATE_NICKS) {
       boolean taken = false;
       try {
-        taken = Nicks.storage().nicknameExists(nickname).get();
+        taken = Nicks.storage().nicknameExists(nickname, Nicks.config().PREVENT_DUPLICATE_NICKS_STRICT).get();
       } catch (InterruptedException | ExecutionException e) {
         e.printStackTrace();
       }

@@ -44,7 +44,10 @@ disabled-decorations:
   - "example (replace this)"
 
 # When enabled this will prevent a player from nicknaming themselves a nickname already in use by another player.
+# Strict will prevent players from having the same characters. If strict is disabled (default) then players can
+# have the same name with different colors, but the same name with the same colors will be blocked.
 prevent-duplicate-nicks: true
+prevent-duplicate-nicks-strict: false
 
 # Database settings
 # Only enable this if you know what you're doing and have an existing database

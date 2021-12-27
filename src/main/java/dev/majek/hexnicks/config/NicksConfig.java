@@ -48,6 +48,7 @@ public class NicksConfig {
   public Boolean              OVERRIDE_ESSENTIALS;
   public Set<TextDecoration>  DISABLED_DECORATIONS;
   public Boolean              PREVENT_DUPLICATE_NICKS;
+  public Boolean              PREVENT_DUPLICATE_NICKS_STRICT;
   public Boolean              DEBUG;
 
   public NicksConfig() {
@@ -76,6 +77,7 @@ public class NicksConfig {
       } catch (IllegalArgumentException | NullPointerException ignored) {}
     });
     PREVENT_DUPLICATE_NICKS = Nicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
+    PREVENT_DUPLICATE_NICKS_STRICT = Nicks.core().getConfig().getBoolean("prevent-duplicate-nicks-strict", false);
     DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
   }
 }

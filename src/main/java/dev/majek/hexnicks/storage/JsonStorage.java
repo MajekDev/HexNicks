@@ -31,6 +31,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +78,17 @@ public class JsonStorage implements StorageMethod {
   }
 
   @Override
-  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname) {
-    return CompletableFuture.supplyAsync(() -> Nicks.core().getNickMap().containsValue(nickname));
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict) {
+    if (strict) {
+      for (Component value : Nicks.core().getNickMap().values()) {
+        if (PlainTextComponentSerializer.plainText().serialize(value)
+            .equalsIgnoreCase(PlainTextComponentSerializer.plainText().serialize(nickname))) {
+          return CompletableFuture.supplyAsync(() -> true);
+        }
+      }
+    } else {
+      return CompletableFuture.supplyAsync(() -> Nicks.core().getNickMap().containsValue(nickname));
+    }
+    return CompletableFuture.supplyAsync(() -> false);
   }
 }

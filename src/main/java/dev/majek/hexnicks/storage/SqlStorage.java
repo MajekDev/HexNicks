@@ -28,10 +28,13 @@ import dev.majek.hexnicks.Nicks;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -124,15 +127,31 @@ public class SqlStorage implements StorageMethod {
   }
 
   @Override
-  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname) {
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        PreparedStatement ps = Nicks.sql().getConnection()
-            .prepareStatement("SELECT nickname FROM nicknameTable WHERE nickname=?");
-        ps.setString(1, GsonComponentSerializer.gson().serialize(nickname));
-        ResultSet resultSet = ps.executeQuery();
-        if (resultSet.next()) {
-          return true;
+        if (strict) {
+          PreparedStatement ps = Nicks.sql().getConnection()
+              .prepareStatement("SELECT nickname FROM nicknameTable");
+          ResultSet resultSet = ps.executeQuery();
+          Set<Component> nicknames = new HashSet<>();
+          while (resultSet.next()) {
+            nicknames.add(GsonComponentSerializer.gson().deserialize(resultSet.getString("nickname")));
+          }
+          for (Component value : nicknames) {
+            if (PlainTextComponentSerializer.plainText().serialize(value)
+                .equalsIgnoreCase(PlainTextComponentSerializer.plainText().serialize(nickname))) {
+              return true;
+            }
+          }
+        } else {
+          PreparedStatement ps = Nicks.sql().getConnection()
+              .prepareStatement("SELECT nickname FROM nicknameTable WHERE nickname=?");
+          ps.setString(1, GsonComponentSerializer.gson().serialize(nickname));
+          ResultSet resultSet = ps.executeQuery();
+          if (resultSet.next()) {
+            return true;
+          }
         }
       } catch (SQLException ex) {
         ex.printStackTrace();

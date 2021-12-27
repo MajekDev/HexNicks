@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.Nicks;
@@ -46,9 +45,9 @@ public class PlayerJoin implements Listener {
     // Set the joining player's nickname to their stored nickname if they have one
     Nicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
       if (aBoolean) {
-        Nicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) -> {
-          Nicks.core().setNick(player, component);
-        });
+        Nicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
+            Nicks.core().setNick(player, component)
+        );
       }
     });
 

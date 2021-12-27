@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package dev.majek.hexnicks.api;
 
 import dev.majek.hexnicks.Nicks;
@@ -128,8 +127,7 @@ public class NicksApi {
    * @param uuid The unique id.
    * @return Nickname if it exists.
    */
-  @Nullable
-  public CompletableFuture<Component> getStoredNick(@NotNull UUID uuid) {
+  public @Nullable CompletableFuture<Component> getStoredNick(@NotNull UUID uuid) {
     return Nicks.storage().getNick(uuid);
   }
 
@@ -139,8 +137,7 @@ public class NicksApi {
    * @param player Player.
    * @return Nickname if it exists.
    */
-  @Nullable
-  public CompletableFuture<Component> getStoredNick(@NotNull Player player) {
+  public @Nullable CompletableFuture<Component> getStoredNick(@NotNull Player player) {
     return Nicks.storage().getNick(player.getUniqueId());
   }
 
@@ -150,8 +147,7 @@ public class NicksApi {
    * @param player OfflinePlayer.
    * @return Nickname if it exists.
    */
-  @Nullable
-  public CompletableFuture<Component> getStoredNick(@NotNull OfflinePlayer player) {
+  public @Nullable CompletableFuture<Component> getStoredNick(@NotNull OfflinePlayer player) {
     return Nicks.storage().getNick(player.getUniqueId());
   }
 }

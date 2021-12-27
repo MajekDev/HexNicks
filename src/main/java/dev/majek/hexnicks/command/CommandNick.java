@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package dev.majek.hexnicks.command;
 
 import dev.majek.hexnicks.Nicks;
@@ -30,9 +29,6 @@ import dev.majek.hexnicks.config.NicksMessages;
 import dev.majek.hexnicks.util.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

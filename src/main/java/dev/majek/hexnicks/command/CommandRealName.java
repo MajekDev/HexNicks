@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package dev.majek.hexnicks.command;
 
 import dev.majek.hexnicks.Nicks;
 import dev.majek.hexnicks.config.NicksMessages;
 import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -55,7 +56,13 @@ public class CommandRealName implements TabExecutor {
       return true;
     }
 
-    NicksMessages.REALNAME.send(sender, player.getName(), Nicks.api().getNick(player));
+    CompletableFuture<Component> nickname = Nicks.api().getStoredNick(player);
+    if (nickname == null) {
+      NicksMessages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
+      return true;
+    }
+
+    nickname.whenComplete(((component, throwable) -> NicksMessages.REALNAME.send(sender, player.getName(), component)));
     return true;
   }
 

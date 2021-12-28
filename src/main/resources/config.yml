@@ -14,7 +14,7 @@ min-length: 3
 require-alphanumeric: true
 
 # The plugin needs a chat formatter for nicknames to format properly in chat
-# PaperNicks can do this itself but if you have another formatter such as EssentialsChat or VaultChatFormatter you should disable this
+# HexNicks can do this itself but if you have another formatter such as EssentialsChat or VaultChatFormatter you should disable this
 chat-formatter: true
 
 # The format of chat messages. Must include {displayname} and {message} placeholders.

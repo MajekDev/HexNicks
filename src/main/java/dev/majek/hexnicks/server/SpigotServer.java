@@ -87,7 +87,7 @@ public final class SpigotServer implements ServerSoftware {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onChat(AsyncPlayerChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
-      String format = Nicks.config().CHAT_FORMAT;
+      String format = Nicks.hooks().applyPlaceHolders(event.getPlayer(), Nicks.config().CHAT_FORMAT);
       String message = event.getMessage();
       if (Nicks.config().LEGACY_COLORS) {
         message = Nicks.utils().legacyToMini(message);

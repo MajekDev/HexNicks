@@ -89,7 +89,7 @@ public final class PaperServer implements ServerSoftware {
           .useUnusualXRepeatedCharacterHexFormat().build();
       event.renderer((source, sourceDisplayName, message, viewer) ->
           // Format entire configured chat format with legacy and mini messages codes
-          MiniMessageWrapper.legacy().mmParse(Nicks.config().CHAT_FORMAT)
+          MiniMessageWrapper.legacy().mmParse(Nicks.hooks().applyPlaceHolders(source, Nicks.config().CHAT_FORMAT))
               // Replace display name placeholder with HexNicks nick
               .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
                   .replacement(Nicks.core().getDisplayName(source)).build()

@@ -19,6 +19,7 @@ HexNicks is a simple nickname plugin that allows players to set their nickname t
 - Active plugin and developer.
 - Ability to format chat on it's own, no external chat formatter needed.
 - Fully-featured [api](https://github.com/MajekDev/HexNicks/tree/main/src/main/java/dev/majek/hexnicks/api) for developers.
+- Full documentation [here](https://github.com/MajekDev/HexNicks/wiki).
 
 ## Commands
 

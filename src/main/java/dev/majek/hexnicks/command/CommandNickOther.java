@@ -70,9 +70,9 @@ public class CommandNickOther implements TabExecutor {
     }
 
     Component nickname = MiniMessageWrapper.builder()
-        .gradients(target.hasPermission("hexnicks.nick.gradient"))
-        .hexColors(target.hasPermission("hexnicks.nick.hex"))
-        .standardColors(target.hasPermission("hexnicks.nick.color"))
+        .gradients(target.hasPermission("hexnicks.color.gradient"))
+        .hexColors(target.hasPermission("hexnicks.color.hex"))
+        .standardColors(true)
         .legacyColors(Nicks.config().LEGACY_COLORS)
         .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
         .build().mmParse(nickInput);

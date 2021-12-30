@@ -224,14 +224,13 @@ public class NicksUtils {
     } else if (WHITE.equals(color)) {
       return 'f';
     }
-    System.out.println("What the fuck");
     return null;
   }
 
   public Set<NamedTextColor> blockedColors(@NotNull CommandSender sender) {
     Set<NamedTextColor> set = new HashSet<>();
     for (NamedTextColor color : NamedTextColor.NAMES.values()) {
-      if (sender.hasPermission("hexnicks.color." + color.toString().toLowerCase(Locale.ROOT) + ".block")) {
+      if (!sender.hasPermission("hexnicks.color." + color.toString().toLowerCase(Locale.ROOT))) {
         set.add(color);
       }
     }

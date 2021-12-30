@@ -1,5 +1,16 @@
 # Plugin Changelog
 
+# 2.2.1 - No Duplicate Nicknames
+
+- New config option for preventing players from having the same nickname.
+- Added ability to block color usage with permissions, read [here](https://github.com/MajekDev/HexNicks/wiki/Permissions#blocking-certain-color-usage).
+- PlaceholderAPI placeholders will now be parsed in chat format.
+- Chat format can now contain legacy codes on Paper if legacy support is enabled.
+- Fix typo permission issue.
+- Standard code cleanup.
+
+This is a very minor update that adds a lot of small new features and squashes some bugs.
+
 # 2.2.0 - Async Everything
 
 - Switched access to MySQL database from synchronous to asynchronous.

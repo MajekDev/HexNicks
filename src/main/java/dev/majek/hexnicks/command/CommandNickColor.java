@@ -75,9 +75,9 @@ public class CommandNickColor implements TabExecutor {
     }
 
     MiniMessageWrapper wrapper = MiniMessageWrapper.builder()
-        .gradients(player.hasPermission("hexnicks.nick.gradient"))
-        .hexColors(player.hasPermission("hexnicks.nick.hex"))
-        .standardColors(player.hasPermission("hexnicks.nick.color"))
+        .gradients(player.hasPermission("hexnicks.color.gradient"))
+        .hexColors(player.hasPermission("hexnicks.color.hex"))
+        .standardColors(true)
         .legacyColors(Nicks.config().LEGACY_COLORS)
         .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
         .removeColors(Nicks.utils().blockedColors(player).toArray(new NamedTextColor[0]))

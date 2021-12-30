@@ -23,7 +23,13 @@
  */
 package dev.majek.hexnicks.server;
 
+import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -71,4 +77,49 @@ public interface ServerSoftware extends Listener {
    * @return name
    */
   @NotNull String softwareName();
+
+  /**
+   * Instance of the {@link LegacyComponentSerializer} used by server implementations.
+   */
+  LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder().hexColors()
+      .useUnusualXRepeatedCharacterHexFormat().character('§').build();
+
+  /**
+   * Format the chat for all server implementations.
+   *
+   * @param source the chatter
+   * @param message the message
+   * @return formatted chat
+   */
+  default @NotNull Component formatChat(final @NotNull Player source, final @NotNull String message) {
+    final MiniMessageWrapper miniMessageWrapper = MiniMessageWrapper.builder()
+        .gradients(source.hasPermission("hexnicks.color.gradient"))
+        .hexColors(source.hasPermission("hexnicks.color.hex"))
+        .legacyColors(Nicks.config().LEGACY_COLORS)
+        .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
+        .removeColors(Nicks.utils().blockedColors(source).toArray(new NamedTextColor[0]))
+        .build();
+
+    return miniMessageWrapper.mmParse(Nicks.hooks().applyPlaceHolders(source, Nicks.config().CHAT_FORMAT))
+        // Replace display name placeholder with HexNicks nick
+        .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
+            .replacement(Nicks.core().getDisplayName(source)).build()
+        )
+        // Replace prefix placeholder with Vault prefix
+        .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
+            .replacement(LEGACY_COMPONENT_SERIALIZER.deserialize(Nicks.hooks().vaultPrefix(source))).build()
+        )
+        // Replace suffix placeholder with Vault Suffix
+        .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
+            .replacement(LEGACY_COMPONENT_SERIALIZER.deserialize(Nicks.hooks().vaultSuffix(source))).build()
+        )
+        // Replace message placeholder with the formatted message from the event
+        .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")
+            .replacement(
+                miniMessageWrapper.mmParse(
+                    Nicks.config().LEGACY_COLORS ? Nicks.utils().legacyToMini(message) : message
+                )
+            ).build()
+        );
+  }
 }

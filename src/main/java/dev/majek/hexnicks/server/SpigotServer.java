@@ -26,8 +26,6 @@ package dev.majek.hexnicks.server;
 import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,21 +39,14 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("deprecation")
 public final class SpigotServer implements ServerSoftware {
 
-  private final LegacyComponentSerializer legacyComponentSerializer;
-
-  public SpigotServer() {
-    legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors()
-        .useUnusualXRepeatedCharacterHexFormat().build();
-  }
-
   @Override
   public @NotNull Component getNick(@NotNull Player player) {
-    return legacyComponentSerializer.deserialize(player.getDisplayName());
+    return LEGACY_COMPONENT_SERIALIZER.deserialize(player.getDisplayName());
   }
 
   @Override
   public void setNick(@NotNull Player player, @NotNull Component nickname) {
-    String nick = legacyComponentSerializer.serialize(nickname) + "§r";
+    String nick = LEGACY_COMPONENT_SERIALIZER.serialize(nickname) + "§r";
     Nicks.core().getNickMap().put(player.getUniqueId(), nickname);
     player.setDisplayName(nick);
     if (Nicks.config().TAB_NICKS) {
@@ -87,18 +78,9 @@ public final class SpigotServer implements ServerSoftware {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onChat(AsyncPlayerChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
-      String format = Nicks.hooks().applyPlaceHolders(event.getPlayer(), Nicks.config().CHAT_FORMAT);
-      String message = event.getMessage();
-      if (Nicks.config().LEGACY_COLORS) {
-        message = Nicks.utils().legacyToMini(message);
-      }
-      message = legacyComponentSerializer.serialize(MiniMessage.miniMessage().parse(message));
-      format = Nicks.utils().miniToLegacy(format)
-          .replace("{displayname}", legacyComponentSerializer.serialize(Nicks.core().getDisplayName(event.getPlayer())))
-          .replace("{message}", message)
-          .replace("{prefix}", Nicks.hooks().vaultPrefix(event.getPlayer()))
-          .replace("{suffix}", Nicks.hooks().vaultSuffix(event.getPlayer()));
-      event.setFormat(Nicks.utils().applyLegacyColors(format));
+      event.setFormat(
+          LEGACY_COMPONENT_SERIALIZER.serialize(formatChat(event.getPlayer(), event.getMessage()))
+      );
       Nicks.debug("spigot chat event - " + event.getFormat());
     }
   }

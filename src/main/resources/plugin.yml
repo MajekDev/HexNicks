@@ -33,16 +33,7 @@ commands:
 
 permissions:
   hexnicks.nick:
-    description: Permission to change nicknames.
-    default: true
-  hexnicks.nick.color:
-    description: Permission to use standard color codes in nicknames.
-    default: true
-  hexnicks.nick.hex:
-    description: Permission to use hex color codes in nicknames.
-    default: true
-  hexnicks.nick.gradient:
-    description: Permission to use gradients in nicknames.
+    description: Permission to change nicknames with /nick.
     default: true
   hexnicks.nick.other:
     description: Permission to change other player's nicknames.
@@ -65,3 +56,45 @@ permissions:
   hexnicks.chat.advanced:
     description: Permission to inject things like click events into chat messages via MiniMessage.
     default: op
+
+  hexnicks.color.*:
+    description: Permission to use all standard color codes.
+    default: true
+  hexnicks.color.hex:
+    description: Permission to use hex color codes.
+    default: true
+  hexnicks.color.gradient:
+    description: Permission to use gradient colors.
+    default: true
+  hexnicks.color.black:
+    default: true
+  hexnicks.color.dark_blue:
+    default: true
+  hexnicks.color.dark_green:
+    default: true
+  hexnicks.color.dark_aqua:
+    default: true
+  hexnicks.color.dark_red:
+    default: true
+  hexnicks.color.dark_purple:
+    default: true
+  hexnicks.color.gold:
+    default: true
+  hexnicks.color.gray:
+    default: true
+  hexnicks.color.dark_gray:
+    default: true
+  hexnicks.color.blue:
+    default: true
+  hexnicks.color.green:
+    default: true
+  hexnicks.color.aqua:
+    default: true
+  hexnicks.color.red:
+    default: true
+  hexnicks.color.light_purple:
+    default: true
+  hexnicks.color.yellow:
+    default: true
+  hexnicks.color.white:
+    default: true

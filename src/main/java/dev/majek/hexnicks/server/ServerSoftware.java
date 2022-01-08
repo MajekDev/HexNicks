@@ -107,11 +107,11 @@ public interface ServerSoftware extends Listener {
         )
         // Replace prefix placeholder with Vault prefix
         .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
-            .replacement(LEGACY_COMPONENT_SERIALIZER.deserialize(Nicks.hooks().vaultPrefix(source))).build()
+            .replacement(Nicks.hooks().vaultPrefix(source)).build()
         )
         // Replace suffix placeholder with Vault Suffix
         .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
-            .replacement(LEGACY_COMPONENT_SERIALIZER.deserialize(Nicks.hooks().vaultSuffix(source))).build()
+            .replacement(Nicks.hooks().vaultSuffix(source)).build()
         )
         // Replace message placeholder with the formatted message from the event
         .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")

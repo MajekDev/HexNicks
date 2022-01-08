@@ -24,7 +24,10 @@
 package dev.majek.hexnicks.hook;
 
 import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.util.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -125,8 +128,10 @@ public class NicksHooks {
    * @param player The player.
    * @return Player's prefix.
    */
-  public @NotNull String vaultPrefix(@NotNull Player player) {
-    return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerPrefix(player)) : "";
+  public @NotNull Component vaultPrefix(@NotNull Player player) {
+    return isVaultHooked() ?
+        MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerPrefix(player)) :
+        Component.empty();
   }
 
   /**
@@ -135,8 +140,10 @@ public class NicksHooks {
    * @param player The player.
    * @return Player's suffix.
    */
-  public @NotNull String vaultSuffix(@NotNull Player player) {
-    return isVaultHooked() ? Nicks.utils().applyLegacyColors(vaultHook.vaultChat().getPlayerSuffix(player)) : "";
+  public @NotNull Component vaultSuffix(@NotNull Player player) {
+    return isVaultHooked() ?
+        MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerSuffix(player)) :
+        Component.empty();
   }
 
   /**

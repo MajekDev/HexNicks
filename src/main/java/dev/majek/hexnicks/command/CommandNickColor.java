@@ -32,7 +32,6 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -61,14 +60,9 @@ public class CommandNickColor implements TabExecutor {
 
     String nickInput = String.join(" ", args);
 
-    // Check if we're supporting legacy
-    if (Nicks.config().LEGACY_COLORS) {
-      nickInput = Nicks.utils().legacyToMini(nickInput);
-    }
-
     // If there are no colors the length should be 0
     String plainTextInput = PlainTextComponentSerializer.plainText()
-        .serialize(MiniMessage.miniMessage().parse(nickInput));
+        .serialize(MiniMessageWrapper.legacy().mmParse(nickInput));
     if (plainTextInput.length() > 0) {
       NicksMessages.ONLY_COLOR_CODES.send(player);
       return true;

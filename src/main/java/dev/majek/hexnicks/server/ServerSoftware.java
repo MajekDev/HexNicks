@@ -115,11 +115,7 @@ public interface ServerSoftware extends Listener {
         )
         // Replace message placeholder with the formatted message from the event
         .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")
-            .replacement(
-                miniMessageWrapper.mmParse(
-                    Nicks.config().LEGACY_COLORS ? Nicks.utils().legacyToMini(message) : message
-                )
-            ).build()
+            .replacement(miniMessageWrapper.mmParse(message)).build()
         );
   }
 }

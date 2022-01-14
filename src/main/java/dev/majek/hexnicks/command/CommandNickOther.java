@@ -64,11 +64,6 @@ public class CommandNickOther implements TabExecutor {
     System.arraycopy(args, 1, newArgs, 0, args.length - 1);
     String nickInput = String.join(" ", newArgs);
 
-    // Check if we're supporting legacy
-    if (Nicks.config().LEGACY_COLORS) {
-      nickInput = Nicks.utils().legacyToMini(nickInput);
-    }
-
     Component nickname = MiniMessageWrapper.builder()
         .gradients(target.hasPermission("hexnicks.color.gradient"))
         .hexColors(target.hasPermission("hexnicks.color.hex"))
@@ -101,7 +96,7 @@ public class CommandNickOther implements TabExecutor {
     }
 
     // Make sure the nickname isn't taken
-    if (Nicks.utils().preventDuplicates(nickname, sender)) {
+    if (Nicks.utils().preventDuplicates(nickname, target)) {
       return true;
     }
 

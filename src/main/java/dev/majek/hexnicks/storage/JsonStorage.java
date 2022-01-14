@@ -26,12 +26,15 @@ package dev.majek.hexnicks.storage;
 import com.google.gson.JsonParser;
 import dev.majek.hexnicks.Nicks;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,16 +80,30 @@ public class JsonStorage implements StorageMethod {
   }
 
   @Override
-  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict) {
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict, @NotNull Player player) {
+    List<Component> taken = new ArrayList<>();
+    for (Map.Entry<UUID, Component> entry : Nicks.core().getNickMap().entrySet()) {
+      if (!entry.getKey().equals(player.getUniqueId())) {
+        taken.add(entry.getValue());
+      }
+    }
+    taken.addAll(
+        Arrays.stream(Bukkit.getOfflinePlayers())
+            .filter(offlinePlayer -> !offlinePlayer.getUniqueId().equals(player.getUniqueId()))
+            .map(OfflinePlayer::getName)
+            .filter(Objects::nonNull)
+            .map(Component::text)
+            .collect(Collectors.toList())
+    );
     if (strict) {
-      for (Component value : Nicks.core().getNickMap().values()) {
+      for (Component value : taken) {
         if (PlainTextComponentSerializer.plainText().serialize(value)
             .equalsIgnoreCase(PlainTextComponentSerializer.plainText().serialize(nickname))) {
           return CompletableFuture.supplyAsync(() -> true);
         }
       }
     } else {
-      return CompletableFuture.supplyAsync(() -> Nicks.core().getNickMap().containsValue(nickname));
+      return CompletableFuture.supplyAsync(() -> taken.contains(nickname));
     }
     return CompletableFuture.supplyAsync(() -> false);
   }

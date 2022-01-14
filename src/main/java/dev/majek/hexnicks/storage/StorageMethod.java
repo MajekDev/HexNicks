@@ -85,7 +85,8 @@ public interface StorageMethod {
    *
    * @param nickname the nickname to check
    * @param strict whether the same names with different colors should be considered
+   * @param player the player creating a nickname - we want to exclude them so their name doesn't count against them
    * @return whether it's taken
    */
-  CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict);
+  CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict, @NotNull Player player);
 }

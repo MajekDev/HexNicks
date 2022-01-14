@@ -27,14 +27,15 @@ import dev.majek.hexnicks.Nicks;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -102,55 +103,57 @@ public class SqlStorage implements StorageMethod {
 
   @Override
   public void saveNick(@NotNull Player player) {
-    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
-      hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
-        try {
-          PreparedStatement update;
-          if (aBoolean) {
-            update = Nicks.sql().getConnection()
-                .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
-            update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
-            update.setString(2, player.getUniqueId().toString());
-          } else {
-            update = Nicks.sql().getConnection()
-                .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
-            update.setString(1, player.getUniqueId().toString());
-            update.setString(2, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () ->
+        hasNick(player.getUniqueId()).whenCompleteAsync((hasNick, throwable) -> {
+          try {
+            PreparedStatement update;
+            if (hasNick) {
+              update = Nicks.sql().getConnection()
+                  .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
+              update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+              update.setString(2, player.getUniqueId().toString());
+            } else {
+              update = Nicks.sql().getConnection()
+                  .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
+              update.setString(1, player.getUniqueId().toString());
+              update.setString(2, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+            }
+            update.executeUpdate();
+          } catch (SQLException ex) {
+            ex.printStackTrace();
           }
-          update.executeUpdate();
-        } catch (SQLException ex) {
-          ex.printStackTrace();
-        }
-      });
-    });
+        })
+    );
   }
 
   @Override
-  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict) {
+  public CompletableFuture<Boolean> nicknameExists(@NotNull Component nickname, boolean strict, @NotNull Player player) {
     return CompletableFuture.supplyAsync(() -> {
       try {
+        // Add all player names except the player setting the nickname
+        List<Component> taken = Arrays.stream(Bukkit.getOfflinePlayers())
+            .filter(offlinePlayer -> !offlinePlayer.getUniqueId().equals(player.getUniqueId()))
+            .map(OfflinePlayer::getName)
+            .filter(Objects::nonNull)
+            .map(Component::text).collect(Collectors.toList());
+
+        // Add all stored nicknames
+        PreparedStatement ps = Nicks.sql().getConnection()
+            .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId !=?");
+        ps.setString(1, player.getUniqueId().toString());
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+          taken.add(GsonComponentSerializer.gson().deserialize(resultSet.getString("nickname")));
+        }
         if (strict) {
-          PreparedStatement ps = Nicks.sql().getConnection()
-              .prepareStatement("SELECT nickname FROM nicknameTable");
-          ResultSet resultSet = ps.executeQuery();
-          Set<Component> nicknames = new HashSet<>();
-          while (resultSet.next()) {
-            nicknames.add(GsonComponentSerializer.gson().deserialize(resultSet.getString("nickname")));
-          }
-          for (Component value : nicknames) {
+          for (Component value : taken) {
             if (PlainTextComponentSerializer.plainText().serialize(value)
                 .equalsIgnoreCase(PlainTextComponentSerializer.plainText().serialize(nickname))) {
               return true;
             }
           }
         } else {
-          PreparedStatement ps = Nicks.sql().getConnection()
-              .prepareStatement("SELECT nickname FROM nicknameTable WHERE nickname=?");
-          ps.setString(1, GsonComponentSerializer.gson().serialize(nickname));
-          ResultSet resultSet = ps.executeQuery();
-          if (resultSet.next()) {
-            return true;
-          }
+          return taken.contains(nickname);
         }
       } catch (SQLException ex) {
         ex.printStackTrace();

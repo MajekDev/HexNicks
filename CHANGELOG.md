@@ -1,5 +1,13 @@
 # Plugin Changelog
 
+# 2.2.2 - Small Patches
+
+- A few bug fixes related to color parsing.
+- Your own nickname/username won't count against you when preventing duplicate nicknames.
+- Other player usernames will also be prevented from being used in /nick.
+
+Another very minor update with some useful fixes.
+
 # 2.2.1 - No Duplicate Nicknames
 
 - New config option for preventing players from having the same nickname.

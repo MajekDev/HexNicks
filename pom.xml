@@ -6,7 +6,7 @@
 
     <groupId>dev.majek.hexnicks</groupId>
     <artifactId>HexNicks</artifactId>
-    <version>2.2.2-SNAPSHOT</version>
+    <version>2.2.2</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>

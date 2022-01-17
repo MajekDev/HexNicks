@@ -35,9 +35,6 @@ There are 6 plugin commands:
 
 All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks.chat.advanced`, and `hexnicks.reload` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/).
 - `hexnicks.nick` - Permission to change your own nickname.
-- `hexnicks.nick.color` - Permission to use standard color codes in nicknames.
-- `hexnicks.nick.hex` - Permission to use hex color codes in nicknames.
-- `hexnicks.nick.gradient` - Permission to use gradients in nicknames.
 - `hexnicks.nick.other` - Permissions to change other player's nicknames.
 - `hexnicks.nonick` - Permission to remove your own nickname.
 - `hexnicks.nonick.other` - Permission to remove other player's nicknames.
@@ -45,6 +42,9 @@ All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks
 - `hexnicks.realname` - Permission to use the realname command.
 - `hexnicks.reload` - Permission to reload the plugin.
 - `hexnicks.chat.advanced` - Permission to inject things like click events into chat messages via MiniMessage.
+- `hexnicks.color.*` - Permission to use all standard color codes in nicknames.
+- `hexnicks.color.hex` - Permission to use hex color codes in nicknames.
+- `hexnicks.color.gradient` - Permission to use gradients in nicknames.
 
 ## Colors
 

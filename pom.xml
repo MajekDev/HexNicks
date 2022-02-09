@@ -60,7 +60,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <reportOutputDirectory>${project.basedir}/docs</reportOutputDirectory>
+                    <reportOutputDirectory>${project.basedir}/javadocs</reportOutputDirectory>
                     <destDir>docs</destDir>
                 </configuration>
             </plugin>

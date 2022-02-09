@@ -31,6 +31,7 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Used to check for plugin updates from the Spigot plugin page.
@@ -54,7 +55,12 @@ public class UpdateChecker {
     this.currentVersion = Integer.parseInt(plugin.getDescription().getVersion()
         .replace(".", "").replace("-SNAPSHOT", ""));
     try {
-      this.spigotVersion = Integer.parseInt(getSpigotVersion().replace(".", ""));
+      final String spigotVersion = getSpigotVersion();
+      if (spigotVersion != null) {
+        this.spigotVersion = Integer.parseInt(spigotVersion.replace(".", ""));
+      } else {
+        this.spigotVersion = currentVersion;
+      }
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }
@@ -63,7 +69,7 @@ public class UpdateChecker {
   /**
    * Get the plugin version currently posted on Spigot.
    */
-  private String getSpigotVersion() throws ExecutionException, InterruptedException {
+  private @Nullable String getSpigotVersion() throws ExecutionException, InterruptedException {
     CompletableFuture<String> spigotVersion = CompletableFuture.supplyAsync(() -> {
       try {
         URL url = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);

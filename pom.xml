@@ -61,7 +61,7 @@
                 </executions>
                 <configuration>
                     <reportOutputDirectory>${project.basedir}/javadoc</reportOutputDirectory>
-                    <destDir>docs</destDir>
+                    <destDir>javadoc</destDir>
                 </configuration>
             </plugin>
             <plugin>

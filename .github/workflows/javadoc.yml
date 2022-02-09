@@ -1,8 +1,8 @@
 name: javadoc
 
 on:
-  push:
-    branches: [ main ]
+  release:
+    types: [published]
 
 jobs:
   javadoc:

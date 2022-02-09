@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"dev.majek.hexnicks"},{"l":"dev.majek.hexnicks.api"},{"l":"dev.majek.hexnicks.command"},{"l":"dev.majek.hexnicks.config"},{"l":"dev.majek.hexnicks.event"},{"l":"dev.majek.hexnicks.hook"},{"l":"dev.majek.hexnicks.server"},{"l":"dev.majek.hexnicks.storage"},{"l":"dev.majek.hexnicks.util"}]

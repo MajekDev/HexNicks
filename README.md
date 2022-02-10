@@ -18,8 +18,8 @@ HexNicks is a simple nickname plugin that allows players to set their nickname t
 - Metrics through [bStats](https://bstats.org/plugin/bukkit/HexNicks/8764).
 - Active plugin and developer.
 - Ability to format chat on it's own, no external chat formatter needed.
-- Fully-featured [api](https://github.com/MajekDev/HexNicks/tree/main/src/main/java/dev/majek/hexnicks/api) for developers.
-- Full documentation [here](https://github.com/MajekDev/HexNicks/wiki).
+- Fully-featured [api](https://hexnicks.majek.dev/developers) for developers.
+- Full documentation [here](https://hexnicks.majek.dev).
 
 ## Commands
 
@@ -69,7 +69,7 @@ I'll just leave this here for you :)
 
 ## Developers
 
-HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://jd.hexnicks.majek.dev/dev/majek/hexnicks/api/package-summary.html) and all JavaDocs [here](https://jd.hexnicks.majek.dev/).
+HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://hexnicks.majek.dev/javadoc/dev/majek/hexnicks/api/package-summary.html) and all JavaDocs [here](https://hexnicks.majek.dev/javadoc).
 
 Event example:
 ```java

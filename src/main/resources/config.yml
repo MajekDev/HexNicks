@@ -1,5 +1,5 @@
 # Config file for HexNicks by Majekdor | Have questions? Ask here: https://discord.majek.dev
-# For colors this config uses MiniMessage (https://docs.adventure.kyori.net/minimessage.html#the-components)
+# For colors this config uses MiniMessage (https://docs.adventure.kyori.net/minimessage/format#standard-tags)
 
 # Whether nicknames should show in the tab list
 tab-nicks: false

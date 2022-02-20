@@ -11,7 +11,7 @@ HexNicks is a simple nickname plugin that allows players to set their nickname t
 
 ## Features
 
-- Parsing via [MiniMessage](https://docs.adventure.kyori.net/minimessage.html) - here's a [handy website](https://webui.adventure.kyori.net/) to pracitce.
+- Parsing via [MiniMessage](https://docs.adventure.kyori.net/minimessage) - here's a [handy website](https://webui.adventure.kyori.net/) to practice.
 - Optimized support for Spigot and Paper. Forks of either should work as well.
 - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) support with the placeholder `%hexnicks_nick%` for player's nicknames.
 - MySQL storage support for users on BungeeCord/Velocity.
@@ -50,7 +50,7 @@ All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks
 
 ### Introducing gradients!
 
-Unless changed in the config, legacy color codes (&c, &l, etc.) are not supported. They can be losely supported when the config option is enabled, but the plugin uses [MiniMessage](https://docs.adventure.kyori.net/minimessage.html) for colors and formatting.
+Unless changed in the config, legacy color codes (&c, &l, etc.) are not supported. They can be losely supported when the config option is enabled, but the plugin uses [MiniMessage](https://docs.adventure.kyori.net/minimessage) for colors and formatting.
 
 <img align="middle" src="https://i.imgur.com/zdn80Qe.png">
 

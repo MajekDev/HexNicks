@@ -82,8 +82,9 @@ public class CommandHexNicks implements TabExecutor {
           return false;
         }
       }
+      default:
+        return false;
     }
-    return true;
   }
 
   @Override

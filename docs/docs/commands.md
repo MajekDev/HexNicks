@@ -4,7 +4,7 @@ title: Commands
 slug: /commands
 ---
 
-The main plugin command you'll be using is `/nick` to change your nickname, but all of the commands in the plugin are explained below. This page will reference color codes a lot, you can read about color formatting here.
+The main plugin command you'll be using is `/nick` to change your nickname, but all of the commands in the plugin are explained below. This page will reference color codes a lot, you can read about color formatting [here](https://hexnicks.majek.dev/color-formatting).
 
 ## /nick
 

@@ -191,14 +191,14 @@ public final class Nicks extends JavaPlugin {
     this.getCommand("nick").setTabCompleter(new CommandNick());
     this.getCommand("nonick").setExecutor(new CommandNoNick());
     this.getCommand("nonick").setTabCompleter(new CommandNoNick());
+    this.getCommand("hexnicks").setExecutor(new CommandHexNicks());
+    this.getCommand("hexnicks").setTabCompleter(new CommandHexNicks());
     this.getCommand("realname").setExecutor(new CommandRealName());
     this.getCommand("realname").setTabCompleter(new CommandRealName());
     this.getCommand("nickother").setExecutor(new CommandNickOther());
     this.getCommand("nickother").setTabCompleter(new CommandNickOther());
     this.getCommand("nickcolor").setExecutor(new CommandNickColor());
     this.getCommand("nickcolor").setTabCompleter(new CommandNickColor());
-    this.getCommand("nicksreload").setExecutor(new CommandNicksReload());
-    this.getCommand("nicksreload").setTabCompleter(new CommandNicksReload());
   }
 
   /**

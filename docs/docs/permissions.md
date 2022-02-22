@@ -4,7 +4,7 @@ title: Permissions
 slug: /permissions
 ---
 
-All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks.chat.advanced`, and `hexnicks.reload` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/). Learn how to do that [here](#how-to-negate-permissions-with-LuckPerms).
+All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks.chat.advanced`, `hexnicks.config-editor`, and `hexnicks.reload` are given to all players by default but can be negated by a permissions manager like [LuckPerms](https://luckperms.net/). Learn how to do that [here](#how-to-negate-permissions-with-LuckPerms).
 
 A lot of these permissions are tied to commands, read command documentation [here](https://github.com/Majekdor/HexNicks/wiki/Commands).
 
@@ -32,9 +32,13 @@ This permission node allows players to use [/nickcolor](https://github.com/Majek
 
 This permission node allows players to use [/realname](https://github.com/Majekdor/HexNicks/wiki/Commands#realname) to view the name of a player using a certain nickname.
 
+## hexnicks.config-editor
+
+This permission node is intended for staff and allows them to edit the HexNicks config via [pastebin](https://paste.majek.dev) using [/hexnicks config-editor](https://github.com/Majekdor/HexNicks/wiki/Commands#hexnicks).
+
 ## hexnicks.reload
 
-This permission node is intended for staff and allows them to use [/nicksreload](https://github.com/Majekdor/HexNicks/wiki/Commands#nicksreload) to reload the plugin.
+This permission node is intended for staff and allows them to use [/hexnicks reload](https://github.com/Majekdor/HexNicks/wiki/Commands#hexnicks) to reload the plugin.
 
 ## hexnicks.chat.advanced
 

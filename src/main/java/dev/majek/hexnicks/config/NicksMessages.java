@@ -26,6 +26,7 @@ package dev.majek.hexnicks.config;
 import dev.majek.hexnicks.Nicks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -90,6 +91,21 @@ public interface NicksMessages {
 
   Args0 NICKNAME_TAKEN = () -> Nicks.utils().configString("messages.nicknameTaken",
       "<red>That nickname is taken by another player! Please choose a different one.");
+
+  Args1<String> NEW_EDITOR = (link) -> MiniMessage.miniMessage().deserialize(Nicks.core().getConfig().getString(
+      "messages.newEditor",
+      "<green>Edit config <click:open_url:'%link%'><aqua><u>here<u/></aqua></click>. When you're done, save your " +
+          "changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor " +
+          "apply <link></aqua></click> to apply them."
+  ).replace("%link%", link));
+
+  Args1<String> EDITOR_APPLIED = (link) -> MiniMessage.miniMessage().deserialize(Nicks.core().getConfig().getString(
+      "messages.editorApplied",
+      "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%<u/></aqua></click> applied."
+  ).replace("%link%", link));
+
+  Args0 INVALID_LINK = () -> Nicks.utils().configString("messages.invalidLink",
+      "<red>The link provided is not valid! See console for further details.");
 
   /**
    * A message that has no arguments that need to be replaced.

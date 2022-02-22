@@ -83,3 +83,6 @@ messages:
   realname: "%nickname% <gray>is <aqua>%name%<gray>."
   update: "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."
   nicknameTaken: "<red>That nickname is taken by another player! Please choose a different one."
+  newEditor: "<green>Edit config <click:open_url:'%link%'><aqua><u>here</u></aqua></click>. When you're done, save your changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor apply <link></aqua></click> to apply them."
+  editorApplied: "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%</u></aqua></click> applied."
+  invalidLink: "<red>The link provided is not valid! See console for further details."

@@ -40,13 +40,13 @@ This permission node is intended for staff and allows them to use [/nicksreload]
 
 This permission node is a dangerous one to grant as it allows players to inject things like hover events and click-to-run-command events into chat. Players without this permission will only be able to use MiniMessage tags for colors in chat. This permission allows them to use all MiniMessage tags in chat.
 
-> Read about chat formatting [here](https://github.com/MajekDev/HexNicks/wiki/Chat-Formatting).
+> Read about chat formatting [here](https://hexnicks.majek.dev/chat-formatting).
 
 ## hexnicks.color.*
 
 This permission node allows players to use all standard color codes (ex. \<red\>, \<dark_blue\>) in their nicknames. You can specify only specific colors with `hexnicks.color.red` (or any of the other 16 Mincraft color names).
 
-> Read about color formatting [here](https://github.com/MajekDev/HexNicks/wiki/Color-Formatting).
+> Read about color formatting [here](https://hexnicks.majek.dev/color-formatting).
 
 ## hexnicks.color.hex
 
@@ -56,7 +56,7 @@ This permission node allows players to use hex color codes (ex. \<#aabbcc\>, \<c
 
 This permission node allows players to use gradients in their nicknames.
 
-> See gradient examples here.
+> See gradient examples [here](https://hexnicks.majek.dev/color-formatting#gradients).
 
 ## Blocking Certain Color Usage
 

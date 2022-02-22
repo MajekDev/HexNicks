@@ -19,4 +19,4 @@ If enabled these codes will be parsed and probably work fine, though you will no
 ## Gradients
 Everyone's favorite thing as of late, gradients! Gradients are parsed using MiniMessage, and you can read the documentation for them [here](https://docs.adventure.kyori.net/minimessage/format#gradient).
 
-> View nickname examples using gradients here.
+> View nickname examples using gradients [here](https://docs.adventure.kyori.net/minimessage/format#gradient).

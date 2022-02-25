@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "dev.majek.hexnicks:HexNIcks:2.2.2"
+    compileOnly "dev.majek.hexnicks:HexNicks:2.2.2"
 }
 ```
 
@@ -58,5 +58,5 @@ public void onNickname(SetNickEvent event) {
 
 There are multiple ways to retrieve nicknames, but the easiest way is:
 ```java
-Nicks.api().getNick(player); // You can pass thru a player, offlineplayer, or uuid
+Nicks.api().getStoredNick(player); // You can pass thru a player, offlineplayer, or uuid
 ```

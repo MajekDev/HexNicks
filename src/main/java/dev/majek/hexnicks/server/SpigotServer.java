@@ -81,7 +81,7 @@ public final class SpigotServer implements ServerSoftware {
       event.setFormat(
           LEGACY_COMPONENT_SERIALIZER.serialize(formatChat(event.getPlayer(), event.getMessage()))
       );
-      Nicks.debug("spigot chat event - " + event.getFormat());
+      Nicks.logging().debug("spigot chat event - " + event.getFormat());
     }
   }
 }

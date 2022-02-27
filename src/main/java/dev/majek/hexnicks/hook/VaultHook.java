@@ -37,7 +37,7 @@ class VaultHook {
   public VaultHook() {
     RegisteredServiceProvider<Chat> rsp = Nicks.core().getServer().getServicesManager().getRegistration(Chat.class);
     if (rsp == null) {
-      Nicks.error("Error hooking into Vault!");
+      Nicks.logging().error("Error hooking into Vault!");
       return;
     }
     vaultChat = rsp.getProvider();

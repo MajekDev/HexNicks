@@ -23,6 +23,7 @@
  */
 package dev.majek.hexnicks;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.majek.hexnicks.api.NicksApi;
@@ -39,6 +40,7 @@ import dev.majek.hexnicks.server.SpigotServer;
 import dev.majek.hexnicks.storage.JsonStorage;
 import dev.majek.hexnicks.storage.SqlStorage;
 import dev.majek.hexnicks.storage.StorageMethod;
+import dev.majek.hexnicks.util.LoggingManager;
 import dev.majek.hexnicks.util.NicksUtils;
 import dev.majek.hexnicks.util.UpdateChecker;
 import java.io.File;
@@ -75,6 +77,7 @@ public final class Nicks extends JavaPlugin {
   private static NicksHooks           hooks;
   private static ServerSoftware       software;
   private static StorageMethod        storage;
+  private static LoggingManager       logging;
   private final JsonConfig            jsonConfig;
   private final Map<UUID, Component>  nickMap;
   private final Metrics               metrics;
@@ -90,12 +93,12 @@ public final class Nicks extends JavaPlugin {
     config = new NicksConfig();
     sql = new NicksSql();
     hooks = new NicksHooks();
+    logging = new LoggingManager(this, new File(this.getDataFolder(), "logs"));
     this.jsonConfig = new JsonConfig(this.getDataFolder(), "nicknames.json");
     try {
       this.jsonConfig.createConfig();
     } catch (final FileNotFoundException ex) {
-      error("Error creating nicknames.json file:");
-      ex.printStackTrace();
+      logging.error("Error creating nicknames.json file", ex);
     }
     this.nickMap = new HashMap<>();
     // Track plugin metrics through bStats
@@ -115,21 +118,20 @@ public final class Nicks extends JavaPlugin {
       software = new PaperServer();
     } catch (final ClassNotFoundException ignored) {
       software = new SpigotServer();
-      log("This plugin will run better on PaperMC 1.17+!");
+      logging.log("This plugin will run better on PaperMC 1.17+!");
     }
-    log("Running on " + software.softwareName() + " server software.");
+    logging.log("Running on " + software.softwareName() + " server software.");
 
     // Load nicknames from storage
     if (this.getConfig().getBoolean("database-enabled")) {
       try {
         sql.connect();
       } catch (final SQLException ex) {
-        error("Failed to connect to MySQL database:");
-        ex.printStackTrace();
+        logging.error("Failed to connect to MySQL database", ex);
       }
     }
     if (sql.isConnected()) {
-      log("Successfully connected to MySQL database.");
+      logging.log("Successfully connected to MySQL database.");
       storage = new SqlStorage();
       sql.createTable();
       storage.updateNicks();
@@ -142,11 +144,13 @@ public final class Nicks extends JavaPlugin {
               .deserializeFromTree(jsonObject.get(key)));
         }
       } catch (final IOException ex) {
-        error("Error loading nickname data from nicknames.json file:");
-        ex.printStackTrace();
+        logging.error("Error loading nickname data from nicknames.json file", ex);
       }
-      log("Successfully loaded nicknames from Json storage.");
+      logging.log("Successfully loaded nicknames from Json storage.");
     }
+
+    // Set debug status
+    logging.doDebug(config.DEBUG);
 
     // Register plugin commands
     this.registerCommands();
@@ -166,7 +170,7 @@ public final class Nicks extends JavaPlugin {
 
     // Check for updates - prompt to update if there is one
     if (this.updateChecker.isBehindSpigot()) {
-      log("There is a new version of the plugin available! " +
+      logging.log("There is a new version of the plugin available! " +
           "Download it here: https://www.spigotmc.org/resources/83554/");
     }
   }
@@ -288,39 +292,19 @@ public final class Nicks extends JavaPlugin {
   }
 
   /**
-   * Log an object to console. This should be a non-critical message.
+   * Get the plugin's logging manager.
    *
-   * @param x Object to log.
+   * @return logging manager
    */
-  public static void log(@NotNull Object x) {
-    core.getLogger().info(x.toString());
-  }
-
-  /**
-   * Log an object to console. This will only be logged if debugging is enabled.
-   *
-   * @param x Object to log.
-   */
-  public static void debug(@NotNull Object x) {
-    if (config.DEBUG) {
-      core.getLogger().warning(x.toString());
-    }
-  }
-
-  /**
-   * Log an object to console. This should only be used for plugin errors.
-   *
-   * @param x Object to log.
-   */
-  public static void error(@NotNull Object x) {
-    core.getLogger().severe(x.toString());
+  public static LoggingManager logging() {
+    return logging;
   }
 
   /**
    * Reload the plugin's configuration file.
    */
   public void reload() {
-    debug("Reloading plugin...");
+    Nicks.logging().debug("Reloading plugin...");
     this.saveDefaultConfig();
     final File configFile = new File(this.getDataFolder(), "config.yml");
     try {
@@ -363,7 +347,7 @@ public final class Nicks extends JavaPlugin {
   @ApiStatus.ScheduledForRemoval
   public boolean hasNick(@NotNull UUID uuid) {
     try {
-      debug("hasNick: " + storage.hasNick(uuid).get());
+      Nicks.logging().debug("hasNick: " + storage.hasNick(uuid).get());
       return storage.hasNick(uuid).get();
     } catch (final InterruptedException | ExecutionException ex) {
       ex.printStackTrace();
@@ -392,7 +376,7 @@ public final class Nicks extends JavaPlugin {
   @ApiStatus.ScheduledForRemoval
   public Component getStoredNick(@NotNull UUID uuid) {
     try {
-      debug("storedNick: " + storage.getNick(uuid).get());
+      Nicks.logging().debug("storedNick: " + storage.getNick(uuid).get());
       return storage.getNick(uuid).get();
     } catch (final InterruptedException | ExecutionException ex) {
       ex.printStackTrace();
@@ -408,6 +392,11 @@ public final class Nicks extends JavaPlugin {
    * @param nick Player's new nickname.
    */
   public void setNick(@NotNull Player player, @NotNull Component nick) {
+    Nicks.logging().debug("Setting " + player.getName() + "'s nickname to \n" +
+        new GsonBuilder().setPrettyPrinting().create().toJson(
+            GsonComponentSerializer.gson().serializeToTree(nick)
+        ) + "\n on platform " + software.softwareName()
+    );
     software.setNick(player, nick);
     hooks.setEssNick(player, nick);
   }

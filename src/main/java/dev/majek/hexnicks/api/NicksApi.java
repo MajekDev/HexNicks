@@ -51,7 +51,7 @@ public class NicksApi {
    */
   public void callEvent(@NotNull Event event) {
     Nicks.core().getServer().getPluginManager().callEvent(event);
-    Nicks.debug("Called event " + event.getEventName());
+    Nicks.logging().debug("Called event " + event.getEventName());
   }
 
   /**

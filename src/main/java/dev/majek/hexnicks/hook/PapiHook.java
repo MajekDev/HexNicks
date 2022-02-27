@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,9 +83,8 @@ class PapiHook extends PlaceholderExpansion {
           return LegacyComponentSerializer.builder().hexColors()
               .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
         }
-      } catch (InterruptedException | ExecutionException ex) {
-        Nicks.error("Error retrieving nickname for Papi: ");
-        ex.printStackTrace();
+      } catch (final InterruptedException | ExecutionException ex) {
+        Nicks.logging().error("Error retrieving nickname for Papi", ex);
       }
     }
     return null;

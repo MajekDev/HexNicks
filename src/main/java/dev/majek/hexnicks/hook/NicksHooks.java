@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,29 +55,29 @@ public class NicksHooks {
    * Reload the hooks to make sure we're hooked into all available plugins.
    */
   public void reloadHooks() {
-    Nicks.debug("Reloaded hooks...");
+    Nicks.logging().debug("Reloaded hooks...");
     if (Nicks.core().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") &&
         Nicks.core().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-      Nicks.log("Hooking into PlaceholderAPI...");
+      Nicks.logging().log("Hooking into PlaceholderAPI...");
       papiHooked = true;
       papiHook = new PapiHook(Nicks.core());
       papiHook.register();
     }
     if (Nicks.core().getServer().getPluginManager().isPluginEnabled("Vault") &&
         Nicks.core().getServer().getPluginManager().getPlugin("Vault") != null) {
-      Nicks.log("Hooking into Vault...");
+      Nicks.logging().log("Hooking into Vault...");
       vaultHooked = true;
       vaultHook = new VaultHook();
       // TODO: 12/19/2021 This is a temporary fix for Vault integration sometimes not working despite HexNicks
       // TODO: 12/19/2021 detecting Vault and claiming it hooked.
       if (vaultHook.vaultChat() == null) {
-        Nicks.error("Detected Vault and tried to hook but failed.");
+        Nicks.logging().error("Detected Vault and tried to hook but failed.");
         vaultHooked = false;
       }
     }
     if (Nicks.core().getServer().getPluginManager().isPluginEnabled("Essentials") &&
         Nicks.core().getServer().getPluginManager().getPlugin("Essentials") != null) {
-      Nicks.log("Hooking into Essentials...");
+      Nicks.logging().log("Hooking into Essentials...");
       essentialsHooked = true;
       essentialsHook = new EssentialsHook();
     }

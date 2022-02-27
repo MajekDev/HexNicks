@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ class VaultHook {
   public VaultHook() {
     RegisteredServiceProvider<Chat> rsp = Nicks.core().getServer().getServicesManager().getRegistration(Chat.class);
     if (rsp == null) {
-      Nicks.error("Error hooking into Vault!");
+      Nicks.logging().error("Error hooking into Vault!");
       return;
     }
     vaultChat = rsp.getProvider();

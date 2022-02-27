@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ public class NicksApi {
    */
   public void callEvent(@NotNull Event event) {
     Nicks.core().getServer().getPluginManager().callEvent(event);
-    Nicks.debug("Called event " + event.getEventName());
+    Nicks.logging().debug("Called event " + event.getEventName());
   }
 
   /**

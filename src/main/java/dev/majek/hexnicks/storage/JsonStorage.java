@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -60,10 +60,9 @@ public class JsonStorage implements StorageMethod {
     Nicks.core().getNickMap().remove(uuid);
     try {
       Nicks.core().jsonConfig().removeFromJsonObject(uuid.toString());
-      Nicks.debug("Removed nickname from user " + uuid + " from json.");
-    } catch (IOException e) {
-      Nicks.error("Error removing nickname from file \nUUID: " + uuid);
-      e.printStackTrace();
+      Nicks.logging().debug("Removed nickname from user " + uuid + " from json.");
+    } catch (final IOException ex) {
+      Nicks.logging().error("Error removing nickname from file \nUUID: " + uuid, ex);
     }
   }
 
@@ -72,10 +71,9 @@ public class JsonStorage implements StorageMethod {
     try {
       Nicks.core().jsonConfig().putInJsonObject(player.getUniqueId().toString(), JsonParser
           .parseString(GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player))));
-      Nicks.debug("Saved nickname from user " + player.getName() + " to json.");
-    } catch (IOException e) {
-      Nicks.error("Error saving nickname to file \nUUID: " + player.getUniqueId());
-      e.printStackTrace();
+      Nicks.logging().debug("Saved nickname from user " + player.getName() + " to json.");
+    } catch (final IOException ex) {
+      Nicks.logging().error("Error saving nickname to file \nUUID: " + player.getUniqueId(), ex);
     }
   }
 

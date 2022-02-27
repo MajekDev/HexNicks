@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,7 @@ public final class PaperServer implements ServerSoftware {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onChat(final AsyncChatEvent event) {
     if (Nicks.config().CHAT_FORMATTER) {
-      Nicks.debug("paper chat event fired");
+      Nicks.logging().debug("paper chat event fired");
       event.renderer((source, sourceDisplayName, message, viewer) ->
           formatChat(source, PlainTextComponentSerializer.plainText().serialize(message))
       );

@@ -1,7 +1,7 @@
 /*
  * This file is part of HexNicks, licensed under the MIT License.
  *
- * Copyright (c) 2020-2021 Majekdor
+ * Copyright (c) 2020-2022 Majekdor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,7 @@ public final class SpigotServer implements ServerSoftware {
       event.setFormat(
           LEGACY_COMPONENT_SERIALIZER.serialize(formatChat(event.getPlayer(), event.getMessage()))
       );
-      Nicks.debug("spigot chat event - " + event.getFormat());
+      Nicks.logging().debug("spigot chat event - " + event.getFormat());
     }
   }
 }

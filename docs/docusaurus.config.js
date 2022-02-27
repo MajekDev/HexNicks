@@ -45,7 +45,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsible: false,
           sidebarCollapsed: false,
-          editUrl: 'https://github.com/MajekDev/HexNicks/edit/master/',
+          editUrl: 'https://github.com/MajekDev/HexNicks/edit/main/docs/',
         },
 
         blog: false,

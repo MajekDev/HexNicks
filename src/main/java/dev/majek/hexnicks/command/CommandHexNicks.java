@@ -73,7 +73,7 @@ public class CommandHexNicks implements TabExecutor {
             Nicks.config().fromWeb(args[2]);
           } catch (IllegalArgumentException ex) {
             NicksMessages.INVALID_LINK.send(sender);
-            Nicks.error("Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
+            Nicks.logging().error("Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
                 "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. 'https://paste.majek.dev/abcde45'");
             return true;
           }
@@ -81,6 +81,15 @@ public class CommandHexNicks implements TabExecutor {
         } else {
           return false;
         }
+      }
+      case "latest-log": {
+        if (!sender.hasPermission("hexnicks.view-log")) {
+          NicksMessages.NO_PERMISSION.send(sender);
+          return true;
+        }
+
+        sender.sendMessage("Link: " + Nicks.logging().latestToPasteBin());
+        return true;
       }
       default:
         return false;
@@ -91,8 +100,8 @@ public class CommandHexNicks implements TabExecutor {
   public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                               @NotNull String alias, @NotNull String[] args) {
     if (args.length == 1) {
-      return TabCompleterBase.filterStartingWith(args[0], Arrays.asList("reload", "config-editor"));
-    } else if (args.length == 2) {
+      return TabCompleterBase.filterStartingWith(args[0], Arrays.asList("reload", "config-editor", "latest-log"));
+    } else if (args[0].equalsIgnoreCase("config-editor") && args.length == 2) {
       return TabCompleterBase.filterStartingWith(args[1], Arrays.asList("new", "apply"));
     } else {
       return Collections.emptyList();

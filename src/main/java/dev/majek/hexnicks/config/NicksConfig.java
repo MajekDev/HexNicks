@@ -107,7 +107,7 @@ public class NicksConfig {
 
     final JsonObject json = JsonParser.parseString(sendRequestAndGetResponse(request)).getAsJsonObject();
     final String url = "https://paste.majek.dev/" + json.get("key").getAsString();
-    Nicks.debug("Uploaded config to " + url + " for updating");
+    Nicks.logging().debug("Uploaded config to " + url + " for updating");
 
     return url;
   }
@@ -124,7 +124,7 @@ public class NicksConfig {
       throw new IllegalArgumentException("The link provided is not a valid bytebin link!");
     }
 
-    Nicks.debug("Retrieving updated config from " + link);
+    Nicks.logging().debug("Retrieving updated config from " + link);
     final HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(link))
         .header("User-Agent", "hexnicks")
@@ -134,8 +134,7 @@ public class NicksConfig {
     try {
       Files.asCharSink(new File(Nicks.core().getDataFolder(), "config.yml"), Charsets.UTF_8).write(sendRequestAndGetResponse(request));
     } catch (final IOException ex) {
-      Nicks.error("Error saving config from editor!");
-      ex.printStackTrace();
+      Nicks.logging().error("Error saving config from editor", ex);
     }
 
     Nicks.core().reload();

@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 /**
  * Manages plugin logging. This includes printing log message, saving to file,
- * and uploading to <a href="https://mclo.gs">mclo.gs</a>.
+ * and uploading to <a href="https://pastes.dev">pastes.dev</a>.
  */
 public class LoggingManager {
 
@@ -105,18 +105,20 @@ public class LoggingManager {
   }
 
   /**
-   * Publish the latest log to <a href="https://mclo.gs">mclo.gs</a>.
+   * Publish the latest log to <a href="https://pastes.dev">pastes.dev</a>.
    *
    * @return the link to the log on the site
    */
-  public @NotNull String latestToMcLogs() {
+  public @NotNull String latestToPasteBin() {
     final HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("https://api.mclo.gs/1/log"))
+        .uri(URI.create("https://api.pastes.dev/post"))
+        .header("User-Agent", "hexnicks")
+        .header("Content-Type", "text/plain; charset=utf-8")
         .POST(HttpRequest.BodyPublishers.ofString(this.latestLog()))
         .build();
 
     final JsonObject json = JsonParser.parseString(sendRequestAndGetResponse(request)).getAsJsonObject();
-    final String url = json.get("url").getAsString();
+    final String url = "https://pastes.dev/" + json.get("key").getAsString();
     this.log("Uploaded latest log to " + url);
 
     return url;

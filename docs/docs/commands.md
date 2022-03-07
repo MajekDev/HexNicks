@@ -38,8 +38,30 @@ Usage: `/realname <nickname>`
 
 This command will return the username of the specified nickname. It requires one argument, the nickname, and will try to match that nickname to a player. It will tab complete the nicknames of all online players and if the plugin is running on Paper, you can hover on the tab completed nickname to view it with colors.
 
-## /nicksreload
+## /hexnicks
 
-Usage: `/nicksreload`
+Usage: `/hexnicks <reload|config-editor> [new|apply] [link]`
 
-This is a staff command for reloading the plugin to apply configuration changes.
+This staff command has multiple subcommands used for managing the plugin.
+
+### /hexnicks reload
+
+Usage: `/hexnicks reload`
+
+This will reload the plugin's config files, storage, and plugin hooks. Use this if you want to apply config file changes.
+
+> Note: This is already called on `/hexnicks config-editor apply <link>`
+
+### /hexnicks config-editor
+
+Usage: `/hexnicks config-editor <apply|new> [link]`
+
+This will either create a new link to the config file in pastebin or apply changes from a config file in pastebin. 
+
+**How to use:**
+
+1. First, execute `/hexnicks config-editor new` to create a new pastebin with your config. The command will give you the link.
+2. Then, make all your desired changes to the config in the pastebin.
+3. Make sure to press save in the upper left corner of the pastebin. You will get a new link. (It should copy to your clipboard automatically)
+4. Take your new link and execute `/hexnicks config-editor apply <link>` to apply your changes.
+5. That's it! The plugin will automatically reload and you're good to go.

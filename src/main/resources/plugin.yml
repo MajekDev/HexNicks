@@ -22,10 +22,9 @@ commands:
     description: Change the color of your nickname.
     usage: /nickcolor <color>
     permission: hexnicks.nickcolor
-  nicksreload:
-    description: Reload the plugin.
-    usage: /nicksreload
-    permission: hexnicks.reload
+  hexnicks:
+    description: Plugin management commands.
+    usage: /hexnicks <reload|config-editor> [apply|new] [link]
   realname:
     description: Get the name of the player a nickname belongs to.
     usage: /realname <nickname>
@@ -49,6 +48,9 @@ permissions:
     default: true
   hexnicks.reload:
     description: Permission to reload the plugin.
+    default: op
+  hexnicks.config-editor:
+    description: Permission to edit the plugin's config file.
     default: op
   hexnicks.realname:
     description: Permission to use the realname command.

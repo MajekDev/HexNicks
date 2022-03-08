@@ -225,7 +225,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.10.0</version>
+            <version>4.10.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- PlaceholderAPI -->

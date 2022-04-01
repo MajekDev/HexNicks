@@ -24,7 +24,7 @@
 package dev.majek.hexnicks.event;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.event.EventHandler;
@@ -32,8 +32,7 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Handles tab completion for <code>/realname</code> if the {@link dev.majek.hexnicks.server.ServerSoftware}
- * is an instanceof {@link dev.majek.hexnicks.server.PaperServer}.
+ * Handles tab completion for <code>/realname</code>.
  */
 public class PaperTabCompleteEvent implements Listener {
 
@@ -50,12 +49,12 @@ public class PaperTabCompleteEvent implements Listener {
 
   public void nickCompletions(@NotNull AsyncTabCompleteEvent event, @NotNull String[] args) {
     if (args.length > 1) {
-      event.completions(Nicks.core().getNickMap().values().stream().filter(nickname ->
+      event.completions(HexNicks.core().getNickMap().values().stream().filter(nickname ->
           PlainTextComponentSerializer.plainText().serialize(nickname).startsWith(args[1])).map(nickname ->
           AsyncTabCompleteEvent.Completion.completion(PlainTextComponentSerializer.plainText()
               .serialize(nickname), nickname)).collect(Collectors.toList()));
     } else {
-      event.completions(Nicks.core().getNickMap().values().stream().map(nickname -> AsyncTabCompleteEvent
+      event.completions(HexNicks.core().getNickMap().values().stream().map(nickname -> AsyncTabCompleteEvent
               .Completion.completion(PlainTextComponentSerializer.plainText().serialize(nickname), nickname))
           .collect(Collectors.toList()));
     }

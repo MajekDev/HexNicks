@@ -23,7 +23,7 @@
  */
 package dev.majek.hexnicks.storage;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,7 +48,7 @@ public class SqlStorage implements StorageMethod {
   public CompletableFuture<Boolean> hasNick(@NotNull UUID uuid) {
     return CompletableFuture.supplyAsync(() -> {
           try {
-            PreparedStatement ps = Nicks.sql().getConnection()
+            PreparedStatement ps = HexNicks.sql().getConnection()
                 .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
@@ -71,7 +71,7 @@ public class SqlStorage implements StorageMethod {
   public CompletableFuture<Component> getNick(@NotNull UUID uuid) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        PreparedStatement ps = Nicks.sql().getConnection()
+        PreparedStatement ps = HexNicks.sql().getConnection()
             .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId=?");
         ps.setString(1, uuid.toString());
         ResultSet resultSet = ps.executeQuery();
@@ -89,9 +89,9 @@ public class SqlStorage implements StorageMethod {
 
   @Override
   public void removeNick(@NotNull UUID uuid) {
-    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () -> {
+    Bukkit.getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
       try {
-        PreparedStatement ps = Nicks.sql().getConnection()
+        PreparedStatement ps = HexNicks.sql().getConnection()
             .prepareStatement("DELETE FROM nicknameTable WHERE uniqueId=?");
         ps.setString(1, uuid.toString());
         ps.executeUpdate();
@@ -102,21 +102,21 @@ public class SqlStorage implements StorageMethod {
   }
 
   @Override
-  public void saveNick(@NotNull Player player) {
-    Bukkit.getScheduler().runTaskAsynchronously(Nicks.core(), () ->
+  public void saveNick(@NotNull Player player, @NotNull Component nickname) {
+    Bukkit.getScheduler().runTaskAsynchronously(HexNicks.core(), () ->
         hasNick(player.getUniqueId()).whenCompleteAsync((hasNick, throwable) -> {
           try {
             PreparedStatement update;
             if (hasNick) {
-              update = Nicks.sql().getConnection()
+              update = HexNicks.sql().getConnection()
                   .prepareStatement("UPDATE nicknameTable SET nickname=? WHERE uniqueId=?");
-              update.setString(1, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+              update.setString(1, GsonComponentSerializer.gson().serialize(nickname));
               update.setString(2, player.getUniqueId().toString());
             } else {
-              update = Nicks.sql().getConnection()
+              update = HexNicks.sql().getConnection()
                   .prepareStatement("INSERT INTO `nicknameTable` (`uniqueId`, `nickname`) VALUES (?, ?);");
               update.setString(1, player.getUniqueId().toString());
-              update.setString(2, GsonComponentSerializer.gson().serialize(Nicks.software().getNick(player)));
+              update.setString(2, GsonComponentSerializer.gson().serialize(nickname));
             }
             update.executeUpdate();
           } catch (SQLException ex) {
@@ -138,7 +138,7 @@ public class SqlStorage implements StorageMethod {
             .map(Component::text).collect(Collectors.toList());
 
         // Add all stored nicknames
-        PreparedStatement ps = Nicks.sql().getConnection()
+        PreparedStatement ps = HexNicks.sql().getConnection()
             .prepareStatement("SELECT nickname FROM nicknameTable WHERE uniqueId !=?");
         ps.setString(1, player.getUniqueId().toString());
         ResultSet resultSet = ps.executeQuery();

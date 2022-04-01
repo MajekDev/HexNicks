@@ -23,15 +23,14 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.api.SetNickEvent;
-import dev.majek.hexnicks.config.NicksMessages;
-import dev.majek.hexnicks.util.MiniMessageWrapper;
+import dev.majek.hexnicks.config.Messages;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
+import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -48,11 +47,10 @@ public class CommandNick implements TabExecutor {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, @NotNull String[] args) {
     // Console cannot have a nickname
-    if (!(sender instanceof Player)) {
-      NicksMessages.INVALID_SENDER.send(sender);
+    if (!(sender instanceof Player player)) {
+      Messages.INVALID_SENDER.send(sender);
       return true;
     }
-    Player player = (Player) sender;
 
     if (args.length == 0) {
       return false;
@@ -64,53 +62,53 @@ public class CommandNick implements TabExecutor {
         .gradients(player.hasPermission("hexnicks.color.gradient"))
         .hexColors(player.hasPermission("hexnicks.color.hex"))
         .standardColors(true)
-        .legacyColors(Nicks.config().LEGACY_COLORS)
-        .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
-        .removeColors(Nicks.utils().blockedColors(player).toArray(new NamedTextColor[0]))
+        .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .removeTextDecorations(MiscUtils.blockedDecorations(player))
+        .removeColors(MiscUtils.blockedColors(player))
         .build().mmParse(nickInput);
 
     // Make sure the nickname is alphanumeric if that's enabled
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
-    if (Nicks.config().REQUIRE_ALPHANUMERIC) {
+    if (HexNicks.config().REQUIRE_ALPHANUMERIC) {
       if (!plainTextNick.matches("[a-zA-Z0-9]+")) {
-        NicksMessages.NON_ALPHANUMERIC.send(player);
+        Messages.NON_ALPHANUMERIC.send(player);
         return true;
       }
     }
 
     // Set the nickname to the default color if there's no color specified
-    nickname = nickname.colorIfAbsent(Nicks.config().DEFAULT_NICK_COLOR);
+    nickname = nickname.colorIfAbsent(HexNicks.config().DEFAULT_NICK_COLOR);
 
     // Make sure the nickname isn't too short
-    int minLength = Nicks.config().MIN_LENGTH;
+    int minLength = HexNicks.config().MIN_LENGTH;
     if (plainTextNick.length() < minLength) {
-      NicksMessages.TOO_SHORT.send(player, minLength);
+      Messages.TOO_SHORT.send(player, minLength);
       return true;
     }
 
     // Make sure the nickname isn't too long
-    int maxLength = Nicks.config().MAX_LENGTH;
+    int maxLength = HexNicks.config().MAX_LENGTH;
     if (plainTextNick.length() > maxLength) {
-      NicksMessages.TOO_LONG.send(player, maxLength);
+      Messages.TOO_LONG.send(player, maxLength);
       return true;
     }
 
     // Make sure the nickname isn't taken
-    if (Nicks.utils().preventDuplicates(nickname, player)) {
+    if (MiscUtils.preventDuplicates(nickname, player)) {
       return true;
     }
 
     // Call event
     SetNickEvent nickEvent = new SetNickEvent(player, nickname,
-        Nicks.core().getDisplayName(player));
-    Nicks.api().callEvent(nickEvent);
+        HexNicks.core().getDisplayName(player));
+    HexNicks.api().callEvent(nickEvent);
     if (nickEvent.isCancelled()) {
       return true;
     }
 
     // Set nick
-    Nicks.core().setNick(player, nickEvent.newNick());
-    NicksMessages.NICKNAME_SET.send(player, nickEvent.newNick());
+    HexNicks.core().setNick(player, nickEvent.newNick());
+    Messages.NICKNAME_SET.send(player, nickEvent.newNick());
 
     return true;
   }

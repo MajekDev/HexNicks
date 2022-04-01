@@ -23,15 +23,15 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.api.SetNickOtherEvent;
-import dev.majek.hexnicks.config.NicksMessages;
-import dev.majek.hexnicks.util.MiniMessageWrapper;
+import dev.majek.hexnicks.config.Messages;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
+import dev.majek.hexnicks.util.MiscUtils;
 import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.Collections;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -55,7 +55,7 @@ public class CommandNickOther implements TabExecutor {
     // Make sure the target player is online
     Player target = Bukkit.getPlayer(args[0]);
     if (target == null) {
-      NicksMessages.UNKNOWN_PLAYER.send(sender, args[0]);
+      Messages.UNKNOWN_PLAYER.send(sender, args[0]);
       return true;
     }
 
@@ -68,49 +68,52 @@ public class CommandNickOther implements TabExecutor {
         .gradients(target.hasPermission("hexnicks.color.gradient"))
         .hexColors(target.hasPermission("hexnicks.color.hex"))
         .standardColors(true)
-        .legacyColors(Nicks.config().LEGACY_COLORS)
-        .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
+        .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .removeTextDecorations(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedDecorations(target)
+            : Collections.emptyList())
+        .removeColors(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedColors(target)
+            : Collections.emptyList())
         .build().mmParse(nickInput);
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
-    int maxLength = Nicks.config().MAX_LENGTH;
-    int minLength = Nicks.config().MIN_LENGTH;
+    int maxLength = HexNicks.config().MAX_LENGTH;
+    int minLength = HexNicks.config().MIN_LENGTH;
 
     // Make sure the nickname is alphanumeric if that's enabled
-    if (Nicks.config().REQUIRE_ALPHANUMERIC) {
+    if (HexNicks.config().REQUIRE_ALPHANUMERIC) {
       if (!plainTextNick.matches("[a-zA-Z0-9]+")) {
-        NicksMessages.NON_ALPHANUMERIC.send(sender);
+        Messages.NON_ALPHANUMERIC.send(sender);
         return true;
       }
     }
 
     // Make sure the nickname isn't too short
     if (plainTextNick.length() < minLength) {
-      NicksMessages.TOO_SHORT.send(sender, minLength);
+      Messages.TOO_SHORT.send(sender, minLength);
       return true;
     }
 
     // Make sure the nickname isn't too long
     if (plainTextNick.length() > maxLength) {
-      NicksMessages.TOO_LONG.send(sender, maxLength);
+      Messages.TOO_LONG.send(sender, maxLength);
       return true;
     }
 
     // Make sure the nickname isn't taken
-    if (Nicks.utils().preventDuplicates(nickname, target)) {
+    if (MiscUtils.preventDuplicates(nickname, target)) {
       return true;
     }
 
     // Call event
     SetNickOtherEvent nickEvent = new SetNickOtherEvent(sender, target,
-        nickname, Nicks.core().getDisplayName(target));
-    Nicks.api().callEvent(nickEvent);
+        nickname, HexNicks.core().getDisplayName(target));
+    HexNicks.api().callEvent(nickEvent);
     if (nickEvent.isCancelled()) {
       return true;
     }
 
     // Set nick
-    Nicks.core().setNick(target, nickEvent.newNick());
-    NicksMessages.NICKNAME_SET_OTHER.send(sender, target, nickEvent.newNick());
+    HexNicks.core().setNick(target, nickEvent.newNick());
+    Messages.NICKNAME_SET_OTHER.send(sender, target, nickEvent.newNick());
 
     return true;
   }

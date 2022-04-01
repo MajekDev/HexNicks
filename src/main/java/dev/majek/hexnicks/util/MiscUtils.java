@@ -23,14 +23,20 @@
  */
 package dev.majek.hexnicks.util;
 
-import dev.majek.hexnicks.Nicks;
-import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.config.Messages;
+
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,7 +48,9 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 /**
  * Handles general utility methods.
  */
-public class NicksUtils {
+public class MiscUtils {
+
+  private MiscUtils() {}
 
   /**
    * Get a string from the config, apply placeholders from PlaceholderAPI,
@@ -53,8 +61,8 @@ public class NicksUtils {
    * @param player The player for placeholders.
    * @return Formatted component.
    */
-  public Component configStringPlaceholders(String path, String def, Player player) {
-    return MiniMessage.miniMessage().deserialize(Nicks.hooks().applyPlaceHolders(player, Nicks.core()
+  public static Component configStringPlaceholders(String path, String def, Player player) {
+    return MiniMessage.miniMessage().deserialize(HexNicks.hooks().applyPlaceHolders(player, HexNicks.core()
         .getConfig().getString(path, def)));
   }
 
@@ -65,8 +73,8 @@ public class NicksUtils {
    * @param def The default if the path returns null.
    * @return Formatted component.
    */
-  public Component configString(String path, String def) {
-    return MiniMessage.miniMessage().deserialize(Nicks.core().getConfig().getString(path, def));
+  public static Component configString(String path, String def) {
+    return MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(path, def));
   }
 
   /**
@@ -76,23 +84,29 @@ public class NicksUtils {
    * @param player the player trying to set the nickname
    * @return true if the nickname was a duplicate and the message was sent
    */
-  public boolean preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
-    if (Nicks.config().PREVENT_DUPLICATE_NICKS) {
+  public static boolean preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
+    if (HexNicks.config().PREVENT_DUPLICATE_NICKS) {
       boolean taken = false;
       try {
-        taken = Nicks.storage().nicknameExists(nickname, Nicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player).get();
+        taken = HexNicks.storage().nicknameExists(nickname, HexNicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player).get();
       } catch (InterruptedException | ExecutionException e) {
         e.printStackTrace();
       }
       if (taken) {
-        NicksMessages.NICKNAME_TAKEN.send(player);
+        Messages.NICKNAME_TAKEN.send(player);
         return true;
       }
     }
     return false;
   }
 
-  public @Nullable Character legacyCodeFromNamed(@NotNull NamedTextColor color) {
+  /**
+   * Get the legacy color code from a named text color.
+   *
+   * @param color the named text color
+   * @return legacy color code
+   */
+  public static @Nullable Character legacyCodeFromNamed(@NotNull NamedTextColor color) {
     if (BLACK.equals(color)) {
       return '0';
     } else if (DARK_BLUE.equals(color)) {
@@ -129,13 +143,54 @@ public class NicksUtils {
     return null;
   }
 
-  public Set<NamedTextColor> blockedColors(@NotNull CommandSender sender) {
-    Set<NamedTextColor> set = new HashSet<>();
-    for (NamedTextColor color : NamedTextColor.NAMES.values()) {
+  /**
+   * Get a set of blocked colors for a command sender based on permissions.
+   *
+   * @param sender the sender
+   * @return blocked colors
+   */
+  public static @NotNull Set<@NotNull NamedTextColor> blockedColors(final @NotNull CommandSender sender) {
+    final Set<NamedTextColor> set = new HashSet<>();
+    for (final NamedTextColor color : NamedTextColor.NAMES.values()) {
       if (!sender.hasPermission("hexnicks.color." + color.toString().toLowerCase(Locale.ROOT))) {
         set.add(color);
       }
     }
     return set;
+  }
+
+  /**
+   * Get a set of blocked decorations for a command sender based on permissions.
+   *
+   * @param sender the sender
+   * @return blocked decorations
+   */
+  public static @NotNull Set<@NotNull TextDecoration> blockedDecorations(final @NotNull CommandSender sender) {
+    final Set<TextDecoration> set = new HashSet<>();
+    for (final TextDecoration decoration : TextDecoration.values()) {
+      if (!sender.hasPermission("hexnicks.decoration." + decoration.toString().toLowerCase(Locale.ROOT))) {
+        set.add(decoration);
+      }
+    }
+    return set;
+  }
+
+  /**
+   * Send a http request and get the response body.
+   *
+   * @param request the request
+   * @return the response body
+   */
+  public static @NotNull String sendRequestAndGetResponse(final @NotNull HttpRequest request) {
+    HttpResponse<String> response = null;
+    try {
+      response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+    } catch (IOException | InterruptedException ex) {
+      ex.printStackTrace();
+    }
+    if (response == null) {
+      throw new RuntimeException("Error getting response from ByteBin");
+    }
+    return response.body();
   }
 }

@@ -23,8 +23,8 @@
  */
 package dev.majek.hexnicks.hook;
 
-import dev.majek.hexnicks.Nicks;
-import dev.majek.hexnicks.util.MiniMessageWrapper;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Handles hooked plugins.
  */
-public class NicksHooks {
+public class HookManager {
 
   private boolean papiHooked;
   private boolean vaultHooked;
@@ -42,7 +42,7 @@ public class NicksHooks {
   private VaultHook vaultHook;
   private EssentialsHook essentialsHook;
 
-  public NicksHooks() {
+  public HookManager() {
     papiHooked = false;
     vaultHooked = false;
     essentialsHooked = false;
@@ -55,29 +55,29 @@ public class NicksHooks {
    * Reload the hooks to make sure we're hooked into all available plugins.
    */
   public void reloadHooks() {
-    Nicks.logging().debug("Reloaded hooks...");
-    if (Nicks.core().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") &&
-        Nicks.core().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-      Nicks.logging().log("Hooking into PlaceholderAPI...");
+    HexNicks.logging().debug("Reloaded hooks...");
+    if (HexNicks.core().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") &&
+        HexNicks.core().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+      HexNicks.logging().log("Hooking into PlaceholderAPI...");
       papiHooked = true;
-      papiHook = new PapiHook(Nicks.core());
+      papiHook = new PapiHook(HexNicks.core());
       papiHook.register();
     }
-    if (Nicks.core().getServer().getPluginManager().isPluginEnabled("Vault") &&
-        Nicks.core().getServer().getPluginManager().getPlugin("Vault") != null) {
-      Nicks.logging().log("Hooking into Vault...");
+    if (HexNicks.core().getServer().getPluginManager().isPluginEnabled("Vault") &&
+        HexNicks.core().getServer().getPluginManager().getPlugin("Vault") != null) {
+      HexNicks.logging().log("Hooking into Vault...");
       vaultHooked = true;
       vaultHook = new VaultHook();
       // TODO: 12/19/2021 This is a temporary fix for Vault integration sometimes not working despite HexNicks
       // TODO: 12/19/2021 detecting Vault and claiming it hooked.
       if (vaultHook.vaultChat() == null) {
-        Nicks.logging().error("Detected Vault and tried to hook but failed.");
+        HexNicks.logging().error("Detected Vault and tried to hook but failed.");
         vaultHooked = false;
       }
     }
-    if (Nicks.core().getServer().getPluginManager().isPluginEnabled("Essentials") &&
-        Nicks.core().getServer().getPluginManager().getPlugin("Essentials") != null) {
-      Nicks.logging().log("Hooking into Essentials...");
+    if (HexNicks.core().getServer().getPluginManager().isPluginEnabled("Essentials") &&
+        HexNicks.core().getServer().getPluginManager().getPlugin("Essentials") != null) {
+      HexNicks.logging().log("Hooking into Essentials...");
       essentialsHooked = true;
       essentialsHook = new EssentialsHook();
     }

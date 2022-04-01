@@ -23,8 +23,8 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
-import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.config.Messages;
 import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -50,26 +50,26 @@ public class CommandRealName implements TabExecutor {
       return false;
     }
 
-    OfflinePlayer player = Nicks.api().playerFromNick(String.join(" ", args));
+    OfflinePlayer player = HexNicks.api().playerFromNick(String.join(" ", args));
     if (player == null) {
-      NicksMessages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
+      Messages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
       return true;
     }
 
-    CompletableFuture<Component> nickname = Nicks.api().getStoredNick(player);
+    CompletableFuture<Component> nickname = HexNicks.api().getStoredNick(player);
     if (nickname == null) {
-      NicksMessages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
+      Messages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
       return true;
     }
 
-    nickname.whenComplete(((component, throwable) -> NicksMessages.REALNAME.send(sender, player.getName(), component)));
+    nickname.whenComplete(((component, throwable) -> Messages.REALNAME.send(sender, player.getName(), component)));
     return true;
   }
 
   @Override
   public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                               @NotNull String alias, @NotNull String[] args) {
-    return TabCompleterBase.filterStartingWith(args[0], Nicks.core().getNickMap().values().stream().map(nickname ->
+    return TabCompleterBase.filterStartingWith(args[0], HexNicks.core().getNickMap().values().stream().map(nickname ->
         PlainTextComponentSerializer.plainText().serialize(nickname)).collect(Collectors.toList()));
   }
 }

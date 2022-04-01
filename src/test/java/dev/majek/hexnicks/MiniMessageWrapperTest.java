@@ -23,12 +23,15 @@
  */
 package dev.majek.hexnicks;
 
-import dev.majek.hexnicks.util.MiniMessageWrapper;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
+import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.placeholder.Placeholder;
-import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -135,8 +138,8 @@ public class MiniMessageWrapperTest {
   public void removedDecorations() {
     String string = "<bold><blue>Majekdor";
     Assert.assertEquals(
-        MiniMessageWrapper.builder().removeTextDecorations(TextDecoration.BOLD).build().mmParse(string),
-        Component.text("Majekdor").color(NamedTextColor.BLUE).decoration(TextDecoration.BOLD, false)
+        MiniMessageWrapper.builder().removeTextDecorations(Set.of(TextDecoration.BOLD)).build().mmParse(string),
+        Component.text("Majekdor").color(NamedTextColor.BLUE)
     );
   }
 
@@ -144,17 +147,28 @@ public class MiniMessageWrapperTest {
   public void placeholderResolver() {
     String string = "<bold><placeholder>Majekdor";
     Assert.assertEquals(
-        MiniMessageWrapper.builder().placeholderResolver(PlaceholderResolver.placeholders(
-            Placeholder.miniMessage("placeholder", "I am ")
+        MiniMessageWrapper.builder().placeholderResolver(TagResolver.resolver(
+            Placeholder.parsed("placeholder", "I am ")
         )).build().mmParse(string),
         Component.text("I am Majekdor").decorate(TextDecoration.BOLD)
     );
     string = "<bold><placeholder>Majekdor";
     Assert.assertEquals(
-        MiniMessageWrapper.builder().placeholderResolver(PlaceholderResolver.placeholders(
-            Placeholder.miniMessage("placeholder", "<blue>")
+        MiniMessageWrapper.builder().placeholderResolver(TagResolver.resolver(
+            Placeholder.parsed("placeholder", "<blue>")
         )).build().mmParse(string),
         Component.text("Majekdor").color(NamedTextColor.BLUE).decorate(TextDecoration.BOLD)
+    );
+  }
+
+  @Test
+  public void foo() {
+    TagResolver bold = TagResolver.resolver(Set.of("bold", "b"), (argumentQueue, context) -> Tag.styling(TextDecoration.BOLD));
+    System.out.println(
+        MiniMessage.builder()
+            .tags(TagResolver.resolver(TagResolver.empty(), bold))
+            .build()
+            .deserialize("<b><aqua>Majek")
     );
   }
 

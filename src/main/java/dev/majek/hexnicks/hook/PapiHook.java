@@ -23,16 +23,22 @@
  */
 package dev.majek.hexnicks.hook;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles PlaceholderAPI hook methods.
@@ -74,20 +80,81 @@ class PapiHook extends PlaceholderExpansion {
   @SuppressWarnings("all")
   public String onRequest(OfflinePlayer player, @NotNull String identifier) {
     if (identifier.equalsIgnoreCase("nick")) {
+      return getNick(player);
+    } else if (identifier.equalsIgnoreCase("nick_raw")) {
+      Component nick = null;
       try {
-        Component nick = Nicks.storage().getNick(player.getUniqueId()).get();
-        if (nick == null) {
-          return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
-              .serialize(Component.text(player.getName()).colorIfAbsent(Nicks.config().DEFAULT_USERNAME_COLOR));
-        } else {
-          return LegacyComponentSerializer.builder().hexColors()
-              .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
+        nick = HexNicks.storage().getNick(player.getUniqueId()).get();
+      } catch (InterruptedException | ExecutionException e) {
+        HexNicks.logging().error("Error retrieving nickname for Papi: ");
+        e.printStackTrace();
+      }
+
+      if (nick == null) {
+        return player.getName();
+      } else {
+        return PlainTextComponentSerializer.plainText().serialize(nick);
+      }
+    } else if (identifier.equalsIgnoreCase("nick_hex")) {
+      Component nick = null;
+      try {
+        nick = HexNicks.storage().getNick(player.getUniqueId()).get();
+      } catch (InterruptedException | ExecutionException e) {
+        HexNicks.logging().error("Error retrieving nickname for Papi: ");
+        e.printStackTrace();
+      }
+
+      if (nick == null) {
+        return player.getName();
+      } else {
+        String legacy = LegacyComponentSerializer.builder().hexColors().character('&').build().serialize(nick);
+        final Pattern pattern = Pattern.compile("&#([0-9a-fA-F]{6})");
+        final Matcher matcher = pattern.matcher(legacy);
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()) {
+          final StringBuilder replacement = new StringBuilder(7).append("#");
+          for (final char character : matcher.group(1).toCharArray()) {
+            replacement.append(character);
+          }
+          matcher.appendReplacement(sb, replacement.toString());
         }
-      } catch (final InterruptedException | ExecutionException ex) {
-        Nicks.logging().error("Error retrieving nickname for Papi", ex);
+        matcher.appendTail(sb);
+        return sb.toString();
+      }
+    } else if (identifier.equalsIgnoreCase("nick_mm")) {
+      Component nick = null;
+      try {
+        nick = HexNicks.storage().getNick(player.getUniqueId()).get();
+      } catch (InterruptedException | ExecutionException e) {
+        HexNicks.logging().error("Error retrieving nickname for Papi: ");
+        e.printStackTrace();
+      }
+
+      if (nick == null) {
+        return player.getName();
+      } else {
+        return MiniMessage.miniMessage().serialize(nick);
       }
     }
     return null;
+  }
+
+  @SuppressWarnings("all")
+  private @Nullable String getNick(final @NotNull OfflinePlayer player) {
+    try {
+      Component nick = HexNicks.storage().getNick(player.getUniqueId()).get();
+      if (nick == null) {
+        return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
+            .serialize(Component.text(player.getName()).colorIfAbsent(HexNicks.config().DEFAULT_USERNAME_COLOR));
+      } else {
+        return LegacyComponentSerializer.builder().hexColors()
+            .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
+      }
+    } catch (InterruptedException | ExecutionException ex) {
+      HexNicks.logging().error("Error retrieving nickname for Papi: ");
+      ex.printStackTrace();
+      return null;
+    }
   }
 
   /**

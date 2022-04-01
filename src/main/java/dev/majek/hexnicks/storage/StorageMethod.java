@@ -23,7 +23,7 @@
  */
 package dev.majek.hexnicks.storage;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.text.Component;
@@ -63,8 +63,9 @@ public interface StorageMethod {
    * Save a nickname in storage. This can be used to put it there initially or to update it.
    *
    * @param player The player whose nickname to save.
+   * @param nickname the nickname to save
    */
-  void saveNick(@NotNull Player player);
+  void saveNick(@NotNull Player player, @NotNull Component nickname);
 
   /**
    * Update the nickname of all online players from storage.
@@ -74,7 +75,7 @@ public interface StorageMethod {
       hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
         if (aBoolean) {
           getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
-              Nicks.software().setNick(player, component));
+              HexNicks.core().setNick(player, component));
         }
       });
     }

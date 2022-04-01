@@ -23,15 +23,14 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.api.NickColorEvent;
-import dev.majek.hexnicks.config.NicksMessages;
-import dev.majek.hexnicks.util.MiniMessageWrapper;
+import dev.majek.hexnicks.config.Messages;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
+import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -48,11 +47,10 @@ public class CommandNickColor implements TabExecutor {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, @NotNull String[] args) {
     // Console cannot have a nickname
-    if (!(sender instanceof Player)) {
-      NicksMessages.INVALID_SENDER.send(sender);
+    if (!(sender instanceof Player player)) {
+      Messages.INVALID_SENDER.send(sender);
       return true;
     }
-    Player player = (Player) sender;
 
     if (args.length == 0) {
       return false;
@@ -64,7 +62,7 @@ public class CommandNickColor implements TabExecutor {
     String plainTextInput = PlainTextComponentSerializer.plainText()
         .serialize(MiniMessageWrapper.legacy().mmParse(nickInput));
     if (plainTextInput.length() > 0) {
-      NicksMessages.ONLY_COLOR_CODES.send(player);
+      Messages.ONLY_COLOR_CODES.send(player);
       return true;
     }
 
@@ -72,18 +70,18 @@ public class CommandNickColor implements TabExecutor {
         .gradients(player.hasPermission("hexnicks.color.gradient"))
         .hexColors(player.hasPermission("hexnicks.color.hex"))
         .standardColors(true)
-        .legacyColors(Nicks.config().LEGACY_COLORS)
-        .removeTextDecorations(Nicks.config().DISABLED_DECORATIONS.toArray(new TextDecoration[0]))
-        .removeColors(Nicks.utils().blockedColors(player).toArray(new NamedTextColor[0]))
+        .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .removeTextDecorations(MiscUtils.blockedDecorations(player))
+        .removeColors(MiscUtils.blockedColors(player))
         .build();
 
     // Get the players current nickname to apply color codes to
     String plainTextNick = PlainTextComponentSerializer.plainText()
-        .serialize(Nicks.core().getDisplayName(player));
+        .serialize(HexNicks.core().getDisplayName(player));
 
     // Remove nickname prefix if essentials is hooked
-    if (Nicks.hooks().isEssentialsHooked()) {
-      String nickPrefix = Nicks.hooks().getEssNickPrefix();
+    if (HexNicks.hooks().isEssentialsHooked()) {
+      String nickPrefix = HexNicks.hooks().getEssNickPrefix();
       if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
         plainTextNick = plainTextNick.substring(nickPrefix.length());
       }
@@ -92,21 +90,21 @@ public class CommandNickColor implements TabExecutor {
     Component nickname = wrapper.mmParse(wrapper.mmString(nickInput) + plainTextNick);
 
     // Make sure the nickname isn't taken
-    if (Nicks.utils().preventDuplicates(nickname, player)) {
+    if (MiscUtils.preventDuplicates(nickname, player)) {
       return true;
     }
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,
-        Nicks.core().getDisplayName(player));
-    Nicks.api().callEvent(colorEvent);
+        HexNicks.core().getDisplayName(player));
+    HexNicks.api().callEvent(colorEvent);
     if (colorEvent.isCancelled()) {
       return true;
     }
 
     // Set nick
-    Nicks.core().setNick(player, colorEvent.newNick());
-    NicksMessages.NICKNAME_SET.send(player, colorEvent.newNick());
+    HexNicks.core().setNick(player, colorEvent.newNick());
+    Messages.NICKNAME_SET.send(player, colorEvent.newNick());
 
     return true;
   }

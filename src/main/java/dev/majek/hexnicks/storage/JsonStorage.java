@@ -61,7 +61,7 @@ public class JsonStorage implements StorageMethod {
   }
 
   @Override
-  public void removeNick(@NotNull UUID uuid) {
+  public synchronized void removeNick(@NotNull UUID uuid) {
     HexNicks.core().getNickMap().remove(uuid);
     try {
       JsonObject json = (JsonObject) JsonParser.parseReader(new FileReader(HexNicks.core().jsonFile()));

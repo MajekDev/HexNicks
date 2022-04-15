@@ -28,8 +28,6 @@ import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.junit.Assert;
@@ -158,17 +156,6 @@ public class MiniMessageWrapperTest {
             Placeholder.parsed("placeholder", "<blue>")
         )).build().mmParse(string),
         Component.text("Majekdor").color(NamedTextColor.BLUE).decorate(TextDecoration.BOLD)
-    );
-  }
-
-  @Test
-  public void foo() {
-    TagResolver bold = TagResolver.resolver(Set.of("bold", "b"), (argumentQueue, context) -> Tag.styling(TextDecoration.BOLD));
-    System.out.println(
-        MiniMessage.builder()
-            .tags(TagResolver.resolver(TagResolver.empty(), bold))
-            .build()
-            .deserialize("<b><aqua>Majek")
     );
   }
 

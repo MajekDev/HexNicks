@@ -68,8 +68,6 @@ public class HookManager {
       HexNicks.logging().log("Hooking into Vault...");
       vaultHooked = true;
       vaultHook = new VaultHook();
-      // TODO: 12/19/2021 This is a temporary fix for Vault integration sometimes not working despite HexNicks
-      // TODO: 12/19/2021 detecting Vault and claiming it hooked.
       if (vaultHook.vaultChat() == null) {
         HexNicks.logging().error("Detected Vault and tried to hook but failed.");
         vaultHooked = false;

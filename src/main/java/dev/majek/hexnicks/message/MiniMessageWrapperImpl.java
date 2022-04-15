@@ -206,8 +206,6 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       }
     }
 
-    // TODO: 3/30/22 Remove all disabled decorations
-
     return mmString;
   }
 

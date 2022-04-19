@@ -1,6 +1,6 @@
 name: HexNicks
 version: ${project.version}
-main: dev.majek.hexnicks.Nicks
+main: dev.majek.hexnicks.HexNicks
 api-version: 1.13
 authors: [Majekdor]
 description: ${project.description}
@@ -99,4 +99,18 @@ permissions:
   hexnicks.color.yellow:
     default: true
   hexnicks.color.white:
+    default: true
+
+  hexnicks.decoration.*:
+    description: Permission to use all text decorations.
+    default: true
+  hexnicks.decoration.bold:
+    default: true
+  hexnicks.decoration.italic:
+    default: true
+  hexnicks.decoration.underlined:
+    default: true
+  hexnicks.decoration.strikethrough:
+    default: true
+  hexnicks.decoration.obfuscated:
     default: true

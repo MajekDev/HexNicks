@@ -27,23 +27,19 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashSet;
-import java.util.Set;
+import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles all config options in the plugin.
  */
-public class NicksConfig {
+public class ConfigValues {
 
   public Boolean              TAB_NICKS;
   public Integer              MAX_LENGTH;
@@ -56,39 +52,34 @@ public class NicksConfig {
   public TextColor            DEFAULT_USERNAME_COLOR;
   public Boolean              UPDATE_PROMPT;
   public Boolean              OVERRIDE_ESSENTIALS;
-  public Set<TextDecoration>  DISABLED_DECORATIONS;
+  public Boolean              NICK_OTHER_OVERRIDE;
   public Boolean              PREVENT_DUPLICATE_NICKS;
   public Boolean              PREVENT_DUPLICATE_NICKS_STRICT;
   public Boolean              DEBUG;
 
-  public NicksConfig() {
+  public ConfigValues() {
     this.reload();
-    DISABLED_DECORATIONS = new HashSet<>();
   }
 
   /**
    * Reload the config values.
    */
   public void reload() {
-    TAB_NICKS = Nicks.core().getConfig().getBoolean("tab-nicks", false);
-    MAX_LENGTH = Nicks.core().getConfig().getInt("max-length", 20);
-    MIN_LENGTH = Nicks.core().getConfig().getInt("min-length", 3);
-    REQUIRE_ALPHANUMERIC = Nicks.core().getConfig().getBoolean("require-alphanumeric", false);
-    CHAT_FORMATTER = Nicks.core().getConfig().getBoolean("chat-formatter", false);
-    CHAT_FORMAT = Nicks.core().getConfig().getString("chat-format", "{displayname}: {message}");
-    LEGACY_COLORS = Nicks.core().getConfig().getBoolean("legacy-colors", false);
-    DEFAULT_NICK_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-nick-color", "#FFFFFF"));
-    DEFAULT_USERNAME_COLOR = TextColor.fromHexString(Nicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
-    UPDATE_PROMPT = Nicks.core().getConfig().getBoolean("update-prompt", true);
-    OVERRIDE_ESSENTIALS = Nicks.core().getConfig().getBoolean("override-essentials", true);
-    Nicks.core().getConfig().getStringList("disabled-decorations").forEach(string -> {
-      try {
-        DISABLED_DECORATIONS.add(TextDecoration.valueOf(string.toUpperCase()));
-      } catch (IllegalArgumentException | NullPointerException ignored) {}
-    });
-    PREVENT_DUPLICATE_NICKS = Nicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
-    PREVENT_DUPLICATE_NICKS_STRICT = Nicks.core().getConfig().getBoolean("prevent-duplicate-nicks-strict", false);
-    DEBUG = Nicks.core().getConfig().getBoolean("debug", false);
+    TAB_NICKS = HexNicks.core().getConfig().getBoolean("tab-nicks", false);
+    MAX_LENGTH = HexNicks.core().getConfig().getInt("max-length", 20);
+    MIN_LENGTH = HexNicks.core().getConfig().getInt("min-length", 3);
+    REQUIRE_ALPHANUMERIC = HexNicks.core().getConfig().getBoolean("require-alphanumeric", false);
+    CHAT_FORMATTER = HexNicks.core().getConfig().getBoolean("chat-formatter", false);
+    CHAT_FORMAT = HexNicks.core().getConfig().getString("chat-format", "{displayname}: {message}");
+    LEGACY_COLORS = HexNicks.core().getConfig().getBoolean("legacy-colors", false);
+    DEFAULT_NICK_COLOR = TextColor.fromHexString(HexNicks.core().getConfig().getString("default-nick-color", "#FFFFFF"));
+    DEFAULT_USERNAME_COLOR = TextColor.fromHexString(HexNicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
+    UPDATE_PROMPT = HexNicks.core().getConfig().getBoolean("update-prompt", true);
+    OVERRIDE_ESSENTIALS = HexNicks.core().getConfig().getBoolean("override-essentials", true);
+    NICK_OTHER_OVERRIDE = HexNicks.core().getConfig().getBoolean("nickother-override", false);
+    PREVENT_DUPLICATE_NICKS = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
+    PREVENT_DUPLICATE_NICKS_STRICT = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks-strict", false);
+    DEBUG = HexNicks.core().getConfig().getBoolean("debug", false);
   }
 
   /**
@@ -102,12 +93,12 @@ public class NicksConfig {
         .header("User-Agent", "hexnicks")
         .header("Content-Type", "text/yaml; charset=utf-8")
         .POST(HttpRequest.BodyPublishers.ofString(
-            Nicks.core().getConfig().saveToString()
+            HexNicks.core().getConfig().saveToString()
         )).build();
 
-    final JsonObject json = JsonParser.parseString(sendRequestAndGetResponse(request)).getAsJsonObject();
+    final JsonObject json = JsonParser.parseString(MiscUtils.sendRequestAndGetResponse(request)).getAsJsonObject();
     final String url = "https://paste.majek.dev/" + json.get("key").getAsString();
-    Nicks.logging().debug("Uploaded config to " + url + " for updating");
+    HexNicks.logging().debug("Uploaded config to " + url + " for updating");
 
     return url;
   }
@@ -124,7 +115,7 @@ public class NicksConfig {
       throw new IllegalArgumentException("The link provided is not a valid bytebin link!");
     }
 
-    Nicks.logging().debug("Retrieving updated config from " + link);
+    HexNicks.logging().debug("Retrieving updated config from " + link);
     final HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(link))
         .header("User-Agent", "hexnicks")
@@ -132,24 +123,12 @@ public class NicksConfig {
         .build();
 
     try {
-      Files.asCharSink(new File(Nicks.core().getDataFolder(), "config.yml"), Charsets.UTF_8).write(sendRequestAndGetResponse(request));
+      Files.asCharSink(new File(HexNicks.core().getDataFolder(), "config.yml"), Charsets.UTF_8)
+          .write(MiscUtils.sendRequestAndGetResponse(request));
     } catch (final IOException ex) {
-      Nicks.logging().error("Error saving config from editor", ex);
+      HexNicks.logging().error("Error saving config from editor", ex);
     }
 
-    Nicks.core().reload();
-  }
-
-  private @NotNull String sendRequestAndGetResponse(final @NotNull HttpRequest request) {
-    HttpResponse<String> response = null;
-    try {
-      response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException ex) {
-      ex.printStackTrace();
-    }
-    if (response == null) {
-      throw new RuntimeException("Error getting response from ByteBin");
-    }
-    return response.body();
+    HexNicks.core().reload();
   }
 }

@@ -23,8 +23,8 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
-import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.config.Messages;
 import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,44 +51,48 @@ public class CommandHexNicks implements TabExecutor {
     switch (args[0].toLowerCase(Locale.ROOT)) {
       case "reload": {
         if (!sender.hasPermission("hexnicks.reload")) {
-          NicksMessages.NO_PERMISSION.send(sender);
+          Messages.NO_PERMISSION.send(sender);
           return true;
         }
-        Nicks.core().reload();
-        NicksMessages.PLUGIN_RELOADED.send(sender);
+        HexNicks.core().reload();
+        Messages.PLUGIN_RELOADED.send(sender);
         return true;
       }
       case "config-editor": {
         if (!sender.hasPermission("hexnicks.config-editor")) {
-          NicksMessages.NO_PERMISSION.send(sender);
+          Messages.NO_PERMISSION.send(sender);
           return true;
         }
         if (args.length < 2) {
           return false;
         }
         if (args[1].equalsIgnoreCase("new")) {
-          NicksMessages.NEW_EDITOR.send(sender, Nicks.config().toWeb());
+          Messages.WORKING.send(sender);
+          Messages.NEW_EDITOR.send(sender, HexNicks.config().toWeb());
         } else if (args[1].equalsIgnoreCase("apply") && args.length == 3) {
+          Messages.WORKING.send(sender);
           try {
-            Nicks.config().fromWeb(args[2]);
+            HexNicks.config().fromWeb(args[2]);
           } catch (IllegalArgumentException ex) {
-            NicksMessages.INVALID_LINK.send(sender);
-            Nicks.logging().error("Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
+            Messages.INVALID_LINK.send(sender);
+            HexNicks.logging().error("Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
                 "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. 'https://paste.majek.dev/abcde45'");
             return true;
           }
-          NicksMessages.EDITOR_APPLIED.send(sender, args[2]);
+          Messages.EDITOR_APPLIED.send(sender, args[2]);
         } else {
           return false;
         }
+        return true;
       }
       case "latest-log": {
         if (!sender.hasPermission("hexnicks.view-log")) {
-          NicksMessages.NO_PERMISSION.send(sender);
+          Messages.NO_PERMISSION.send(sender);
           return true;
         }
 
-        sender.sendMessage("Link: " + Nicks.logging().latestToPasteBin());
+        Messages.WORKING.send(sender);
+        Messages.LATEST_LOG.send(sender, HexNicks.logging().latestToPasteBin());
         return true;
       }
       default:

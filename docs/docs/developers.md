@@ -20,9 +20,9 @@ HexNicks is hosted in Majekdor's Maven Repository [here](https://repo.majek.dev)
 
 <dependencies>
     <dependency>
-        <groupId>dev.majek.hexnicks</groupId>
-        <artifactId>HexNicks</artifactId>
-        <version>2.2.2</version>
+        <groupId>dev.majek</groupId>
+        <artifactId>hexnicks</artifactId>
+        <version>3.0.0</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -38,13 +38,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly "dev.majek.hexnicks:HexNicks:2.2.2"
+    compileOnly "dev.majek:hexnicks:3.0.0"
 }
 ```
 
 ## API
 
-HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way as other Bukkit events. You can see the events [here](https://jd.hexnicks.majek.dev/dev/majek/hexnicks/api/package-summary.html) and all JavaDocs [here](https://jd.hexnicks.majek.dev/).
+HexNicks does have an api and all commands trigger an event when executed. These events can be listened to the same way 
+as other Bukkit events. You can see the events [here](https://hexnicks.majek.dev/javadoc/dev/majek/hexnicks/api/package-summary.html) 
+and all JavaDocs [here](https://hexnicks.majek.dev/javadoc).
 
 Event example:
 ```java

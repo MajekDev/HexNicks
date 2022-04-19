@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.majek.hexnicks.util;
+package dev.majek.hexnicks.message;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.placeholder.PlaceholderResolver;
-import net.kyori.adventure.text.minimessage.transformation.TransformationType;
-import net.kyori.adventure.util.Buildable;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -37,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 2.1.2
  */
-public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMessageWrapper.Builder> {
+public interface MiniMessageWrapper {
 
   /**
    * <p>Gets a simple instance.</p>
@@ -120,7 +121,6 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    * @return a builder
    * @since 2.1.2
    */
-  @Override
   @NotNull Builder toBuilder();
 
   /**
@@ -128,7 +128,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
    *
    * @since 2.1.2
    */
-  interface Builder extends Buildable.Builder<MiniMessageWrapper> {
+  interface Builder {
 
     /**
      * Whether gradients on the final string should be parsed.
@@ -167,7 +167,7 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
     @NotNull Builder legacyColors(final boolean parse);
 
     /**
-     * Whether to parse advanced {@link TransformationType}s on the final string to be parsed.
+     * Whether to parse advanced {@link Tag}s on the final string to be parsed.
      * This includes click events, hover events, fonts, etc.
      *
      * @param parse whether to parse
@@ -186,13 +186,22 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
     @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations);
 
     /**
-     * Set the {@link PlaceholderResolver} for the {@link MiniMessage} instance.
+     * The {@link TextDecoration}s that should not be parsed.
+     *
+     * @param decorations the decorations
+     * @return this builder
+     * @since 3.0.0
+     */
+    @NotNull Builder removeTextDecorations(final @NotNull Collection<@NotNull TextDecoration> decorations);
+
+    /**
+     * Set the {@link TagResolver} for the {@link MiniMessage} instance.
      *
      * @param placeholderResolver the placeholder resolver
      * @return this builder
      * @since 2.2.1
      */
-    @NotNull Builder placeholderResolver(final @NotNull PlaceholderResolver placeholderResolver);
+    @NotNull Builder placeholderResolver(final @NotNull TagResolver placeholderResolver);
 
     /**
      * The {@link NamedTextColor}s that should not be parsed.
@@ -204,12 +213,20 @@ public interface MiniMessageWrapper extends Buildable<MiniMessageWrapper, MiniMe
     @NotNull Builder removeColors(final @NotNull NamedTextColor... colors);
 
     /**
+     * The {@link NamedTextColor}s that should not be parsed.
+     *
+     * @param colors the colors
+     * @return this builder
+     * @since 3.0.0
+     */
+    @NotNull Builder removeColors(final @NotNull Collection<@NotNull NamedTextColor> colors);
+
+    /**
      * Build the {@link MiniMessageWrapper} ready to parse.
      *
      * @return the wrapper
      * @since 2.1.2
      */
-    @Override
     @NotNull MiniMessageWrapper build();
   }
 }

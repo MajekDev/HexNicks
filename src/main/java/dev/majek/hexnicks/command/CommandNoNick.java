@@ -23,10 +23,10 @@
  */
 package dev.majek.hexnicks.command;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.api.NoNickEvent;
 import dev.majek.hexnicks.api.NoNickOtherEvent;
-import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.config.Messages;
 import dev.majek.hexnicks.util.TabCompleterBase;
 import java.util.Collections;
 import java.util.List;
@@ -48,47 +48,47 @@ public class CommandNoNick implements TabExecutor {
     if (args.length == 0) {
       // Console has no nickname
       if (!(sender instanceof Player)) {
-        NicksMessages.INVALID_SENDER.send(sender);
+        Messages.INVALID_SENDER.send(sender);
         return true;
       }
       Player player = (Player) sender;
 
       // Call event
       NoNickEvent noNickEvent = new NoNickEvent(player,
-          Nicks.core().getDisplayName(player));
-      Nicks.api().callEvent(noNickEvent);
+          HexNicks.core().getDisplayName(player));
+      HexNicks.api().callEvent(noNickEvent);
       if (noNickEvent.isCancelled()) {
         return true;
       }
 
-      Nicks.core().removeNick(player);
-      NicksMessages.NICKNAME_REMOVED.send(player);
+      HexNicks.core().removeNick(player);
+      Messages.NICKNAME_REMOVED.send(player);
 
     } else {
 
       // Make sure the sender has permission to remove another player's nickname
       if (!sender.hasPermission("hexnicks.nonick.other")) {
-        NicksMessages.NO_PERMISSION.send(sender);
+        Messages.NO_PERMISSION.send(sender);
         return true;
       }
 
       // Make sure the target player is online
       Player target = Bukkit.getPlayer(args[0]);
       if (target == null) {
-        NicksMessages.UNKNOWN_PLAYER.send(sender, args[0]);
+        Messages.UNKNOWN_PLAYER.send(sender, args[0]);
         return true;
       }
 
       // Call event
       NoNickOtherEvent event = new NoNickOtherEvent(sender, target,
-          Nicks.core().getDisplayName(target));
-      Nicks.api().callEvent(event);
+          HexNicks.core().getDisplayName(target));
+      HexNicks.api().callEvent(event);
       if (event.isCancelled()) {
         return true;
       }
 
-      Nicks.core().removeNick(target);
-      NicksMessages.NICKNAME_REMOVED_OTHER.send(sender, target);
+      HexNicks.core().removeNick(target);
+      Messages.NICKNAME_REMOVED_OTHER.send(sender, target);
     }
     return true;
   }

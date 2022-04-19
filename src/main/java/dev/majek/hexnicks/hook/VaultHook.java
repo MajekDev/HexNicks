@@ -23,7 +23,7 @@
  */
 package dev.majek.hexnicks.hook;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -35,9 +35,9 @@ class VaultHook {
   private Chat vaultChat;
 
   public VaultHook() {
-    RegisteredServiceProvider<Chat> rsp = Nicks.core().getServer().getServicesManager().getRegistration(Chat.class);
+    RegisteredServiceProvider<Chat> rsp = HexNicks.core().getServer().getServicesManager().getRegistration(Chat.class);
     if (rsp == null) {
-      Nicks.logging().error("Error hooking into Vault!");
+      HexNicks.logging().error("Error hooking into Vault!");
       return;
     }
     vaultChat = rsp.getProvider();

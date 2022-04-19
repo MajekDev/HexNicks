@@ -23,89 +23,95 @@
  */
 package dev.majek.hexnicks.config;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static dev.majek.hexnicks.Nicks.utils;
-
 /**
  * Handles all plugin messages.
  */
-public interface NicksMessages {
+public interface Messages {
 
-  Args0 INVALID_SENDER = () -> utils().configString("messages.invalidSender",
+  Args0 INVALID_SENDER = () -> MiscUtils.configString("messages.invalidSender",
       "<red>You must be in-game to use this command.");
 
-  Args1<String> UNKNOWN_PLAYER = playerName -> utils().configString("messages.unknownPlayer",
+  Args1<String> UNKNOWN_PLAYER = playerName -> MiscUtils.configString("messages.unknownPlayer",
       "<red>Unknown player %player%.").replaceText(TextReplacementConfig.builder()
       .matchLiteral("%player%").replacement(playerName).build());
 
-  Args0 NO_PERMISSION = () -> utils().configString("messages.noPermission",
+  Args0 NO_PERMISSION = () -> MiscUtils.configString("messages.noPermission",
       "<red>You do not have permission to execute this command.");
 
-  Args1<Integer> TOO_SHORT = minLength -> utils().configString("messages.tooShort",
+  Args1<Integer> TOO_SHORT = minLength -> MiscUtils.configString("messages.tooShort",
       "<red>That nickname is too short. Minimum length is %length% characters.")
       .replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
           .replacement(String.valueOf(minLength)).build());
 
-  Args1<Integer> TOO_LONG = maxLength -> utils().configString("messages.tooLong",
+  Args1<Integer> TOO_LONG = maxLength -> MiscUtils.configString("messages.tooLong",
       "<red>That nickname is too long. Maximum length is %length% characters.")
       .replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
       .replacement(String.valueOf(maxLength)).build());
 
-  Args0 NON_ALPHANUMERIC = () -> utils().configString("messages.nonAlphanumeric",
+  Args0 NON_ALPHANUMERIC = () -> MiscUtils.configString("messages.nonAlphanumeric",
       "<red>Your nickname must be alphanumeric.");
 
-  Args1<Component> NICKNAME_SET = nickname -> utils().configString("messages.nicknameSet",
+  Args1<Component> NICKNAME_SET = nickname -> MiscUtils.configString("messages.nicknameSet",
       "<gray>Your nickname has been set to: <white>%nick%<gray>.")
       .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
 
-  Args2<Player, Component> NICKNAME_SET_OTHER = (player, nickname) -> utils()
+  Args2<Player, Component> NICKNAME_SET_OTHER = (player, nickname) -> MiscUtils
       .configStringPlaceholders("messages.nicknameSetOther", "<aqua>%player%<gray>'s nickname has been " +
           "set to: <white>%nick%<gray>.", player)
       .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
       .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
 
-  Args0 NICKNAME_REMOVED = () -> utils().configString("messages.nicknameRemoved", "<gray>Nickname removed.");
+  Args0 NICKNAME_REMOVED = () -> MiscUtils.configString("messages.nicknameRemoved", "<gray>Nickname removed.");
 
-  Args1<Player> NICKNAME_REMOVED_OTHER = target -> utils().configStringPlaceholders(
+  Args1<Player> NICKNAME_REMOVED_OTHER = target -> MiscUtils.configStringPlaceholders(
       "messages.nicknameRemovedOther", "<aqua>%player%<gray>'s nickname removed.", target)
       .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(target.getName()).build());
 
-  Args0 ONLY_COLOR_CODES = () -> utils().configString("messages.onlyColorCodes",
+  Args0 ONLY_COLOR_CODES = () -> MiscUtils.configString("messages.onlyColorCodes",
       "<red>You may only include color codes.");
 
-  Args0 PLUGIN_RELOADED = () -> utils().configString("messages.pluginReloaded", "<green>Plugin reloaded.");
+  Args0 PLUGIN_RELOADED = () -> MiscUtils.configString("messages.pluginReloaded", "<green>Plugin reloaded.");
 
-  Args2<String, Component> REALNAME = (name, nickname) -> Nicks.utils()
+  Args2<String, Component> REALNAME = (name, nickname) -> MiscUtils
       .configString("messages.realname", "%nickname% <gray>is <aqua>%name%<gray>.")
       .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
       .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
 
-  Args0 UPDATE = () -> Nicks.utils().configString("messages.update",
+  Args0 UPDATE = () -> MiscUtils.configString("messages.update",
       "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>.");
 
-  Args0 NICKNAME_TAKEN = () -> Nicks.utils().configString("messages.nicknameTaken",
+  Args0 NICKNAME_TAKEN = () -> MiscUtils.configString("messages.nicknameTaken",
       "<red>That nickname is taken by another player! Please choose a different one.");
 
-  Args1<String> NEW_EDITOR = (link) -> MiniMessage.miniMessage().deserialize(Nicks.core().getConfig().getString(
+  Args1<String> NEW_EDITOR = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
       "messages.newEditor",
       "<green>Edit config <click:open_url:'%link%'><aqua><u>here<u/></aqua></click>. When you're done, save your " +
           "changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor " +
           "apply <link></aqua></click> to apply them."
   ).replace("%link%", link));
 
-  Args1<String> EDITOR_APPLIED = (link) -> MiniMessage.miniMessage().deserialize(Nicks.core().getConfig().getString(
+  Args1<String> EDITOR_APPLIED = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
       "messages.editorApplied",
       "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%<u/></aqua></click> applied."
   ).replace("%link%", link));
 
-  Args0 INVALID_LINK = () -> Nicks.utils().configString("messages.invalidLink",
+  Args0 INVALID_LINK = () -> MiscUtils.configString("messages.invalidLink",
       "<red>The link provided is not valid! See console for further details.");
+
+  Args1<String> LATEST_LOG = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
+      "messages.latestLog",
+      "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
+  ).replace("%link%", link));
+
+  Args0 WORKING = () -> MiscUtils.configString("messages.working", "<gray>Working...");
 
   /**
    * A message that has no arguments that need to be replaced.
@@ -114,7 +120,7 @@ public interface NicksMessages {
     Component build();
 
     default void send(CommandSender sender) {
-      Nicks.software().sendMessage(sender, build());
+      sender.sendMessage(build());
     }
   }
 
@@ -125,7 +131,7 @@ public interface NicksMessages {
     Component build(A0 arg0);
 
     default void send(CommandSender sender, A0 arg0) {
-      Nicks.software().sendMessage(sender, build(arg0));
+      sender.sendMessage(build(arg0));
     }
   }
 
@@ -136,7 +142,7 @@ public interface NicksMessages {
     Component build(A0 arg0, A1 arg1);
 
     default void send(CommandSender sender, A0 arg0, A1 arg1) {
-      Nicks.software().sendMessage(sender, build(arg0, arg1));
+      sender.sendMessage(build(arg0, arg1));
     }
   }
 }

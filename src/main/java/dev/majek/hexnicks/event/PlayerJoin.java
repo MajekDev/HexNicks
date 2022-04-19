@@ -23,8 +23,8 @@
  */
 package dev.majek.hexnicks.event;
 
-import dev.majek.hexnicks.Nicks;
-import dev.majek.hexnicks.config.NicksMessages;
+import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.config.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,21 +39,21 @@ public class PlayerJoin implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerJoin(PlayerJoinEvent event) {
-    Nicks.storage().updateNicks();
+    HexNicks.storage().updateNicks();
     Player player = event.getPlayer();
 
     // Set the joining player's nickname to their stored nickname if they have one
-    Nicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
+    HexNicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
       if (aBoolean) {
-        Nicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
-            Nicks.core().setNick(player, component)
+        HexNicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
+            HexNicks.core().setNick(player, component)
         );
       }
     });
 
     // Update prompt
-    if (event.getPlayer().isOp() && Nicks.core().hasUpdate() && Nicks.config().UPDATE_PROMPT) {
-      NicksMessages.UPDATE.send(event.getPlayer());
+    if (event.getPlayer().isOp() && HexNicks.core().hasUpdate() && HexNicks.config().UPDATE_PROMPT) {
+      Messages.UPDATE.send(event.getPlayer());
     }
   }
 }

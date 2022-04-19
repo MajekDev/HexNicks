@@ -38,10 +38,9 @@ update-prompt: true
 # Whether to set a user's Essentials nickname on /nick to fix some Essentials compatibility.
 override-essentials: true
 
-# Disabled text decorations for nicknames.
-# Accepted values: italic, bold, strikethrough, obfuscated, underlined
-disabled-decorations:
-  - "example (replace this)"
+# When enabled, /nickother won't check the target user's permissions for things like colors.
+# When this is false, /nickother will respect the target user's permissions for color in their nickname.
+nickother-override: false
 
 # When enabled this will prevent a player from nicknaming themselves a nickname already in use by another player.
 # Strict will prevent players from having the same characters. If strict is disabled (default) then players can
@@ -86,3 +85,5 @@ messages:
   newEditor: "<green>Edit config <click:open_url:'%link%'><aqua><u>here</u></aqua></click>. When you're done, save your changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor apply <link></aqua></click> to apply them."
   editorApplied: "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%</u></aqua></click> applied."
   invalidLink: "<red>The link provided is not valid! See console for further details."
+  latestLog: "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
+  working: "<gray>Working..."

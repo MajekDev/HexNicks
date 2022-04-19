@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.majek.hexnicks.config;
+package dev.majek.hexnicks.storage;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -33,16 +33,16 @@ import org.bukkit.Bukkit;
 /**
  * Handles the plugin's MySQL connection.
  */
-public class NicksSql {
+public class SqlManager {
 
-  private final String host = Nicks.core().getConfig().getString("host");
-  private final String port = Nicks.core().getConfig().getString("port");
-  private final String database = Nicks.core().getConfig().getString("database");
-  private final String username = Nicks.core().getConfig().getString("username");
-  private final String password = Nicks.core().getConfig().getString("password");
-  private final boolean useSSL = Nicks.core().getConfig().getBoolean("use-ssl");
-  private final boolean autoReconnect = Nicks.core().getConfig().getBoolean("auto-reconnect");
-  private final int updateInterval = Nicks.core().getConfig().getInt("update-interval", 300);
+  private final String host = HexNicks.core().getConfig().getString("host");
+  private final String port = HexNicks.core().getConfig().getString("port");
+  private final String database = HexNicks.core().getConfig().getString("database");
+  private final String username = HexNicks.core().getConfig().getString("username");
+  private final String password = HexNicks.core().getConfig().getString("password");
+  private final boolean useSSL = HexNicks.core().getConfig().getBoolean("use-ssl");
+  private final boolean autoReconnect = HexNicks.core().getConfig().getBoolean("auto-reconnect");
+  private final int updateInterval = HexNicks.core().getConfig().getInt("update-interval", 300);
 
   private Connection connection;
 
@@ -65,7 +65,7 @@ public class NicksSql {
       connection = DriverManager.getConnection("jdbc:mysql://" +
               host + ":" + port + "/" + database + "?useSSL=" + useSSL + "&autoReconnect=" + autoReconnect, username, password);
     }
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(Nicks.core(), () -> Nicks.storage().updateNicks(), 200L, updateInterval * 20L);
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(HexNicks.core(), () -> HexNicks.storage().updateNicks(), 200L, updateInterval * 20L);
   }
 
   /**
@@ -96,7 +96,7 @@ public class NicksSql {
   public void createTable() {
     PreparedStatement ps;
     try {
-      ps = Nicks.sql().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS " +
+      ps = HexNicks.sql().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS " +
           "nicknameTable (uniqueId VARCHAR(100),nickname VARCHAR(10000),PRIMARY KEY (uniqueId))");
       ps.executeUpdate();
     } catch (SQLException ex) {

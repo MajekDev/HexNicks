@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.majek.hexnicks</groupId>
-    <artifactId>HexNicks</artifactId>
-    <version>2.3.0-SNAPSHOT</version>
+    <groupId>dev.majek</groupId>
+    <artifactId>hexnicks</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
-
     <description>Simple nickname plugin with hex color code and gradient support.</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -41,10 +41,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -80,7 +80,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0-SNAPSHOT</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -89,38 +89,6 @@
                         </goals>
                         <configuration>
                             <relocations>
-                                <relocation>
-                                    <pattern>com.google.gson</pattern>
-                                    <shadedPattern>dev.majek.relocations.com.google.gson</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google.guava</pattern>
-                                    <shadedPattern>dev.majek.relocations.com.google.guava</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.kyori.adventure.text.minimessage</pattern>
-                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.minimessage</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.kyori.adventure.text.serializer.plain</pattern>
-                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.plain</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.kyori.adventure.text.serializer.legacy</pattern>
-                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.legacy</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.kyori.adventure.text.serializer.gson</pattern>
-                                    <shadedPattern>dev.majek.relocations.net.kyori.adventure.text.serializer.gson</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.checkerframework</pattern>
-                                    <shadedPattern>dev.majek.relocations.org.checkerframework</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.intellij</pattern>
-                                    <shadedPattern>dev.majek.relocations.org.intellij</shadedPattern>
-                                </relocation>
                                 <relocation>
                                     <pattern>org.jetbrains</pattern>
                                     <shadedPattern>dev.majek.relocations.org.jetbrains</shadedPattern>
@@ -174,9 +142,9 @@
     <dependencies>
         <!-- PaperMC -->
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- JetBrains Annotations -->
@@ -186,61 +154,12 @@
             <version>23.0.0</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Adventure API -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-api</artifactId>
-            <version>4.10.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Adventure Platform Bukkit -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- MiniMessage -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.10.0-20220207.012501-47</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Adventure Legacy Serializer -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.10.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Adventure Gson Serializer -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.10.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Adventure Plain Text Serializer -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.10.0</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.1</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- Gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-            <scope>compile</scope>
         </dependency>
         <!-- bStats -->
         <dependency>
@@ -261,19 +180,13 @@
             <groupId>com.tchristofferson</groupId>
             <artifactId>ConfigUpdater</artifactId>
             <version>2.0-SNAPSHOT</version>
-        </dependency>
-        <!-- Maven Source Plugin -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <!-- EssentialsX -->
         <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.19.2</version>
+            <version>2.19.4</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -282,12 +195,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Guava -->
+        <!-- JUnit -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
-            <scope>compile</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

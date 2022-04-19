@@ -23,7 +23,7 @@
  */
 package dev.majek.hexnicks.api;
 
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -34,14 +34,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles the Nicks API. Contains some useful utility methods.
  */
-public class NicksApi {
+public class HexNicksApi {
 
   /**
    * Shortcut for calling a Bukkit event.
@@ -50,8 +49,8 @@ public class NicksApi {
    * @since 1.0.0
    */
   public void callEvent(@NotNull Event event) {
-    Nicks.core().getServer().getPluginManager().callEvent(event);
-    Nicks.logging().debug("Called event " + event.getEventName());
+    HexNicks.core().getServer().getPluginManager().callEvent(event);
+    HexNicks.logging().debug("Called event " + event.getEventName());
   }
 
   /**
@@ -64,7 +63,7 @@ public class NicksApi {
    */
   @Nullable
   public OfflinePlayer playerFromNick(@NotNull String nickname) {
-    Iterator<Map.Entry<UUID, Component>> iterator = Nicks.core().getNickMap()
+    Iterator<Map.Entry<UUID, Component>> iterator = HexNicks.core().getNickMap()
         .entrySet().stream().iterator();
     while (iterator.hasNext()) {
       Map.Entry<UUID, Component> next = iterator.next();
@@ -81,54 +80,9 @@ public class NicksApi {
    *
    * @param uuid The unique id.
    * @return Nickname if it exists.
-   * @deprecated for removal - this method will take a while to return when using SQL storage
-   * @see #getStoredNick(UUID)
-   */
-  @Nullable
-  @Deprecated
-  @ApiStatus.ScheduledForRemoval
-  public Component getNick(@NotNull UUID uuid) {
-    return Nicks.core().getStoredNick(uuid);
-  }
-
-  /**
-   * Get a nickname from an online {@link Player}.
-   *
-   * @param player Player.
-   * @return Nickname if it exists.
-   * @deprecated for removal - this method will take a while to return when using SQL storage
-   * @see #getStoredNick(Player)
-   */
-  @Nullable
-  @Deprecated
-  @ApiStatus.ScheduledForRemoval
-  public Component getNick(@NotNull Player player) {
-    return Nicks.core().getStoredNick(player.getUniqueId());
-  }
-
-  /**
-   * Get a nickname from an {@link OfflinePlayer}.
-   *
-   * @param player OfflinePlayer.
-   * @return Nickname if it exists.
-   * @deprecated for removal - this method will take a while to return when using SQL storage
-   * @see #getStoredNick(OfflinePlayer)
-   */
-  @Nullable
-  @Deprecated
-  @ApiStatus.ScheduledForRemoval
-  public Component getNick(@NotNull OfflinePlayer player) {
-    return Nicks.core().getStoredNick(player.getUniqueId());
-  }
-
-  /**
-   * Get a nickname from a player's unique id.
-   *
-   * @param uuid The unique id.
-   * @return Nickname if it exists.
    */
   public @Nullable CompletableFuture<Component> getStoredNick(@NotNull UUID uuid) {
-    return Nicks.storage().getNick(uuid);
+    return HexNicks.storage().getNick(uuid);
   }
 
   /**
@@ -138,7 +92,7 @@ public class NicksApi {
    * @return Nickname if it exists.
    */
   public @Nullable CompletableFuture<Component> getStoredNick(@NotNull Player player) {
-    return Nicks.storage().getNick(player.getUniqueId());
+    return HexNicks.storage().getNick(player.getUniqueId());
   }
 
   /**
@@ -148,6 +102,6 @@ public class NicksApi {
    * @return Nickname if it exists.
    */
   public @Nullable CompletableFuture<Component> getStoredNick(@NotNull OfflinePlayer player) {
-    return Nicks.storage().getNick(player.getUniqueId());
+    return HexNicks.storage().getNick(player.getUniqueId());
   }
 }

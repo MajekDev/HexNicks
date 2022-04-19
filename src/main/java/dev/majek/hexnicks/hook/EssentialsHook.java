@@ -24,7 +24,7 @@
 package dev.majek.hexnicks.hook;
 
 import com.earth2me.essentials.Essentials;
-import dev.majek.hexnicks.Nicks;
+import dev.majek.hexnicks.HexNicks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
@@ -40,7 +40,7 @@ class EssentialsHook {
   private final LegacyComponentSerializer legacyComponentSerializer;
 
   public EssentialsHook() {
-    this.essentials = (Essentials) Nicks.core().getServer().getPluginManager().getPlugin("Essentials");
+    this.essentials = (Essentials) HexNicks.core().getServer().getPluginManager().getPlugin("Essentials");
     legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors()
         .useUnusualXRepeatedCharacterHexFormat().build();
   }
@@ -52,7 +52,7 @@ class EssentialsHook {
    * @param nickname The nickname.
    */
   public void setEssentialsNick(@NotNull Player player, @NotNull Component nickname) {
-    if (Nicks.config().OVERRIDE_ESSENTIALS) {
+    if (HexNicks.config().OVERRIDE_ESSENTIALS) {
       essentials.getUser(player).setNickname(legacyComponentSerializer.serialize(nickname));
     }
   }

@@ -2,18 +2,9 @@ package dev.majek.hexnicks.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.*;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,6 +14,12 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Manages plugin logging. This includes printing log message, saving to file,
@@ -96,6 +93,7 @@ public class LoggingManager {
    * Log a debug message and send it to a user. This will only log if {@link #debug} is set to true.
    *
    * @param message the message
+   * @param audience the user to send the message to
    */
   public void debug(final @NotNull String message, final @NotNull Audience audience) {
     if (this.debug) {
@@ -111,14 +109,14 @@ public class LoggingManager {
    */
   public @NotNull String latestToPasteBin() {
     final HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("https://api.pastes.dev/post"))
+        .uri(URI.create("https://bytebin.majek.dev/post"))
         .header("User-Agent", "hexnicks")
         .header("Content-Type", "text/plain; charset=utf-8")
         .POST(HttpRequest.BodyPublishers.ofString(this.latestLog()))
         .build();
 
-    final JsonObject json = JsonParser.parseString(sendRequestAndGetResponse(request)).getAsJsonObject();
-    final String url = "https://pastes.dev/" + json.get("key").getAsString();
+    final JsonObject json = JsonParser.parseString(MiscUtils.sendRequestAndGetResponse(request)).getAsJsonObject();
+    final String url = "https://paste.majek.dev/" + json.get("key").getAsString();
     this.log("Uploaded latest log to " + url);
 
     return url;
@@ -216,19 +214,5 @@ public class LoggingManager {
     } catch (final IOException ex) {
       this.error("Failure writing log to file", ex);
     }
-  }
-
-  private @NotNull String sendRequestAndGetResponse(final @NotNull HttpRequest request) {
-    HttpResponse<String> response = null;
-    try {
-      response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException ex) {
-      ex.printStackTrace();
-    }
-    if (response == null) {
-      this.error("Error getting response from http");
-      throw new RuntimeException();
-    }
-    return response.body();
   }
 }

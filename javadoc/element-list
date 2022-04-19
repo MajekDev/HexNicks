@@ -4,6 +4,6 @@ dev.majek.hexnicks.command
 dev.majek.hexnicks.config
 dev.majek.hexnicks.event
 dev.majek.hexnicks.hook
-dev.majek.hexnicks.server
+dev.majek.hexnicks.message
 dev.majek.hexnicks.storage
 dev.majek.hexnicks.util

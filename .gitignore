@@ -114,3 +114,4 @@ run/
 
 # Javadoc folder
 javadoc/
+/docs/.docusaurus/

@@ -73,7 +73,8 @@ public class LoggingManager {
    * @param throwable the exception
    */
   public void error(final @NotNull String message, final @NotNull Throwable throwable) {
-    this.log(message);
+    this.error(message);
+    this.error(throwable.getMessage());
     this.writeToFile(Level.SEVERE, throwable.getMessage());
   }
 

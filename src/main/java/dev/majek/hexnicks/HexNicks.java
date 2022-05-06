@@ -107,6 +107,33 @@ public final class HexNicks extends JavaPlugin {
       this.getPluginLoader().disablePlugin(this);
     }
 
+    // Make sure nickname storage file exists
+    boolean dataFolderExists = this.getDataFolder().exists();
+    if (!dataFolderExists) {
+      boolean mkdirs = this.getDataFolder().mkdirs();
+      if (!mkdirs) {
+        logging.error("Failed to create plugin data folder.");
+      }
+    }
+    boolean created = this.jsonFile.exists();
+    if (!created) {
+      try {
+        created = this.jsonFile.createNewFile();
+        if (created) {
+          final PrintWriter writer = new PrintWriter(this.jsonFile);
+          writer.write("{ }");
+          writer.flush();
+          writer.close();
+        }
+      } catch (final IOException ex) {
+        logging.error("IOException while creating nicknames.json storage file.", ex);
+      }
+    }
+    if (!created) {
+      logging.error("Could not create nicknames.json storage file. Shutting down plugin.");
+      this.getPluginLoader().disablePlugin(this);
+    }
+
     // Load nicknames from storage
     if (this.getConfig().getBoolean("database-enabled")) {
       try {

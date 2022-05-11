@@ -69,7 +69,7 @@ You can specify only specific colors with `hexnicks.color.red` (or any of the ot
 
 This permission node allows players to use hex color codes (ex. \<#aabbcc\>, \<color:#aabbcc\>) in their nicknames.
 
-## hexnicks.color.gradients
+## hexnicks.color.gradient
 
 This permission node allows players to use gradients in their nicknames.
 
@@ -92,6 +92,6 @@ using a certain text decoration code simply negate the permission for the color 
 If you wanted to, for example, only give certain groups permission to use gradients, you would need to negate the 
 permission for the other groups. To do this using LuckPerms, you would run
 ```
-/lp group <group> permission set hexnicks.nick.gradient false
+/lp group <group> permission set hexnicks.color.gradient false
 ```
 replacing `<group>` with the name of the group you're modifying.

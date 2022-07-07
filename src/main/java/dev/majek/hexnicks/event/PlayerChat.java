@@ -39,6 +39,7 @@ public class PlayerChat implements Listener {
    */
   private @NotNull Component formatChat(final @NotNull Player source, final @NotNull String message) {
     final MiniMessageWrapper miniMessageWrapper = MiniMessageWrapper.builder()
+        .advancedTransformations(source.hasPermission("hexnicks.chat.advanced"))
         .gradients(source.hasPermission("hexnicks.color.gradient"))
         .hexColors(source.hasPermission("hexnicks.color.hex"))
         .legacyColors(HexNicks.config().LEGACY_COLORS)

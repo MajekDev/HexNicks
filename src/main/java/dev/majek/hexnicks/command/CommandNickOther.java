@@ -98,11 +98,6 @@ public class CommandNickOther implements TabExecutor {
       return true;
     }
 
-    // Make sure the nickname isn't taken
-    if (MiscUtils.preventDuplicates(nickname, target)) {
-      return true;
-    }
-
     // Call event
     SetNickOtherEvent nickEvent = new SetNickOtherEvent(sender, target,
         nickname, HexNicks.core().getDisplayName(target));
@@ -110,10 +105,20 @@ public class CommandNickOther implements TabExecutor {
     if (nickEvent.isCancelled()) {
       return true;
     }
+    final Component finalNick = nickEvent.newNick();
 
-    // Set nick
-    HexNicks.core().setNick(target, nickEvent.newNick());
-    Messages.NICKNAME_SET_OTHER.send(sender, target, nickEvent.newNick());
+    // Send loading message
+    Messages.WORKING.send(target);
+
+    // Asynchronously check to make sure the nickname isn't taken
+    HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+      // Make sure the nickname isn't taken
+      if (!MiscUtils.preventDuplicates(finalNick, target)) {
+        // Set nick
+        HexNicks.core().setNick(target, finalNick);
+        Messages.NICKNAME_SET.send(target, finalNick);
+      }
+    });
 
     return true;
   }

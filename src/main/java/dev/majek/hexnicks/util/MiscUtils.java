@@ -33,7 +33,7 @@ import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -86,13 +86,15 @@ public class MiscUtils {
    */
   public static boolean preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
     if (HexNicks.config().PREVENT_DUPLICATE_NICKS) {
-      boolean taken = false;
-      try {
-        taken = HexNicks.storage().nicknameExists(nickname, HexNicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player).get();
-      } catch (InterruptedException | ExecutionException e) {
-        e.printStackTrace();
-      }
-      if (taken) {
+      final AtomicBoolean taken = new AtomicBoolean(false);
+      HexNicks.storage().nicknameExists(nickname, HexNicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player).whenComplete((bool, error) -> {
+        if (error != null) {
+          HexNicks.logging().error("Error checking if nickname exists.", error);
+        } else {
+          taken.set(bool);
+        }
+      });
+      if (taken.get()) {
         Messages.NICKNAME_TAKEN.send(player);
         return true;
       }

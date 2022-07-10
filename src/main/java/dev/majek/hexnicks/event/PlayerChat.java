@@ -13,6 +13,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Handles formatting player chat if enabled in the config.
+ */
 public class PlayerChat implements Listener {
 
   /**

@@ -120,7 +120,7 @@ public interface Messages {
     Component build();
 
     default void send(CommandSender sender) {
-      sender.sendMessage(build());
+      MiscUtils.sendMessage(sender, build());
     }
   }
 
@@ -131,7 +131,7 @@ public interface Messages {
     Component build(A0 arg0);
 
     default void send(CommandSender sender, A0 arg0) {
-      sender.sendMessage(build(arg0));
+      MiscUtils.sendMessage(sender, build(arg0));
     }
   }
 
@@ -142,7 +142,7 @@ public interface Messages {
     Component build(A0 arg0, A1 arg1);
 
     default void send(CommandSender sender, A0 arg0, A1 arg1) {
-      sender.sendMessage(build(arg0, arg1));
+      MiscUtils.sendMessage(sender, build(arg0, arg1));
     }
   }
 }

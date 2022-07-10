@@ -38,6 +38,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -194,5 +195,17 @@ public class MiscUtils {
       throw new RuntimeException("Error getting response from ByteBin");
     }
     return response.body();
+  }
+
+  /**
+   * Send a message to a user provided the message isn't empty.
+   *
+   * @param recipient the recipient of the message
+   * @param message the message to send
+   */
+  public static void sendMessage(final @NotNull CommandSender recipient, final @NotNull Component message) {
+    if (!PlainTextComponentSerializer.plainText().serialize(message).isEmpty()) {
+      recipient.sendMessage(message);
+    }
   }
 }

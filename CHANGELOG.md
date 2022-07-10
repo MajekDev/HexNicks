@@ -1,5 +1,13 @@
 # Plugin Changelog
 
+# 3.0.3 - Small Patches
+
+- Fixed bug with messages on `/nickother`.
+- Messages will only send provided they're not empty.
+- Added `package-info.java` to message package.
+
+Another very minor update with some useful fixes.
+
 # 3.0.2 - Async Improvements
 
 - Nickname commands (`/nick`, `/nickcolor`, and `/nickother`) will now run asynchronously to prevent a server slowdown and a "Working..." message will be displayed until the command completes.

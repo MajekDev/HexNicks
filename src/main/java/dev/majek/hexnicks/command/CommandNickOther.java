@@ -108,7 +108,7 @@ public class CommandNickOther implements TabExecutor {
     final Component finalNick = nickEvent.newNick();
 
     // Send loading message
-    Messages.WORKING.send(target);
+    Messages.WORKING.send(sender);
 
     // Asynchronously check to make sure the nickname isn't taken
     HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
@@ -117,6 +117,7 @@ public class CommandNickOther implements TabExecutor {
         // Set nick
         HexNicks.core().setNick(target, finalNick);
         Messages.NICKNAME_SET.send(target, finalNick);
+        Messages.NICKNAME_SET_OTHER.send(sender, target, finalNick);
       }
     });
 

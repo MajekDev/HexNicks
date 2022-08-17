@@ -366,6 +366,7 @@ public final class HexNicks extends JavaPlugin {
    * @param player the player whose nickname to remove
    */
   public void removeNick(@NotNull Player player) {
+    logging.debug("Removing " + player.getName() + "'s nickname.");
     this.nickMap.remove(player.getUniqueId());
     player.displayName(Component.text(player.getName()));
     if (config.TAB_NICKS) {

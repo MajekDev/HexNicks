@@ -71,6 +71,7 @@ public interface StorageMethod {
    * Update the nickname of all online players from storage.
    */
   default void updateNicks() {
+    HexNicks.logging().debug("Firing StorageMethod#updateNicks...");
     for (Player player : Bukkit.getOnlinePlayers()) {
       hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
         if (aBoolean) {

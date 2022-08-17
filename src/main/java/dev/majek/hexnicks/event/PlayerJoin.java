@@ -45,9 +45,12 @@ public class PlayerJoin implements Listener {
     // Set the joining player's nickname to their stored nickname if they have one
     HexNicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
       if (aBoolean) {
+        HexNicks.logging().debug("Player " + player.getName() + " joined and has nickname, setting...");
         HexNicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) ->
             HexNicks.core().setNick(player, component)
         );
+      } else {
+        HexNicks.logging().debug("Player " + player.getName() + " joined and has no nickname.");
       }
     });
 

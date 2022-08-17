@@ -1,5 +1,11 @@
 # Plugin Changelog
 
+# 3.0.4 - Logging Is A Feature
+
+- Added a lot of logging when in debug mode.
+
+This logging was meant to help find an issue... then the issue fixed itself. The logging could still be helpful in finding future issues, though.
+
 # 3.0.3 - Small Patches
 
 - Fixed bug with messages on `/nickother`.

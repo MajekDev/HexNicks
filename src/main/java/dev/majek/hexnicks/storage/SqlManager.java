@@ -64,6 +64,7 @@ public class SqlManager {
     if (!isConnected()) {
       connection = DriverManager.getConnection("jdbc:mysql://" +
               host + ":" + port + "/" + database + "?useSSL=" + useSSL + "&autoReconnect=" + autoReconnect, username, password);
+      HexNicks.logging().debug("Connecting to sql database '" + database + "'...");
     }
     Bukkit.getScheduler().scheduleSyncRepeatingTask(HexNicks.core(), () -> HexNicks.storage().updateNicks(), 200L, updateInterval * 20L);
   }
@@ -74,6 +75,7 @@ public class SqlManager {
   public void disconnect() {
     if (isConnected()) {
       try {
+        HexNicks.logging().debug("Disconnecting from sql database...");
         connection.close();
       } catch (SQLException e) {
         e.printStackTrace();
@@ -94,12 +96,14 @@ public class SqlManager {
    * Create the MySQL table if it doesn't already exist.
    */
   public void createTable() {
+    HexNicks.logging().debug("Creating sql database table...");
     PreparedStatement ps;
     try {
       ps = HexNicks.sql().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS " +
           "nicknameTable (uniqueId VARCHAR(100),nickname VARCHAR(10000),PRIMARY KEY (uniqueId))");
       ps.executeUpdate();
     } catch (SQLException ex) {
+      HexNicks.logging().error("Error creating table in database", ex);
       ex.printStackTrace();
     }
   }

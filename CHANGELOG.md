@@ -1,5 +1,13 @@
 # Plugin Changelog
 
+# 3.0.5 - Filtering Feature
+
+- `/nickcolor` will now allow you to include colors and your username. See [#85](https://github.com/MajekDev/HexNicks/issues/85).
+- You can now block nicknames in the config with regex support.
+- Removed qodana scan workflow.
+
+The filtering feature config option is the main new thing here. The `/nickcolor` thing was more of a bug if we're being honest. It should have worked that way from the start.
+
 # 3.0.4 - Logging Is A Feature
 
 - Added a lot of logging when in debug mode.

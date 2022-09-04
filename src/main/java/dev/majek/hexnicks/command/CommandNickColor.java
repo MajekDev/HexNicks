@@ -61,7 +61,7 @@ public class CommandNickColor implements TabExecutor {
     // If there are no colors the length should be 0
     String plainTextInput = PlainTextComponentSerializer.plainText()
         .serialize(MiniMessageWrapper.legacy().mmParse(nickInput));
-    if (plainTextInput.length() > 0) {
+    if (plainTextInput.length() > 0 && !plainTextInput.equals(player.getName())) {
       Messages.ONLY_COLOR_CODES.send(player);
       return true;
     }
@@ -87,7 +87,9 @@ public class CommandNickColor implements TabExecutor {
       }
     }
 
-    Component nickname = wrapper.mmParse(wrapper.mmString(nickInput) + plainTextNick);
+    Component nickname = wrapper.mmParse(
+        wrapper.mmString(nickInput) + (plainTextInput.length() == 0 ? plainTextNick : "")
+    );
 
     // Call event
     NickColorEvent colorEvent = new NickColorEvent(player, nickname,

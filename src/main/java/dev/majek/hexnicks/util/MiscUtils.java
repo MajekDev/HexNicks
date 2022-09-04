@@ -25,7 +25,6 @@ package dev.majek.hexnicks.util;
 
 import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.config.Messages;
-
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -34,6 +33,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -101,6 +102,32 @@ public class MiscUtils {
       }
     }
     return false;
+  }
+
+  /**
+   * Check whether the given nickname is blocked by config settings.
+   *
+   * @param plainTextNick the provided nickname in plain text
+   * @return whether the nickname is blocked.
+   */
+  public static boolean isBlocked(@NotNull String plainTextNick) {
+    for (String blockedNick : HexNicks.config().BLOCKED_NICKNAMES) {
+      if (isValidRegex(blockedNick) && plainTextNick.matches(blockedNick)) {
+        return true;
+      } else if (blockedNick.equalsIgnoreCase(plainTextNick)) {
+          return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isValidRegex(@NotNull String string) {
+    try {
+      Pattern.compile(string);
+      return true;
+    } catch (PatternSyntaxException ignored) {
+      return false;
+    }
   }
 
   /**

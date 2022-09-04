@@ -113,6 +113,8 @@ public interface Messages {
 
   Args0 WORKING = () -> MiscUtils.configString("messages.working", "<gray>Working...");
 
+  Args0 NOT_ALLOWED = () -> MiscUtils.configString("messages.notAllowed", "<red>That nickname is not allowed!");
+
   /**
    * A message that has no arguments that need to be replaced.
    */

@@ -67,13 +67,18 @@ public class CommandNick implements TabExecutor {
         .removeColors(MiscUtils.blockedColors(player))
         .build().mmParse(nickInput);
 
-    // Make sure the nickname is alphanumeric if that's enabled
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
-    if (HexNicks.config().REQUIRE_ALPHANUMERIC) {
-      if (!plainTextNick.matches("[a-zA-Z0-9]+")) {
-        Messages.NON_ALPHANUMERIC.send(player);
-        return true;
-      }
+
+    // First make sure the nickname is allowed
+    if (MiscUtils.isBlocked(plainTextNick)) {
+      Messages.NOT_ALLOWED.send(player);
+      return true;
+    }
+
+    // Make sure the nickname is alphanumeric if that's enabled
+    if (HexNicks.config().REQUIRE_ALPHANUMERIC && !plainTextNick.matches("[a-zA-Z0-9]+")) {
+      Messages.NON_ALPHANUMERIC.send(player);
+      return true;
     }
 
     // Set the nickname to the default color if there's no color specified

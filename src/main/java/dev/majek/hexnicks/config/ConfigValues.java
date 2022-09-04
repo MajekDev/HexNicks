@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
+import java.util.List;
 import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,7 @@ public class ConfigValues {
   public Boolean              NICK_OTHER_OVERRIDE;
   public Boolean              PREVENT_DUPLICATE_NICKS;
   public Boolean              PREVENT_DUPLICATE_NICKS_STRICT;
+  public List<String>         BLOCKED_NICKNAMES;
   public Boolean              DEBUG;
 
   public ConfigValues() {
@@ -79,6 +81,7 @@ public class ConfigValues {
     NICK_OTHER_OVERRIDE = HexNicks.core().getConfig().getBoolean("nickother-override", false);
     PREVENT_DUPLICATE_NICKS = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
     PREVENT_DUPLICATE_NICKS_STRICT = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks-strict", false);
+    BLOCKED_NICKNAMES = HexNicks.core().getConfig().getStringList("blocked-nicknames");
     DEBUG = HexNicks.core().getConfig().getBoolean("debug", false);
   }
 

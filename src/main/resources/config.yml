@@ -48,6 +48,18 @@ nickother-override: false
 prevent-duplicate-nicks: true
 prevent-duplicate-nicks-strict: false
 
+# A list of nicknames that will not be allowed, ignoring case.
+# This list can also accept regex.
+# Using /nickother will not check if the nickname is blocked.
+#
+# Ex.
+# blocked-nicknames:
+#   - "idiot"
+#   - "(i|1)d(i|1)(0|o)t" # this is regex
+blocked-nicknames:
+  - "replace these lines"
+  - "what to block"
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false
@@ -87,3 +99,4 @@ messages:
   invalidLink: "<red>The link provided is not valid! See console for further details."
   latestLog: "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
   working: "<gray>Working..."
+  notAllowed: "<red>That nickname is not allowed!"

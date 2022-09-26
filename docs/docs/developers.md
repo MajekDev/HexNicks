@@ -22,7 +22,7 @@ HexNicks is hosted in Majekdor's Maven Repository [here](https://repo.majek.dev)
     <dependency>
         <groupId>dev.majek</groupId>
         <artifactId>hexnicks</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.5</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "dev.majek:hexnicks:3.0.0"
+    compileOnly "dev.majek:hexnicks:3.0.5"
 }
 ```
 
@@ -60,5 +60,5 @@ public void onNickname(SetNickEvent event) {
 
 There are multiple ways to retrieve nicknames, but the easiest way is:
 ```java
-Nicks.api().getStoredNick(player); // You can pass thru a player, offlineplayer, or uuid
+HexNicks.api().getStoredNick(player); // You can pass thru a player, offlineplayer, or uuid
 ```

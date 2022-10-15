@@ -84,6 +84,15 @@ public class MiniMessageWrapperTest {
   }
 
   @Test
+  public void legacyObfuscated() {
+    String legacy = "&9&kMajekdor";
+    Assert.assertEquals(
+        "<blue><obfuscated>Majekdor",
+        MiniMessageWrapper.legacy().mmString(legacy)
+    );
+  }
+
+  @Test
   public void legacyHexColors() {
     String legacyHex = "&#336633Majek<blue>dor&a!";
     Assert.assertEquals(

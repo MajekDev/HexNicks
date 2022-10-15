@@ -171,10 +171,10 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
         mmString = mmString.replaceAll("&x(&[0-9a-fA-F]){6}", "");
       }
 
-      final Pattern legacyCharPattern = Pattern.compile("(?<!\\\\)(&([a-f0-9l-or]))");
+      final Pattern legacyCharPattern = Pattern.compile("(?<!\\\\)(&([a-f0-9k-or]))");
       mmString = legacyCharPattern.matcher(mmString).replaceAll((result) -> CHAR_COLORS.get(result.group(2).charAt(0)));
 
-      final Pattern escapedLegacyCharPattern = Pattern.compile("(\\\\&([a-f0-9l-or]))");
+      final Pattern escapedLegacyCharPattern = Pattern.compile("(\\\\&([a-f0-9k-or]))");
       mmString = escapedLegacyCharPattern.matcher(mmString).replaceAll((result) -> "&" + result.group(2));
     } else {
       mmString = mmString.replaceAll("(&[0-9a-fA-Fk-oK-OxXrR])+", "");

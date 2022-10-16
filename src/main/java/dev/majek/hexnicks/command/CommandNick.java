@@ -76,7 +76,7 @@ public class CommandNick implements TabExecutor {
     }
 
     // Make sure the nickname is alphanumeric if that's enabled
-    if (HexNicks.config().REQUIRE_ALPHANUMERIC && !plainTextNick.matches("[a-zA-Z0-9]+")) {
+    if (HexNicks.config().REQUIRE_ALPHANUMERIC && !plainTextNick.matches("\\w+")) {
       Messages.NON_ALPHANUMERIC.send(player);
       return true;
     }

@@ -6,7 +6,7 @@
 
     <groupId>dev.majek</groupId>
     <artifactId>hexnicks</artifactId>
-    <version>3.0.6</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
@@ -80,7 +80,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- PlaceholderAPI -->
@@ -201,6 +201,13 @@
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
+        </dependency>
+        <!-- Hikari -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

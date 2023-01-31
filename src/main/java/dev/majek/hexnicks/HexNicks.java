@@ -30,17 +30,15 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.majek.hexnicks.api.HexNicksApi;
 import dev.majek.hexnicks.command.*;
 import dev.majek.hexnicks.config.ConfigValues;
-import dev.majek.hexnicks.storage.SqlManager;
+import dev.majek.hexnicks.storage.*;
 import dev.majek.hexnicks.event.PaperTabCompleteEvent;
 import dev.majek.hexnicks.event.PlayerChat;
 import dev.majek.hexnicks.event.PlayerJoin;
 import dev.majek.hexnicks.hook.HookManager;
-import dev.majek.hexnicks.storage.JsonStorage;
-import dev.majek.hexnicks.storage.SqlStorage;
-import dev.majek.hexnicks.storage.StorageMethod;
 import dev.majek.hexnicks.util.LoggingManager;
 import dev.majek.hexnicks.util.UpdateChecker;
 import java.io.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,6 +48,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -66,7 +65,6 @@ public final class HexNicks extends JavaPlugin {
   private static HexNicksApi api;
   private static LoggingManager logging;
   private static ConfigValues config;
-  private static SqlManager sql;
   private static HookManager hooks;
   private static StorageMethod storage;
   private final File jsonFile;
@@ -76,7 +74,6 @@ public final class HexNicks extends JavaPlugin {
 
   /**
    * Initialize plugin.
-   *
    * Logging must be instantiated before other managers.
    */
   public HexNicks() {
@@ -84,7 +81,6 @@ public final class HexNicks extends JavaPlugin {
     api = new HexNicksApi();
     logging = new LoggingManager(this, new File(this.getDataFolder(), "logs"));
     config = new ConfigValues();
-    sql = new SqlManager();
     hooks = new HookManager();
     this.jsonFile = new File(this.getDataFolder(), "nicknames.json");
     this.nickMap = new HashMap<>();
@@ -137,28 +133,18 @@ public final class HexNicks extends JavaPlugin {
     // Load nicknames from storage
     if (this.getConfig().getBoolean("database-enabled")) {
       try {
-        sql.connect();
+        HikariManager.createTable();
+        storage = new SqlStorage();
+        storage.updateNicks();
+        logging.log("Successfully connected to MySQL database.");
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(HexNicks.core(), () -> HexNicks.storage().updateNicks(),
+                200L, this.getConfig().getInt("update-interval", 300) * 20L);
       } catch (final SQLException ex) {
         logging.error("Failed to connect to MySQL database", ex);
+        this.loadNicknamesFromJson();
       }
-    }
-    if (sql.isConnected()) {
-      logging.log("Successfully connected to MySQL database.");
-      storage = new SqlStorage();
-      sql.createTable();
-      storage.updateNicks();
     } else {
-      try {
-        storage = new JsonStorage();
-        JsonObject json = (JsonObject) JsonParser.parseReader(new FileReader(HexNicks.core().jsonFile()));
-        for (final String key : json.keySet()) {
-          this.nickMap.put(UUID.fromString(key), GsonComponentSerializer.gson()
-              .deserializeFromTree(json.get(key)));
-        }
-      } catch (final IOException ex) {
-        logging.error("Error loading nickname data from nicknames.json file", ex);
-      }
-      logging.log("Successfully loaded nicknames from Json storage.");
+      this.loadNicknamesFromJson();
     }
 
     // Set debug status
@@ -187,15 +173,26 @@ public final class HexNicks extends JavaPlugin {
     }
   }
 
+  private void loadNicknamesFromJson() {
+    try {
+      storage = new JsonStorage();
+      JsonObject json = (JsonObject) JsonParser.parseReader(new FileReader(HexNicks.core().jsonFile()));
+      for (final String key : json.keySet()) {
+        this.nickMap.put(UUID.fromString(key), GsonComponentSerializer.gson()
+                .deserializeFromTree(json.get(key)));
+      }
+    } catch (final IOException ex) {
+      logging.error("Error loading nickname data from nicknames.json file", ex);
+    }
+    logging.log("Successfully loaded nicknames from Json storage.");
+  }
+
   /**
    * Plugin shutdown logic.
    */
   @Override
   public void onDisable() {
-    // Disconnect from Sql if necessary
-    if (sql.isConnected()) {
-      sql.disconnect();
-    }
+
   }
 
   /**
@@ -251,15 +248,6 @@ public final class HexNicks extends JavaPlugin {
    */
   public static ConfigValues config() {
     return config;
-  }
-
-  /**
-   * Access the plugin's SQL connection if connected.
-   *
-   * @return sql manager
-   */
-  public static SqlManager sql() {
-    return sql;
   }
 
   /**

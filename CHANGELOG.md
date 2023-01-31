@@ -1,5 +1,15 @@
 # Plugin Changelog
 
+# 3.1.0 - Hello Hikari
+
+- Started using [HikariCP](https://github.com/brettwooldridge/HikariCP) for managing MySQL.
+- Fixed bug with server lagging on shutdown.
+- Fixed bug with failing to remove Essentials prefix.
+- Bumped annotations and Maven shade dependencies.
+- Bug fixes related to color/chat formatting.
+
+There have been a number of SQL issues reported recently. This update should fix all of them and make the SQL integration faster overall.
+
 # 3.0.5 - Filtering Feature
 
 - `/nickcolor` will now allow you to include colors and your username. See [#85](https://github.com/MajekDev/HexNicks/issues/85).

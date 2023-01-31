@@ -81,6 +81,14 @@ public class CommandNick implements TabExecutor {
       return true;
     }
 
+    // Remove nickname prefix if essentials is hooked
+    if (HexNicks.hooks().isEssentialsHooked()) {
+      String nickPrefix = HexNicks.hooks().getEssNickPrefix();
+      if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
+        plainTextNick = plainTextNick.substring(nickPrefix.length());
+      }
+    }
+
     // Set the nickname to the default color if there's no color specified
     nickname = nickname.colorIfAbsent(HexNicks.config().DEFAULT_NICK_COLOR);
 

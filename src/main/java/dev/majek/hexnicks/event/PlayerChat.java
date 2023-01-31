@@ -27,7 +27,9 @@ public class PlayerChat implements Listener {
   public void onChat(final AsyncChatEvent event) {
     if (HexNicks.config().CHAT_FORMATTER) {
       HexNicks.logging().debug("Original message: " + PlainTextComponentSerializer.plainText().serialize(event.message()));
-      event.message(formatChat(event.getPlayer(), PlainTextComponentSerializer.plainText().serialize(event.message()), true));
+      event.renderer((source, sourceDisplayName, message, viewer) ->
+              formatChat(event.getPlayer(), PlainTextComponentSerializer.plainText().serialize(event.message()))
+      );
     }
   }
 
@@ -38,7 +40,7 @@ public class PlayerChat implements Listener {
    * @param message the message
    * @return formatted chat
    */
-  private @NotNull Component formatChat(final @NotNull Player source, final @NotNull String message, boolean justMessage) {
+  private @NotNull Component formatChat(final @NotNull Player source, final @NotNull String message) {
     final MiniMessageWrapper miniMessageWrapper = MiniMessageWrapper.builder()
         .advancedTransformations(source.hasPermission("hexnicks.chat.advanced"))
         .gradients(source.hasPermission("hexnicks.color.gradient"))
@@ -48,28 +50,23 @@ public class PlayerChat implements Listener {
         .removeColors(MiscUtils.blockedColors(source))
         .build();
 
-    Component ret;
-    if (justMessage) {
-      ret = miniMessageWrapper.mmParse(message);
-    } else {
-      ret = miniMessageWrapper.mmParse(HexNicks.hooks().applyPlaceHolders(source, HexNicks.config().CHAT_FORMAT))
-          // Replace display name placeholder with HexNicks nick
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
-              .replacement(HexNicks.core().getDisplayName(source)).build()
-          )
-          // Replace prefix placeholder with Vault prefix
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
-              .replacement(HexNicks.hooks().vaultPrefix(source)).build()
-          )
-          // Replace suffix placeholder with Vault Suffix
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
-              .replacement(HexNicks.hooks().vaultSuffix(source)).build()
-          )
-          // Replace message placeholder with the formatted message from the event
-          .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")
-              .replacement(miniMessageWrapper.mmParse(message)).build()
-          );
-    }
+    Component ret = miniMessageWrapper.mmParse(HexNicks.hooks().applyPlaceHolders(source, HexNicks.config().CHAT_FORMAT))
+            // Replace display name placeholder with HexNicks nick
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
+                    .replacement(HexNicks.core().getDisplayName(source)).build()
+            )
+            // Replace prefix placeholder with Vault prefix
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
+                    .replacement(HexNicks.hooks().vaultPrefix(source)).build()
+            )
+            // Replace suffix placeholder with Vault Suffix
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
+                    .replacement(HexNicks.hooks().vaultSuffix(source)).build()
+            )
+            // Replace message placeholder with the formatted message from the event
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{message}")
+                    .replacement(miniMessageWrapper.mmParse(message)).build()
+            );
     HexNicks.logging().debug("Formatted message: " + PlainTextComponentSerializer.plainText().serialize(ret));
     return ret;
   }

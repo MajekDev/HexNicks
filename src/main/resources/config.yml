@@ -70,6 +70,8 @@ username: ''
 password: ''
 use-ssl: false
 auto-reconnect: false
+# The maximum lifetime of a connection in milliseconds. This should be lower than your database's wait timeout.
+max-lifetime: 300000
 # This is the time, in seconds, for how often the plugin should check the database for updated nicknames.
 update-interval: 300
 

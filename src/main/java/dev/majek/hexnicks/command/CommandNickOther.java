@@ -86,6 +86,14 @@ public class CommandNickOther implements TabExecutor {
       }
     }
 
+    // Remove nickname prefix if essentials is hooked
+    if (HexNicks.hooks().isEssentialsHooked()) {
+      String nickPrefix = HexNicks.hooks().getEssNickPrefix();
+      if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
+        plainTextNick = plainTextNick.substring(nickPrefix.length());
+      }
+    }
+
     // Make sure the nickname isn't too short
     if (plainTextNick.length() < minLength) {
       Messages.TOO_SHORT.send(sender, minLength);

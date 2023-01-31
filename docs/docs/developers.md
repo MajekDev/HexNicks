@@ -22,7 +22,7 @@ HexNicks is hosted in Majekdor's Maven Repository [here](https://repo.majek.dev)
     <dependency>
         <groupId>dev.majek</groupId>
         <artifactId>hexnicks</artifactId>
-        <version>3.0.5</version>
+        <version>3.1.0</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "dev.majek:hexnicks:3.0.5"
+    compileOnly "dev.majek:hexnicks:3.1.0"
 }
 ```
 

@@ -119,7 +119,7 @@ public class CommandNickOther implements TabExecutor {
     Messages.WORKING.send(sender);
 
     // Asynchronously check to make sure the nickname isn't taken
-    HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+    HexNicks.getScheduler().runTaskAsynchronously(() -> {
       // Make sure the nickname isn't taken
       if (!MiscUtils.preventDuplicates(finalNick, target)) {
         // Set nick

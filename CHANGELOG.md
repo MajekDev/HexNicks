@@ -1,5 +1,12 @@
 # Plugin Changelog
 
+# 3.1.1 - Dependency Bumps
+
+- Bumped dependencies.
+- Officially added 1.20+ support (it worked already, but now I've tested it).
+
+This is an optional update. You will likely see no difference in game.
+
 # 3.1.0 - Hello Hikari
 
 - Started using [HikariCP](https://github.com/brettwooldridge/HikariCP) for managing MySQL.

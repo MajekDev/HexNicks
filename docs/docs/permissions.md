@@ -8,47 +8,47 @@ All permissions except `hexnicks.nick.other`, `hexnicks.nonick.other`, `hexnicks
 `hexnicks.config-editor`, and `hexnicks.reload` are given to all players by default but can be negated by a permissions 
 manager like [LuckPerms](https://luckperms.net/). Learn how to do that [here](#how-to-negate-permissions-with-LuckPerms).
 
-A lot of these permissions are tied to commands, read command documentation [here](https://github.com/Majekdor/HexNicks/wiki/Commands).
+A lot of these permissions are tied to commands, read command documentation [here](https://hexnicks.majek.dev/commands).
 
 ## hexnicks.nick
 
-This permission node allows players to use the command [/nick](https://github.com/Majekdor/HexNicks/wiki/Commands#nick) 
+This permission node allows players to use the command [/nick](https://hexnicks.majek.dev/commands#nick) 
 to change their nickname.
 
 ## hexnicks.nick.other
 
 This permission node is intended for staff and allows them to use the command 
-[/nickother](https://github.com/Majekdor/HexNicks/wiki/Commands#nickother) to change the nickname of other players.
+[/nickother](https://hexnicks.majek.dev/commands#nickother) to change the nickname of other players.
 
 ## hexnicks.nonick
 
-This permission node allows players to use the command [/nonick](https://github.com/Majekdor/HexNicks/wiki/Commands#nonick) 
+This permission node allows players to use the command [/nonick](https://hexnicks.majek.dev/commands#nonick) 
 to remove their nickname.
 
 ## hexnicks.nonick.other
 
 This permission node is intended for staff and allows them to remove the nickname of another player using 
-[/nonick](https://github.com/Majekdor/HexNicks/wiki/Commands#nonick).
+[/nonick](https://hexnicks.majek.dev/commands#nonick).
 
 ## hexnicks.nickcolor
 
-This permission node allows players to use [/nickcolor](https://github.com/Majekdor/HexNicks/wiki/Commands#nickcolor) 
+This permission node allows players to use [/nickcolor](https://hexnicks.majek.dev/commands#nickcolor) 
 to change just the color of their nickname.
 
 ## hexnicks.realname
 
-This permission node allows players to use [/realname](https://github.com/Majekdor/HexNicks/wiki/Commands#realname) 
+This permission node allows players to use [/realname](https://hexnicks.majek.dev/commands#realname) 
 to view the name of a player using a certain nickname.
 
 ## hexnicks.config-editor
 
 This permission node is intended for staff and allows them to edit the HexNicks config via 
-[pastebin](https://paste.majek.dev) using [/hexnicks config-editor](https://github.com/Majekdor/HexNicks/wiki/Commands#hexnicks).
+[pastebin](https://paste.majek.dev) using [/hexnicks config-editor](https://hexnicks.majek.dev/commands#hexnicks).
 
 ## hexnicks.reload
 
 This permission node is intended for staff and allows them to use 
-[/hexnicks reload](https://github.com/Majekdor/HexNicks/wiki/Commands#hexnicks) to reload the plugin.
+[/hexnicks reload](https://hexnicks.majek.dev/commands#hexnicks) to reload the plugin.
 
 ## hexnicks.chat.advanced
 

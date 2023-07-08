@@ -12,8 +12,8 @@ There are only a few commands and permissions to limit what players use what com
 for MySQL storage, it's mostly intended to be a simple nickname plugin for smaller Paper servers.
 
 This documentation is a constant work in progress so if you feel something is missing feel free to open an issue. 
-The wiki is organized into different pages for things like commands, permissions, etc. If you have questions the wiki 
-doesn't cover, please either post in [discussions](https://github.com/Majekdor/HexNicks/discussions) or 
+The docs are organized into different pages for things like commands, permissions, etc. If you have questions the docs 
+don't cover, please either post in [discussions](https://github.com/Majekdor/HexNicks/discussions) or 
 join my [Discord](https://discord.majek.dev).
 
 The HexNicks code lives on GitHub. If you have a bug report, or even a feature request, feel free to open an 

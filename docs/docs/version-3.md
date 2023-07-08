@@ -13,7 +13,7 @@ You are now able to edit the plugin config file in your browser. Steps:
 1. Type `/hexnicks config-editor new` to get a link to the config file.
 2. Follow the link and make all of your changes.
 3. Save the file in paste bin and copy the link.
-4. Type `/hexnicks config-editor apply <link>`, replacing `<link>` with the link you copied
+4. Type `/hexnicks config-editor apply <link>`, replacing `<link>` with the link you copied.
 5. That's it! Your config file is updated and reloaded automatically.
 
 ### New Placeholders

@@ -7,9 +7,9 @@ slug: /chat-formatting
 The built-in chat formatter allows HexNicks to control how your chat is formatted. If you would rather use a 
 different plugin to format your chat then HexNicks' chat formatter can always be disabled in the config. Modify 
 the chat format to your liking in the `chat-format` field of the config 
-[here](https://github.com/MajekDev/HexNicks/blob/57e09bd43cfd9df96d74263f192dea6c03f3fe6f/src/main/resources/config.yml#L22).
+[here](https://github.com/MajekDev/HexNicks/blob/main/src/main/resources/config.yml#L22).
 
-> Read about the config options [here](https://github.com/MajekDev/HexNicks/wiki/Configuration-Options).
+> Read about the config options [here](https://hexnicks.majek.dev/config-options).
 
 By default, the chat format is the same as vanilla Minecraft, with angle brackets around the display name (nickname). 
 This can be changed to whatever format you like, but please remember to maintain correct YAML syntax. Use a syntax checker 

@@ -14,7 +14,7 @@ Usage: `/nick <nickname>`
 
 This is the command players will use to change their nickname. It requires one argument (the nickname) and unless 
 you disable `require-alphanumeric` in the 
-[config](https://hexnicks.majek.dev/config-options#Require-Alphanumeric) 
+[config](https://hexnicks.majek.dev/config-options#require-alphanumeric) 
 then the nickname may only contain valid color codes, letters, and numbers. If you want nicknames with spaces, special 
 characters, etc. then go ahead and disable that config option.
 
@@ -81,7 +81,7 @@ This will either create a new link to the config file in pastebin or apply chang
 
 1. First, execute `/hexnicks config-editor new` to create a new pastebin with your config. The command will give you the link.
 2. Then, make all your desired changes to the config in the pastebin.
-3. Make sure to press save in the upper left corner of the pastebin. You will get a new link. (It should copy to your clipboard automatically)
+3. Make sure to press save in the upper left corner of the pastebin. You will get a new link (It should copy to your clipboard automatically).
 4. Take your new link and execute `/hexnicks config-editor apply <link>` to apply your changes.
 5. That's it! The plugin will automatically reload, and you're good to go.
 

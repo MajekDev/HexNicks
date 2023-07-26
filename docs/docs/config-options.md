@@ -7,6 +7,16 @@ slug: /config-options
 HexNicks' [config](https://github.com/MajekDev/HexNicks/blob/main/src/main/resources/config.yml) is documented fairly 
 well but this page will try to explain some of the more confusing bits.
 
+# Config File Editing
+You are now able to edit the plugin config file in your browser. Steps:
+1. First, execute `/hexnicks config-editor new` to create a new pastebin with your config. The command will give you the link.
+2. Then, make all your desired changes to the config in the pastebin.
+3. Make sure to press save in the upper left corner of the pastebin. You will get a new link (It should copy to your clipboard automatically).
+4. Take your new link and execute `/hexnicks config-editor apply <link>` to apply your changes.
+5. That's it! The plugin will automatically reload, and you're good to go.
+
+# Options
+
 ## Require Alphanumeric
 
 This config option requires all nicknames to contain nothing but characters a-z, lower and upper case, 

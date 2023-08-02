@@ -23,6 +23,8 @@
  */
 package dev.majek.hexnicks;
 
+import com.github.Anon8281.universalScheduler.UniversalScheduler;
+import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -38,7 +40,6 @@ import dev.majek.hexnicks.hook.HookManager;
 import dev.majek.hexnicks.util.LoggingManager;
 import dev.majek.hexnicks.util.UpdateChecker;
 import java.io.*;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,7 +49,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,6 +71,7 @@ public final class HexNicks extends JavaPlugin {
   private final Map<UUID, Component> nickMap;
   private final Metrics metrics;
   private final UpdateChecker updateChecker;
+  private static TaskScheduler scheduler;
 
   /**
    * Initialize plugin.
@@ -102,6 +103,8 @@ public final class HexNicks extends JavaPlugin {
       logging.error("This plugin can only run on Paper 1.18.2+");
       this.getPluginLoader().disablePlugin(this);
     }
+
+    scheduler = UniversalScheduler.getScheduler(core);
 
     // Make sure nickname storage file exists
     boolean dataFolderExists = this.getDataFolder().exists();
@@ -137,7 +140,7 @@ public final class HexNicks extends JavaPlugin {
         storage = new SqlStorage();
         storage.updateNicks();
         logging.log("Successfully connected to MySQL database.");
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(HexNicks.core(), () -> HexNicks.storage().updateNicks(),
+        HexNicks.getScheduler().runTaskTimer(() -> HexNicks.storage().updateNicks(),
                 200L, this.getConfig().getInt("update-interval", 300) * 20L);
       } catch (final SQLException ex) {
         logging.error("Failed to connect to MySQL database", ex);
@@ -171,6 +174,10 @@ public final class HexNicks extends JavaPlugin {
       logging.log("There is a new version of the plugin available! " +
           "Download it here: https://www.spigotmc.org/resources/83554/");
     }
+  }
+
+  public static TaskScheduler getScheduler() {
+    return scheduler;
   }
 
   private void loadNicknamesFromJson() {

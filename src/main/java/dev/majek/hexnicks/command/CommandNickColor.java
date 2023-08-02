@@ -104,7 +104,7 @@ public class CommandNickColor implements TabExecutor {
     Messages.WORKING.send(player);
 
     // Asynchronously check to make sure the nickname isn't taken
-    HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+    HexNicks.getScheduler().runTaskAsynchronously(() -> {
       // Make sure the nickname isn't taken
       if (!MiscUtils.preventDuplicates(finalNick, player)) {
         // Set nick

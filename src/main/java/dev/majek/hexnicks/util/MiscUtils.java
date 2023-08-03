@@ -40,6 +40,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -233,6 +234,19 @@ public class MiscUtils {
   public static void sendMessage(final @NotNull CommandSender recipient, final @NotNull Component message) {
     if (!PlainTextComponentSerializer.plainText().serialize(message).isEmpty()) {
       recipient.sendMessage(message);
+    }
+  }
+
+  /**
+   * Announce a message to the server provided the message isn't empty.
+   *
+   * @param message the message to send
+   */
+  public static void announceMessage(final @NotNull Component message) {
+    if (!PlainTextComponentSerializer.plainText().serialize(message).isEmpty()) {
+      for (Player player : Bukkit.getOnlinePlayers()) {
+        player.sendMessage(message);
+      }
     }
   }
 }

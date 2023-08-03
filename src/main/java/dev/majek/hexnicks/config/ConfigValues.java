@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public class ConfigValues {
 
   public Boolean              TAB_NICKS;
+  public Boolean              ANNOUNCE_NICKS_ON_JOIN;
   public Integer              MAX_LENGTH;
   public Integer              MIN_LENGTH;
   public Boolean              REQUIRE_ALPHANUMERIC;
@@ -68,6 +69,7 @@ public class ConfigValues {
    */
   public void reload() {
     TAB_NICKS = HexNicks.core().getConfig().getBoolean("tab-nicks", false);
+    ANNOUNCE_NICKS_ON_JOIN = HexNicks.core().getConfig().getBoolean("announce-nicks-on-join", false);
     MAX_LENGTH = HexNicks.core().getConfig().getInt("max-length", 20);
     MIN_LENGTH = HexNicks.core().getConfig().getInt("min-length", 3);
     REQUIRE_ALPHANUMERIC = HexNicks.core().getConfig().getBoolean("require-alphanumeric", false);

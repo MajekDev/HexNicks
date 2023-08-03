@@ -67,11 +67,11 @@ public final class HexNicks extends JavaPlugin {
   private static ConfigValues config;
   private static HookManager hooks;
   private static StorageMethod storage;
+  private static TaskScheduler scheduler;
   private final File jsonFile;
   private final Map<UUID, Component> nickMap;
   private final Metrics metrics;
   private final UpdateChecker updateChecker;
-  private static TaskScheduler scheduler;
 
   /**
    * Initialize plugin.
@@ -83,6 +83,7 @@ public final class HexNicks extends JavaPlugin {
     logging = new LoggingManager(this, new File(this.getDataFolder(), "logs"));
     config = new ConfigValues();
     hooks = new HookManager();
+    scheduler = UniversalScheduler.getScheduler(core);
     this.jsonFile = new File(this.getDataFolder(), "nicknames.json");
     this.nickMap = new HashMap<>();
     // Track plugin metrics through bStats
@@ -103,8 +104,6 @@ public final class HexNicks extends JavaPlugin {
       logging.error("This plugin can only run on Paper 1.18.2+");
       this.getPluginLoader().disablePlugin(this);
     }
-
-    scheduler = UniversalScheduler.getScheduler(core);
 
     // Make sure nickname storage file exists
     boolean dataFolderExists = this.getDataFolder().exists();
@@ -140,7 +139,7 @@ public final class HexNicks extends JavaPlugin {
         storage = new SqlStorage();
         storage.updateNicks();
         logging.log("Successfully connected to MySQL database.");
-        HexNicks.getScheduler().runTaskTimer(() -> HexNicks.storage().updateNicks(),
+        HexNicks.scheduler().runTaskTimer(() -> HexNicks.storage().updateNicks(),
                 200L, this.getConfig().getInt("update-interval", 300) * 20L);
       } catch (final SQLException ex) {
         logging.error("Failed to connect to MySQL database", ex);
@@ -174,10 +173,6 @@ public final class HexNicks extends JavaPlugin {
       logging.log("There is a new version of the plugin available! " +
           "Download it here: https://www.spigotmc.org/resources/83554/");
     }
-  }
-
-  public static TaskScheduler getScheduler() {
-    return scheduler;
   }
 
   private void loadNicknamesFromJson() {
@@ -283,6 +278,16 @@ public final class HexNicks extends JavaPlugin {
    */
   public static LoggingManager logging() {
     return logging;
+  }
+
+  /**
+   * Get the plugin's scheduler. Depending on the type of server the plugin is running on,
+   * this could be a Folia scheduler or a Bukkit scheduler.
+   *
+   * @return task scheduler
+   */
+  public static TaskScheduler scheduler() {
+    return scheduler;
   }
 
   /**

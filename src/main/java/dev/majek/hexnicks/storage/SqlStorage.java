@@ -99,7 +99,7 @@ public class SqlStorage implements StorageMethod {
   @Override
   public void removeNick(@NotNull UUID uuid) {
     HexNicks.logging().debug("Firing SqlStorage#removeNick...");
-    HexNicks.getScheduler().runTaskAsynchronously(() -> {
+    HexNicks.scheduler().runTaskAsynchronously(() -> {
       try (Connection connection = HikariManager.getConnection()) {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM nicknameTable WHERE uniqueId=?");
         ps.setString(1, uuid.toString());
@@ -114,7 +114,7 @@ public class SqlStorage implements StorageMethod {
   @Override
   public void saveNick(@NotNull Player player, @NotNull Component nickname) {
     HexNicks.logging().debug("Firing SqlStorage#saveNick...");
-    HexNicks.getScheduler().runTaskAsynchronously(() ->
+    HexNicks.scheduler().runTaskAsynchronously(() ->
         hasNick(player.getUniqueId()).whenCompleteAsync((hasNick, throwable) -> {
           try (Connection connection = HikariManager.getConnection()) {
             PreparedStatement update;

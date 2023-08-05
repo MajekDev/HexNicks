@@ -115,6 +115,11 @@ public interface Messages {
 
   Args0 NOT_ALLOWED = () -> MiscUtils.configString("messages.notAllowed", "<red>That nickname is not allowed!");
 
+  Args2<Player, Component> ANNOUNCE_NICK = (player, nickname) -> MiscUtils
+          .configStringPlaceholders("messages.joinAnnouncement", "<yellow>%player% has the nickname</yellow> %nick%", player)
+          .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
+          .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
+
   /**
    * A message that has no arguments that need to be replaced.
    */
@@ -135,6 +140,10 @@ public interface Messages {
     default void send(CommandSender sender, A0 arg0) {
       MiscUtils.sendMessage(sender, build(arg0));
     }
+
+    default void announce(A0 arg0) {
+      MiscUtils.announceMessage(build(arg0));
+    }
   }
 
   /**
@@ -145,6 +154,10 @@ public interface Messages {
 
     default void send(CommandSender sender, A0 arg0, A1 arg1) {
       MiscUtils.sendMessage(sender, build(arg0, arg1));
+    }
+
+    default void announce(A0 arg0, A1 arg1) {
+      MiscUtils.announceMessage(build(arg0, arg1));
     }
   }
 }

@@ -4,6 +4,9 @@
 # Whether nicknames should show in the tab list
 tab-nicks: false
 
+# Whether nicknames should be announced when players join
+announce-nicks-on-join: false
+
 # The maximum number of characters (excluding color codes) a nickname may be
 max-length: 20
 
@@ -102,3 +105,4 @@ messages:
   latestLog: "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
   working: "<gray>Working..."
   notAllowed: "<red>That nickname is not allowed!"
+  joinAnnouncement: "<yellow>%player% has the nickname</yellow> %nick%"

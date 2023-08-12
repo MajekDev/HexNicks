@@ -249,4 +249,17 @@ public class MiscUtils {
       }
     }
   }
+
+
+  /**
+   * Constrain a number to between two other numbers (inclusive)
+   *
+   * @param value The number to constrain
+   * @param min The minimum value (inclusive)
+   * @param max The maximum value (inclusive)
+   * @return value, or the closest bound
+   */
+  public static int constrain(int value, int min, int max) {
+    return value > max ? max : Math.max(value, min);
+  }
 }

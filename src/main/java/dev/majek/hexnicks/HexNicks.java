@@ -32,6 +32,7 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.majek.hexnicks.api.HexNicksApi;
 import dev.majek.hexnicks.command.*;
 import dev.majek.hexnicks.config.ConfigValues;
+import dev.majek.hexnicks.gui.GuiManager;
 import dev.majek.hexnicks.storage.*;
 import dev.majek.hexnicks.event.PaperTabCompleteEvent;
 import dev.majek.hexnicks.event.PlayerChat;
@@ -67,6 +68,7 @@ public final class HexNicks extends JavaPlugin {
   private static ConfigValues config;
   private static HookManager hooks;
   private static StorageMethod storage;
+  private static GuiManager guis;
   private final File jsonFile;
   private final Map<UUID, Component> nickMap;
   private final Metrics metrics;
@@ -83,6 +85,7 @@ public final class HexNicks extends JavaPlugin {
     logging = new LoggingManager(this, new File(this.getDataFolder(), "logs"));
     config = new ConfigValues();
     hooks = new HookManager();
+    guis = new GuiManager();
     this.jsonFile = new File(this.getDataFolder(), "nicknames.json");
     this.nickMap = new HashMap<>();
     // Track plugin metrics through bStats
@@ -167,7 +170,7 @@ public final class HexNicks extends JavaPlugin {
         () -> String.valueOf(config.CHAT_FORMATTER)));
 
     // Register events
-    this.registerEvents(new PlayerJoin(), new PaperTabCompleteEvent(), new PlayerChat());
+    this.registerEvents(new PlayerJoin(), new PaperTabCompleteEvent(), new PlayerChat(), guis);
 
     // Check for updates - prompt to update if there is one
     if (this.updateChecker.isBehindSpigot()) {
@@ -283,6 +286,15 @@ public final class HexNicks extends JavaPlugin {
    */
   public static LoggingManager logging() {
     return logging;
+  }
+
+  /**
+   * Get the plugin's gui manager.
+   *
+   * @return gui manager
+   */
+  public static GuiManager guis() {
+    return guis;
   }
 
   /**

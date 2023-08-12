@@ -63,6 +63,9 @@ blocked-nicknames:
   - "replace these lines"
   - "what to block"
 
+# Whether a gui should open when running `/nickcolor` with no arguments -- `/nickcolor <color>` works either way.
+nickcolor-gui: true
+
 # Database settings
 # Only enable this if you know what you're doing and have an existing database
 database-enabled: false
@@ -106,3 +109,12 @@ messages:
   working: "<gray>Working..."
   notAllowed: "<red>That nickname is not allowed!"
   joinAnnouncement: "<yellow>%player% has the nickname</yellow> %nick%"
+  guiBack: "<yellow><!italic>Back"
+  guiNickColorTitle: "Nick Color"
+  guiNickColorHexTitle: "Nick Color - <color:%color%>%color%"
+  guiNickColorRandomHex: "<!italic><rainbow>Random Hexadecimal Color"
+  guiNickColorHexRed: "<!italic><red>Red %step%"
+  guiNickColorHexGreen: "<!italic><green>Green %step%"
+  guiNickColorHexBlue: "<!italic><blue>Blue %step%"
+  guiNickColorHexButton: "<!italic><yellow>Custom Hexadecimal Color"
+  guiNickColorHexSave: "<!italic><yellow>Click to save nickname"

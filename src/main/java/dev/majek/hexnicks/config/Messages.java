@@ -27,6 +27,7 @@ import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -119,6 +120,27 @@ public interface Messages {
           .configStringPlaceholders("messages.joinAnnouncement", "<yellow>%player% has the nickname</yellow> %nick%", player)
           .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
+
+  Args0 GUI_BACK = () -> MiscUtils.configString("messages.guiBack", "<yellow><!italic>Back");
+
+  Args0 GUI_NICK_COLOR_TITLE = () -> MiscUtils.configString("messages.guiNickColorTitle", "Nick Color");
+
+  Args1<TextColor> GUI_NICK_COLOR_HEX_TITLE = (col) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
+          "messages.guiNickColorHexTitle",
+          "Nick Color - <color:%color%>%color%"
+  ).replace("%color%", col.toString()));
+
+  Args0 GUI_NICK_COLOR_RANDOM_HEX = () -> MiscUtils.configString("messages.guiNickColorRandomHex", "<!italic><rainbow>Random Hexadecimal Color");
+
+  Args1<Integer> GUI_NICK_COLOR_HEX_RED = (c) -> MiscUtils.configString("messages.guiNickColorHexRed", "<!italic><red>Red %step%")
+          .replaceText(TextReplacementConfig.builder().matchLiteral("%step%").replacement("%+d".formatted(c)).build());
+  Args1<Integer> GUI_NICK_COLOR_HEX_GREEN = (c) -> MiscUtils.configString("messages.guiNickColorHexGreen", "<!italic><green>Green %step%")
+          .replaceText(TextReplacementConfig.builder().matchLiteral("%step%").replacement("%+d".formatted(c)).build());
+  Args1<Integer> GUI_NICK_COLOR_HEX_BLUE = (c) -> MiscUtils.configString("messages.guiNickColorHexBlue", "<!italic><blue>Blue %step%")
+          .replaceText(TextReplacementConfig.builder().matchLiteral("%step%").replacement("%+d".formatted(c)).build());
+
+  Args0 GUI_NICK_COLOR_HEX_BUTTON = () -> MiscUtils.configString("messages.guiNickColorHexButton", "<!italic><yellow>Custom Hexadecimal Color");
+  Args0 GUI_NICK_COLOR_HEX_SAVE = () -> MiscUtils.configString("messages.guiNickColorHexSave", "<!italic><yellow>Click to save nickname");
 
   /**
    * A message that has no arguments that need to be replaced.

@@ -26,6 +26,7 @@ package dev.majek.hexnicks.command;
 import dev.majek.hexnicks.HexNicks;
 import dev.majek.hexnicks.api.NickColorEvent;
 import dev.majek.hexnicks.config.Messages;
+import dev.majek.hexnicks.gui.NickColorGui;
 import dev.majek.hexnicks.message.MiniMessageWrapper;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +54,12 @@ public class CommandNickColor implements TabExecutor {
     }
 
     if (args.length == 0) {
-      return false;
+      if (HexNicks.config().NICKCOLOR_GUI) {
+        new NickColorGui().openGui(player);
+        return true;
+      } else {
+        return false;
+      }
     }
 
     String nickInput = String.join(" ", args);

@@ -1,6 +1,7 @@
 package dev.majek.hexnicks.gui;
 
 import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.config.Messages;
 import dev.majek.hexnicks.message.MiniMessageWrapper;
 import dev.majek.hexnicks.util.CustomHead;
 import dev.majek.hexnicks.util.MiscUtils;
@@ -43,18 +44,16 @@ public class NickColorHexGui extends Gui {
   /**
    * Generate the array of items that should be used for changing the r/g/b values
    *
-   * @param name  the name of the value that should be displayed (i.e. "Red")
-   * @param color The colour of the text to be displayed
-   * @param base  The base {@link ItemStack} that should be used (this is cloned for each item in the array)
+   * @param msg  The message that should be used for the name (passed the step)
+   * @param base The base {@link ItemStack} that should be used (this is cloned for each item in the array)
    * @return An array with 6 elements that maps to the values in {@code STEPS}
    */
-  private static ItemStack[] generateItems(String name, NamedTextColor color, ItemStack base) {
+  private static ItemStack[] generateItems(Messages.Args1<Integer> msg, ItemStack base) {
     ItemStack[] out = new ItemStack[6];
-    Component nameComp = Component.text(name, color).decoration(TextDecoration.ITALIC, false);
     ItemMeta meta = base.getItemMeta();
     for (int i = 0; i < 6; i++) {
       int step = STEPS[i];
-      meta.displayName(nameComp.append(Component.space()).append(Component.text("%+d".formatted(step))));
+      meta.displayName(msg.build(step));
       out[i] = base.clone();
       out[i].setAmount(Math.abs(step));
       out[i].setItemMeta(meta);
@@ -64,33 +63,29 @@ public class NickColorHexGui extends Gui {
 
   static {
     // @formatter:off
-    // TODO: Language
-    RED   = generateItems("Red",   NamedTextColor.RED,   CustomHead.RED.asItemStack());
-    GREEN = generateItems("Green", NamedTextColor.GREEN, CustomHead.GREEN.asItemStack());
-    BLUE  = generateItems("Blue",  NamedTextColor.AQUA,  CustomHead.AQUA.asItemStack());
+    RED   = generateItems(Messages.GUI_NICK_COLOR_HEX_RED,   CustomHead.RED.asItemStack());
+    GREEN = generateItems(Messages.GUI_NICK_COLOR_HEX_GREEN, CustomHead.GREEN.asItemStack());
+    BLUE  = generateItems(Messages.GUI_NICK_COLOR_HEX_BLUE,  CustomHead.AQUA.asItemStack());
     // @formatter:on
 
     // Generate the rainbow button
     RAINBOW = CustomHead.RAINBOW.asItemStack();
     ItemMeta meta = RAINBOW.getItemMeta();
-    // TODO: Language
-    meta.displayName(MiniMessageWrapper.standard().mmParse("<rainbow>Random Hexadecimal Color</rainbow>").decoration(TextDecoration.ITALIC, false));
+    meta.displayName(Messages.GUI_NICK_COLOR_RANDOM_HEX.build());
     RAINBOW.setItemMeta(meta);
 
     BACK_BUTTON = new ItemStack(Material.NETHER_STAR);
     meta = BACK_BUTTON.getItemMeta();
-    // TODO: Language
-    meta.displayName(Component.text("Back", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+    meta.displayName(Messages.GUI_BACK.build());
     BACK_BUTTON.setItemMeta(meta);
   }
 
   public NickColorHexGui() {
-    // TODO: Language
     this(0x88, 0x88, 0x88);
   }
 
   public NickColorHexGui(int r, int g, int b) {
-    super(54, Component.text("Nick Color - ").append(Component.text(TextColor.color(r, g, b).toString(), TextColor.color(r, g, b))));
+    super(54, Messages.GUI_NICK_COLOR_HEX_TITLE.build(TextColor.color(r, g, b)));
 
     this.red = r;
     this.green = g;
@@ -105,7 +100,10 @@ public class NickColorHexGui extends Gui {
     ItemStack s = new ItemStack(Material.NAME_TAG);
     ItemMeta meta = s.getItemMeta();
     meta.displayName(Component.text(this.nickname).color(col).decoration(TextDecoration.ITALIC, false));
-    meta.lore(List.of(Component.text(col.toString()).decoration(TextDecoration.ITALIC, false)));
+    meta.lore(List.of(
+      Component.text(col.toString()).decoration(TextDecoration.ITALIC, false),
+      Messages.GUI_NICK_COLOR_HEX_SAVE.build()
+    ));
     s.setItemMeta(meta);
     addActionButton(20, s, () -> {
       // Use the command since it already handles the logic

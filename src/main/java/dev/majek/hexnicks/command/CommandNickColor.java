@@ -54,8 +54,12 @@ public class CommandNickColor implements TabExecutor {
     }
 
     if (args.length == 0) {
-      new NickColorGui().openGui(player);
-      return true;
+      if (HexNicks.config().NICKCOLOR_GUI) {
+        new NickColorGui().openGui(player);
+        return true;
+      } else {
+        return false;
+      }
     }
 
     String nickInput = String.join(" ", args);

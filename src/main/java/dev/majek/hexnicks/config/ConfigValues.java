@@ -58,6 +58,7 @@ public class ConfigValues {
   public Boolean              PREVENT_DUPLICATE_NICKS;
   public Boolean              PREVENT_DUPLICATE_NICKS_STRICT;
   public List<String>         BLOCKED_NICKNAMES;
+  public Boolean              NICKCOLOR_GUI;
   public Boolean              DEBUG;
 
   public ConfigValues() {
@@ -84,6 +85,7 @@ public class ConfigValues {
     PREVENT_DUPLICATE_NICKS = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks", true);
     PREVENT_DUPLICATE_NICKS_STRICT = HexNicks.core().getConfig().getBoolean("prevent-duplicate-nicks-strict", false);
     BLOCKED_NICKNAMES = HexNicks.core().getConfig().getStringList("blocked-nicknames");
+    NICKCOLOR_GUI = HexNicks.core().getConfig().getBoolean("nickcolor-gui", true);
     DEBUG = HexNicks.core().getConfig().getBoolean("debug", false);
   }
 

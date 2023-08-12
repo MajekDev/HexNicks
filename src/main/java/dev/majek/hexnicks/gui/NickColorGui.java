@@ -2,6 +2,7 @@ package dev.majek.hexnicks.gui;
 
 import dev.majek.hexnicks.command.CommandHexNicks;
 import dev.majek.hexnicks.command.CommandNickColor;
+import dev.majek.hexnicks.config.Messages;
 import dev.majek.hexnicks.util.CustomHead;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -79,18 +80,12 @@ public class NickColorGui extends Gui {
 
     RAINBOW = CustomHead.RAINBOW.asItemStack();
     ItemMeta meta = RAINBOW.getItemMeta();
-    // TODO: Language
-    meta.displayName(Component.text("Hexadecimal Color").decoration(TextDecoration.ITALIC, false));
-    meta.lore(List.of(
-      // TODO: Language
-      Component.text("Create a custom hexadecimal color", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
-    ));
+    meta.displayName(Messages.GUI_NICK_COLOR_HEX_BUTTON.build());
     RAINBOW.setItemMeta(meta);
   }
 
   public NickColorGui() {
-    // TODO: Language
-    super(54, Component.text("Nick Color"));
+    super(54, Messages.GUI_NICK_COLOR_TITLE.build());
   }
 
   /**

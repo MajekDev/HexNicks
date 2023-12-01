@@ -85,6 +85,11 @@ public interface Messages {
       .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
       .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
 
+  Args2<String, Component> FAKENAME = (name, nickname) -> MiscUtils
+      .configString("messages.fakename", "%name% <gray>is <aqua>%nickname%<gray>.")
+      .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
+      .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
+
   Args0 UPDATE = () -> MiscUtils.configString("messages.update",
       "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>.");
 

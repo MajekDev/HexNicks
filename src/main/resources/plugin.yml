@@ -30,6 +30,10 @@ commands:
     description: Get the name of the player a nickname belongs to.
     usage: /realname <nickname>
     permission: hexnicks.realname
+  fakename:
+    description: Get the nickname of a player.
+    usage: /fakename <player>
+    permission: hexnicks.fakename
 
 permissions:
   hexnicks.nick:
@@ -55,6 +59,9 @@ permissions:
     default: op
   hexnicks.realname:
     description: Permission to use the realname command.
+    default: true
+  hexnicks.fakename:
+    description: Permission to use the fakename command.
     default: true
   hexnicks.chat.advanced:
     description: Permission to inject things like click events into chat messages via MiniMessage.

@@ -215,6 +215,8 @@ public final class HexNicks extends JavaPlugin {
     this.getCommand("hexnicks").setTabCompleter(new CommandHexNicks());
     this.getCommand("realname").setExecutor(new CommandRealName());
     this.getCommand("realname").setTabCompleter(new CommandRealName());
+    this.getCommand("fakename").setExecutor(new CommandFakeName());
+    this.getCommand("fakename").setTabCompleter(new CommandFakeName());
     this.getCommand("nickother").setExecutor(new CommandNickOther());
     this.getCommand("nickother").setTabCompleter(new CommandNickOther());
     this.getCommand("nickcolor").setExecutor(new CommandNickColor());

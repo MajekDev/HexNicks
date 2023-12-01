@@ -97,6 +97,7 @@ messages:
   onlyColorCodes: "<red>You may only include color codes."
   pluginReloaded: "<green>Plugin reloaded."
   realname: "%nickname% <gray>is <aqua>%name%<gray>."
+  fakename: "%name% <gray>is <aqua>%nickname%<gray>."
   update: "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."
   nicknameTaken: "<red>That nickname is taken by another player! Please choose a different one."
   newEditor: "<green>Edit config <click:open_url:'%link%'><aqua><u>here</u></aqua></click>. When you're done, save your changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor apply <link></aqua></click> to apply them."

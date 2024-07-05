@@ -24,12 +24,25 @@
 package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.api.HexNicksApi;
 import dev.majek.hexnicks.config.Messages;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * <p>Handles the player join event.</p>
@@ -51,9 +64,11 @@ public class PlayerJoin implements Listener {
             Messages.ANNOUNCE_NICK.announce(player, component);
           }
           HexNicks.core().setNick(player, component);
+          JoinMessage(component);
         });
       } else {
         HexNicks.logging().debug("Player " + player.getName() + " joined and has no nickname.");
+        JoinMessage(Component.text(player.getName()));
       }
     });
 
@@ -61,5 +76,22 @@ public class PlayerJoin implements Listener {
     if (event.getPlayer().isOp() && HexNicks.core().hasUpdate() && HexNicks.config().UPDATE_PROMPT) {
       Messages.UPDATE.send(event.getPlayer());
     }
+
+    Component name = HexNicks.core().getNickMap().get(player.getUniqueId());
+    if (name != null) {
+      name = Component.text(player.getName());
+    }
+
+    event.joinMessage(Component.text().content("").build());
+  }
+
+  private void JoinMessage (Component name) {
+    ComponentBuilder textBuilder = Component.text()
+            .append(Component.text("<", Style.empty().color(TextColor.color(0xFFFFFF))))
+            .append(name)
+            .append(Component.text(">", Style.empty().color(TextColor.color(0xFFFFFF))))
+            .append(Component.text(" connected!", Style.empty().color(TextColor.color(0xFFFF55))));
+    Component text = textBuilder.build();
+    Bukkit.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(text));
   }
 }

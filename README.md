@@ -20,7 +20,7 @@ support for MySQL storage, it's mostly intended to be a simple nickname plugin f
 - MySQL storage support for users on BungeeCord/Velocity.
 - Metrics through [bStats](https://bstats.org/plugin/bukkit/HexNicks/8764).
 - Active plugin and developer.
-- Ability to format chat on it's own, no external chat formatter needed.
+- Ability to format chat on its own, no external chat formatter needed.
 - Simple [api](https://hexnicks.majek.dev/developers) for developers.
 - Full documentation [here](https://hexnicks.majek.dev).
 

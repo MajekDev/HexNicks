@@ -6,7 +6,7 @@
 
     <groupId>dev.majek</groupId>
     <artifactId>hexnicks</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2</version>
     <packaging>jar</packaging>
 
     <name>HexNicks</name>
@@ -119,7 +119,7 @@
     <repositories>
         <repository>
             <id>papermc-repo</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>sonatype</id>

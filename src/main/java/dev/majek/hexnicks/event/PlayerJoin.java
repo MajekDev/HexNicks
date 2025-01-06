@@ -24,12 +24,26 @@
 package dev.majek.hexnicks.event;
 
 import dev.majek.hexnicks.HexNicks;
+import dev.majek.hexnicks.api.HexNicksApi;
 import dev.majek.hexnicks.config.Messages;
+import dev.majek.hexnicks.message.MiniMessageWrapper;
+import dev.majek.hexnicks.util.MiscUtils;
+import net.kyori.adventure.text.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * <p>Handles the player join event.</p>
@@ -41,6 +55,7 @@ public class PlayerJoin implements Listener {
   public void onPlayerJoin(PlayerJoinEvent event) {
     HexNicks.storage().updateNicks();
     Player player = event.getPlayer();
+    boolean shouldFormat = HexNicks.config().FORMAT_JOIN;
 
     // Set the joining player's nickname to their stored nickname if they have one
     HexNicks.storage().hasNick(player.getUniqueId()).whenCompleteAsync((aBoolean, throwable) -> {
@@ -51,9 +66,11 @@ public class PlayerJoin implements Listener {
             Messages.ANNOUNCE_NICK.announce(player, component);
           }
           HexNicks.core().setNick(player, component);
+          if(shouldFormat) { JoinMessage(player, component); }
         });
       } else {
         HexNicks.logging().debug("Player " + player.getName() + " joined and has no nickname.");
+        if(shouldFormat) { JoinMessage(player, Component.text(player.getName())); }
       }
     });
 
@@ -61,5 +78,39 @@ public class PlayerJoin implements Listener {
     if (event.getPlayer().isOp() && HexNicks.core().hasUpdate() && HexNicks.config().UPDATE_PROMPT) {
       Messages.UPDATE.send(event.getPlayer());
     }
+
+    Component name = HexNicks.core().getNickMap().get(player.getUniqueId());
+    if (name != null) {
+      name = Component.text(player.getName());
+    }
+
+    if(shouldFormat) { event.joinMessage(Component.text().content("").build()); }
+  }
+
+  private void JoinMessage (Player source, Component name) {
+    final MiniMessageWrapper miniMessageWrapper = MiniMessageWrapper.builder()
+            .advancedTransformations(source.hasPermission("hexnicks.chat.advanced"))
+            .gradients(source.hasPermission("hexnicks.color.gradient"))
+            .hexColors(source.hasPermission("hexnicks.color.hex"))
+            .legacyColors(HexNicks.config().LEGACY_COLORS)
+            .removeTextDecorations(MiscUtils.blockedDecorations(source))
+            .removeColors(MiscUtils.blockedColors(source))
+            .build();
+
+    Component text = miniMessageWrapper.mmParse(HexNicks.hooks().applyPlaceHolders(source, HexNicks.config().JOIN_FORMAT))
+            // Replace display name placeholder with HexNicks nick
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{displayname}")
+                    .replacement(name).build()
+            )
+            // Replace prefix placeholder with Vault prefix
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{prefix}")
+                    .replacement(HexNicks.hooks().vaultPrefix(source)).build()
+            )
+            // Replace suffix placeholder with Vault Suffix
+            .replaceText(TextReplacementConfig.builder().matchLiteral("{suffix}")
+                    .replacement(HexNicks.hooks().vaultSuffix(source)).build()
+            );
+
+    Bukkit.getServer().getOnlinePlayers().forEach(player -> player.sendMessage(text));
   }
 }

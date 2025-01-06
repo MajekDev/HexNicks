@@ -24,6 +24,22 @@ chat-formatter: true
 # May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
 chat-format: "<{displayname}> {message}"
 
+# Whether the join message should be formatted.
+# If this is false, the default join message will be used.
+format-join: true
+
+# The format of join messages. Must include {displayname} placeholder.
+# May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
+join-format: "<{displayname}> <yellow>connected!"
+
+# Whether the quit message should be formatted.
+# If this is false, the default quit message will be used.
+format-quit: true
+
+# The format of quit messages. Must include {displayname} placeholder.
+# May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
+quit-format: "<{displayname}> <yellow>disconnected!"
+
 # Whether to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false
 

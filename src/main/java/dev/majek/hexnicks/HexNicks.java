@@ -32,6 +32,7 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.majek.hexnicks.api.HexNicksApi;
 import dev.majek.hexnicks.command.*;
 import dev.majek.hexnicks.config.ConfigValues;
+import dev.majek.hexnicks.event.PlayerQuit;
 import dev.majek.hexnicks.storage.*;
 import dev.majek.hexnicks.event.PaperTabCompleteEvent;
 import dev.majek.hexnicks.event.PlayerChat;
@@ -166,7 +167,7 @@ public final class HexNicks extends JavaPlugin {
         () -> String.valueOf(config.CHAT_FORMATTER)));
 
     // Register events
-    this.registerEvents(new PlayerJoin(), new PaperTabCompleteEvent(), new PlayerChat());
+    this.registerEvents(new PlayerJoin(), new PaperTabCompleteEvent(), new PlayerChat(), new PlayerQuit());
 
     // Check for updates - prompt to update if there is one
     if (this.updateChecker.isBehindSpigot()) {

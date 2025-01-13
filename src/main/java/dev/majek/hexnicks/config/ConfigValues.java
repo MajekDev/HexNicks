@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.List;
+import java.util.Map;
+
 import dev.majek.hexnicks.util.MiscUtils;
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +51,7 @@ public class ConfigValues {
   public Boolean              REQUIRE_ALPHANUMERIC;
   public Boolean              CHAT_FORMATTER;
   public String               CHAT_FORMAT;
+  public Boolean              NO_CHAT_REPORTS;
   public Boolean              LEGACY_COLORS;
   public TextColor            DEFAULT_NICK_COLOR;
   public TextColor            DEFAULT_USERNAME_COLOR;
@@ -75,6 +78,7 @@ public class ConfigValues {
     REQUIRE_ALPHANUMERIC = HexNicks.core().getConfig().getBoolean("require-alphanumeric", false);
     CHAT_FORMATTER = HexNicks.core().getConfig().getBoolean("chat-formatter", false);
     CHAT_FORMAT = HexNicks.core().getConfig().getString("chat-format", "{displayname}: {message}");
+    NO_CHAT_REPORTS = HexNicks.core().getConfig().getBoolean("no-chat-reports", false);
     LEGACY_COLORS = HexNicks.core().getConfig().getBoolean("legacy-colors", false);
     DEFAULT_NICK_COLOR = TextColor.fromHexString(HexNicks.core().getConfig().getString("default-nick-color", "#FFFFFF"));
     DEFAULT_USERNAME_COLOR = TextColor.fromHexString(HexNicks.core().getConfig().getString("default-username-color", "#FFFFFF"));
@@ -135,5 +139,26 @@ public class ConfigValues {
     }
 
     HexNicks.core().reload();
+  }
+
+  public Map<String, ConfigType> values() {
+    return Map.ofEntries(
+        Map.entry("tab-nicks", ConfigType.BOOLEAN),
+        Map.entry("announce-nicks-on-join", ConfigType.BOOLEAN),
+        Map.entry("max-length", ConfigType.INT),
+        Map.entry("min-length", ConfigType.INT),
+        Map.entry("require-alphanumeric", ConfigType.BOOLEAN),
+        Map.entry("chat-formatter", ConfigType.BOOLEAN),
+        Map.entry("chat-format", ConfigType.STRING),
+        Map.entry("no-chat-reports", ConfigType.BOOLEAN),
+        Map.entry("legacy-color", ConfigType.BOOLEAN),
+        Map.entry("update-prompt", ConfigType.BOOLEAN),
+        Map.entry("override-essentials", ConfigType.BOOLEAN),
+        Map.entry("nickother-override", ConfigType.BOOLEAN),
+        Map.entry("prevent-duplicate-nicks", ConfigType.BOOLEAN),
+        Map.entry("prevent-duplicate-nicks-strict", ConfigType.BOOLEAN),
+        Map.entry("debug", ConfigType.BOOLEAN),
+        Map.entry("messages.unknownPlayer", ConfigType.STRING)
+    );
   }
 }

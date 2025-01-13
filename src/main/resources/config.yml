@@ -24,6 +24,10 @@ chat-formatter: true
 # May also include {prefix} and {suffix} placeholders. These items will be pulled from Vault if it is hooked.
 chat-format: "<{displayname}> {message}"
 
+# Whether chat messages should be sent to players individually in order to block chat reports.
+# This option has no effect if chat-formatter is set to false.
+no-chat-reports: false
+
 # Whether to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false
 

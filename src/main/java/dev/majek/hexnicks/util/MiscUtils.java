@@ -116,7 +116,7 @@ public class MiscUtils {
       if (isValidRegex(blockedNick) && plainTextNick.matches(blockedNick)) {
         return true;
       } else if (blockedNick.equalsIgnoreCase(plainTextNick)) {
-          return true;
+        return true;
       }
     }
     return false;

@@ -149,9 +149,6 @@ public final class HexNicks extends JavaPlugin {
       this.loadNicknamesFromJson();
     }
 
-    // Set debug status
-    logging.doDebug(config.DEBUG);
-
     // Register plugin commands
     this.registerCommands();
 
@@ -300,12 +297,13 @@ public final class HexNicks extends JavaPlugin {
     try {
       ConfigUpdater.update(core, "config.yml", configFile, Collections.emptyList());
     } catch (final IOException ex) {
-      ex.printStackTrace();
+      logging.error("Failed to reload config.yml", ex);
     }
     this.reloadConfig();
     config.reload();
     storage.updateNicks();
     hooks.reloadHooks();
+    logging.doDebug(config.DEBUG);
   }
 
   /**

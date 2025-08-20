@@ -244,6 +244,7 @@ public class MiscUtils {
    */
   public static void announceMessage(final @NotNull Component message) {
     if (!PlainTextComponentSerializer.plainText().serialize(message).isEmpty()) {
+      HexNicks.logging().log(PlainTextComponentSerializer.plainText().serialize(message));
       for (Player player : Bukkit.getOnlinePlayers()) {
         player.sendMessage(message);
       }

@@ -64,6 +64,7 @@ public class CommandNick implements TabExecutor {
         .hexColors(player.hasPermission("hexnicks.color.hex"))
         .standardColors(true)
         .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .cssColors(HexNicks.config().CSS_COLORS)
         .removeTextDecorations(MiscUtils.blockedDecorations(player))
         .removeColors(MiscUtils.blockedColors(player))
         .build().mmParse(nickInput);

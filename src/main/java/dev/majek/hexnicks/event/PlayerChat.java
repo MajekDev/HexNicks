@@ -84,6 +84,7 @@ public class PlayerChat implements Listener {
         .gradients(source.hasPermission("hexnicks.color.gradient"))
         .hexColors(source.hasPermission("hexnicks.color.hex"))
         .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .cssColors(HexNicks.config().CSS_COLORS)
         .removeTextDecorations(MiscUtils.blockedDecorations(source))
         .removeColors(MiscUtils.blockedColors(source))
         .build();

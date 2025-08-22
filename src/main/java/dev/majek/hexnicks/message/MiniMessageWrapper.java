@@ -29,7 +29,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 
@@ -175,6 +174,15 @@ public interface MiniMessageWrapper {
      * @since 2.1.2
      */
     @NotNull Builder advancedTransformations(final boolean parse);
+
+    /**
+     * Whether CSS color codes on the final string should be parsed.
+     *
+     * @param parse whether to parse
+     * @return this builder
+     * @since 3.2.0
+     */
+    @NotNull Builder cssColors(final boolean parse);
 
     /**
      * The {@link TextDecoration}s that should not be parsed.

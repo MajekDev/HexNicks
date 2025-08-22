@@ -70,6 +70,7 @@ public class CommandNickOther implements TabExecutor {
         .hexColors(target.hasPermission("hexnicks.color.hex"))
         .standardColors(true)
         .legacyColors(HexNicks.config().LEGACY_COLORS)
+        .cssColors(HexNicks.config().CSS_COLORS)
         .removeTextDecorations(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedDecorations(target)
             : Collections.emptyList())
         .removeColors(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedColors(target)

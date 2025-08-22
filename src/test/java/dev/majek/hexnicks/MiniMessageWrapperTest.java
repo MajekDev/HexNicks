@@ -27,6 +27,7 @@ import dev.majek.hexnicks.message.MiniMessageWrapper;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -179,6 +180,62 @@ public class MiniMessageWrapperTest {
     Assert.assertEquals(
         MiniMessageWrapper.builder().legacyColors(true).removeColors(NamedTextColor.RED).build().mmParse(string),
         Component.text("I am Majekdor").color(NamedTextColor.BLUE).decorate(TextDecoration.BOLD)
+    );
+  }
+
+  @Test
+  public void singleCssColor() {
+    String string = "<aliceblue>This is a test";
+    Assert.assertEquals(
+        MiniMessageWrapper.standard().mmParse(string),
+        Component.text("This is a test", TextColor.color(0xf0f8ff))
+    );
+  }
+
+  @Test
+  public void multipleCssColors() {
+    String string = "<aliceblue>Blue</aliceblue> White <orange>Orange";
+    Assert.assertEquals(
+        MiniMessageWrapper.standard().mmParse(string),
+        Component.empty()
+            .append(Component.text("Blue").color(TextColor.color(0xf0f8ff)))
+            .append(Component.text(" White "))
+            .append(Component.text("Orange").color(TextColor.color(0xffa500)))
+    );
+  }
+
+  @Test
+  public void multipleCssColorsUsingArgs() {
+    String string = "<css:aliceblue>Blue</css:aliceblue> White <css:orange>Orange";
+
+    Assert.assertEquals(
+        MiniMessageWrapper.standard().mmParse(string),
+        Component.empty()
+            .append(Component.text("Blue").color(TextColor.color(0xf0f8ff)))
+            .append(Component.text(" White "))
+            .append(Component.text("Orange").color(TextColor.color(0xffa500)))
+    );
+  }
+
+  @Test
+  public void specifyMcColorThatExistsInCss() {
+    String string = "<c:aqua>This should be minecraft aqua";
+
+    Assert.assertEquals(
+        MiniMessageWrapper.standard().mmParse(string),
+        Component.text("This should be minecraft aqua", NamedTextColor.AQUA)
+    );
+  }
+
+  @Test
+  public void cssAndMcColors() {
+    String string = "<c:aqua>MC Aqua</c:aqua> White <css:aqua>CSS Aqua</css:aqua>";
+
+    Assert.assertEquals(
+        MiniMessageWrapper.standard().mmParse(string), Component.empty()
+            .append(Component.text("MC Aqua", NamedTextColor.AQUA))
+            .append(Component.text(" White "))
+            .append(Component.text("CSS Aqua", TextColor.color(0x00ffff)))
     );
   }
 }

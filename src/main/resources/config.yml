@@ -31,6 +31,9 @@ no-chat-reports: false
 # Whether to support legacy nicknames (&a, &l, etc.)
 legacy-colors: false
 
+# Whether to support CSS color codes
+css-colors: true
+
 # The default color of nicknames if no color code is provided on nickname creation.
 # This MUST be a hex code string. No color names or legacy codes.
 default-nick-color: "#FFFFFF"

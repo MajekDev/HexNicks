@@ -46,35 +46,87 @@ import org.jetbrains.annotations.NotNull;
 final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
   @ApiStatus.Internal
-  static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(true, true, true,
-      false, false, TagResolver.empty(), new HashSet<>(), new HashSet<>());
-
-  @ApiStatus.Internal
-  static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(true, true, true,
-      true, false, TagResolver.empty(), new HashSet<>(), new HashSet<>());
-
-  private final TagResolver allTags = TagResolver.resolver(StandardTags.defaults()/*, new CSSColorTagResolver()*/);
-
-  private final TagResolver colorTags = TagResolver.resolver(
-      StandardTags.color(), StandardTags.decorations(),
-      StandardTags.gradient(), StandardTags.rainbow()
+  static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      TagResolver.empty(),
+      new HashSet<>(),
+      new HashSet<>()
   );
 
-  private final boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+  @ApiStatus.Internal
+  static final MiniMessageWrapper LEGACY = new MiniMessageWrapperImpl(
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      TagResolver.empty(),
+      new HashSet<>(),
+      new HashSet<>()
+  );
+
+  private final TagResolver allTags = TagResolver.resolver(
+      ExtraTags.cssColors(),
+      StandardTags.defaults()
+  );
+
+  private final TagResolver colorTags = TagResolver.resolver(
+      StandardTags.color(),
+      StandardTags.decorations(),
+      StandardTags.gradient(),
+      StandardTags.rainbow()
+  );
+
+  private final TagResolver colorTagsPlusCSS = TagResolver.resolver(
+      ExtraTags.cssColors(),
+      StandardTags.color(),
+      StandardTags.decorations(),
+      StandardTags.gradient(),
+      StandardTags.rainbow()
+  );
+
+  private TagResolver colorTags() {
+    if (this.cssColors) {
+      return this.colorTagsPlusCSS;
+    } else {
+      return this.colorTags;
+    }
+  }
+
+  private final boolean
+      gradients,
+      hexColors,
+      standardColors,
+      legacyColors,
+      advancedTransformations,
+      cssColors;
   private final TagResolver placeholderResolver;
   private final Set<TextDecoration> removedTextDecorations;
   private final Set<NamedTextColor> removedColors;
 
-  MiniMessageWrapperImpl(final boolean gradients, final boolean hexColors, final boolean standardColors,
-                         final boolean legacyColors, final boolean advancedTransformations,
-                         final TagResolver placeholderResolver,
-                         final Set<TextDecoration> removedTextDecorations,
-                         final Set<NamedTextColor> removedColors) {
+  MiniMessageWrapperImpl(
+      final boolean gradients,
+      final boolean hexColors,
+      final boolean standardColors,
+      final boolean legacyColors,
+      final boolean advancedTransformations,
+      final boolean cssColors,
+      final TagResolver placeholderResolver,
+      final Set<TextDecoration> removedTextDecorations,
+      final Set<NamedTextColor> removedColors
+  ) {
     this.gradients = gradients;
     this.hexColors = hexColors;
     this.standardColors = standardColors;
     this.legacyColors = legacyColors;
     this.advancedTransformations = advancedTransformations;
+    this.cssColors = cssColors;
     this.placeholderResolver = placeholderResolver;
     this.removedTextDecorations = removedTextDecorations;
     this.removedColors = removedColors;
@@ -84,7 +136,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   public @NotNull Component mmParse(@NotNull String mmString) {
     return MiniMessage.builder()
         .tags(TagResolver.resolver(
-            this.advancedTransformations ? this.allTags : this.colorTags,
+            this.advancedTransformations ? this.allTags : this.colorTags(),
             this.placeholderResolver
         ))
         .build()
@@ -217,7 +269,13 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   @ApiStatus.Internal
   static final class BuilderImpl implements Builder {
 
-    private boolean gradients, hexColors, standardColors, legacyColors, advancedTransformations;
+    private boolean
+        gradients,
+        hexColors,
+        standardColors,
+        legacyColors,
+        advancedTransformations,
+        cssColors;
     private TagResolver placeholderResolver;
     private final Set<TextDecoration> removedTextDecorations;
     private final Set<NamedTextColor> removedColors;
@@ -229,6 +287,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       this.standardColors = true;
       this.legacyColors = false;
       this.advancedTransformations = false;
+      this.cssColors = true;
       this.placeholderResolver = TagResolver.empty();
       this.removedTextDecorations = new HashSet<>();
       this.removedColors = new HashSet<>();
@@ -241,6 +300,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       this.standardColors = wrapper.standardColors;
       this.legacyColors = wrapper.legacyColors;
       this.advancedTransformations = wrapper.advancedTransformations;
+      this.cssColors = wrapper.cssColors;
       this.placeholderResolver = wrapper.placeholderResolver;
       this.removedTextDecorations = wrapper.removedTextDecorations;
       this.removedColors = wrapper.removedColors;
@@ -277,6 +337,12 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
     }
 
     @Override
+    public @NotNull Builder cssColors(final boolean parse) {
+      this.cssColors = parse;
+      return this;
+    }
+
+    @Override
     public @NotNull Builder removeTextDecorations(final @NotNull TextDecoration... decorations) {
       this.removedTextDecorations.addAll(List.of(decorations));
       return this;
@@ -308,8 +374,17 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
     @Override
     public @NotNull MiniMessageWrapper build() {
-      return new MiniMessageWrapperImpl(this.gradients, this.hexColors, this.standardColors, this.legacyColors,
-          this.advancedTransformations, this.placeholderResolver, this.removedTextDecorations, this.removedColors);
+      return new MiniMessageWrapperImpl(
+          this.gradients,
+          this.hexColors,
+          this.standardColors,
+          this.legacyColors,
+          this.advancedTransformations,
+          this.cssColors,
+          this.placeholderResolver,
+          this.removedTextDecorations,
+          this.removedColors
+      );
     }
   }
 

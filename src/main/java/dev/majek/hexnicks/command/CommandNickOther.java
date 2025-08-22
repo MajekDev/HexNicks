@@ -49,7 +49,8 @@ public class CommandNickOther implements TabExecutor {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, @NotNull String[] args) {
     if (args.length < 2) {
-      return false;
+      Messages.NICK_OTHER_USAGE.send(sender);
+      return true;
     }
 
     // Make sure the target player is online

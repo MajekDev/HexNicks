@@ -53,7 +53,8 @@ public class CommandNick implements TabExecutor {
     }
 
     if (args.length == 0) {
-      return false;
+      Messages.NICK_USAGE.send(sender);
+      return true;
     }
 
     String nickInput = String.join(" ", args);

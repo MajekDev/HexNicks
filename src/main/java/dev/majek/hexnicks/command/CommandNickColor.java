@@ -53,7 +53,8 @@ public class CommandNickColor implements TabExecutor {
     }
 
     if (args.length == 0) {
-      return false;
+      Messages.NICK_COLOR_USAGE.send(sender);
+      return true;
     }
 
     String nickInput = String.join(" ", args);
@@ -61,7 +62,7 @@ public class CommandNickColor implements TabExecutor {
     // If there are no colors the length should be 0
     String plainTextInput = PlainTextComponentSerializer.plainText()
         .serialize(MiniMessageWrapper.legacy().mmParse(nickInput));
-    if (plainTextInput.length() > 0 && !plainTextInput.equals(player.getName())) {
+    if (!plainTextInput.isEmpty() && !plainTextInput.equals(player.getName())) {
       Messages.ONLY_COLOR_CODES.send(player);
       return true;
     }
@@ -88,7 +89,7 @@ public class CommandNickColor implements TabExecutor {
     }
 
     Component nickname = wrapper.mmParse(
-        wrapper.mmString(nickInput) + (plainTextInput.length() == 0 ? plainTextNick : "")
+        wrapper.mmString(nickInput) + (plainTextInput.isEmpty() ? plainTextNick : "")
     );
 
     // Call event

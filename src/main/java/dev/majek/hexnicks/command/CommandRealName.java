@@ -47,7 +47,8 @@ public class CommandRealName implements TabExecutor {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, @NotNull String[] args) {
     if (args.length == 0) {
-      return false;
+      Messages.REAL_NAME_USAGE.send(sender);
+      return true;
     }
 
     OfflinePlayer player = HexNicks.api().playerFromNick(String.join(" ", args));

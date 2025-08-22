@@ -110,3 +110,8 @@ messages:
   working: "<gray>Working..."
   notAllowed: "<red>That nickname is not allowed!"
   joinAnnouncement: "<yellow>%player% has the nickname</yellow> %nick%"
+  hexnicksUsage: "<red>Usage: /hexnicks <reload|config-editor> [apply|new] [link]"
+  nickUsage: "<red>Usage: /nick <nickname>"
+  nickColorUsage: "<red>Usage: /nickcolor <color>"
+  nickOtherUsage: "<red>Usage: /nickother <player> <nickname>"
+  realNameUsage: "<red>Usage: /realname <nickname>"

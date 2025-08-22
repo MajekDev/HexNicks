@@ -45,7 +45,8 @@ public class CommandHexNicks implements TabExecutor {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                            @NotNull String label, @NotNull String[] args) {
     if (args.length == 0) {
-      return false;
+      Messages.HEXNICKS_USAGE.send(sender);
+      return true;
     }
 
     switch (args[0].toLowerCase(Locale.ROOT)) {
@@ -64,7 +65,8 @@ public class CommandHexNicks implements TabExecutor {
           return true;
         }
         if (args.length < 2) {
-          return false;
+          Messages.HEXNICKS_USAGE.send(sender);
+          return true;
         }
         if (args[1].equalsIgnoreCase("new")) {
           Messages.WORKING.send(sender);
@@ -81,7 +83,8 @@ public class CommandHexNicks implements TabExecutor {
           }
           Messages.EDITOR_APPLIED.send(sender, args[2]);
         } else {
-          return false;
+          Messages.HEXNICKS_USAGE.send(sender);
+          return true;
         }
         return true;
       }
@@ -96,7 +99,8 @@ public class CommandHexNicks implements TabExecutor {
         return true;
       }
       default:
-        return false;
+        Messages.HEXNICKS_USAGE.send(sender);
+        return true;
     }
   }
 

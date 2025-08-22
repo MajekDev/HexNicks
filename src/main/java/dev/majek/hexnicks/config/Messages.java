@@ -120,6 +120,16 @@ public interface Messages {
           .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
           .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
 
+  Args0 HEXNICKS_USAGE = () -> MiscUtils.configString("messages.hexnicksUsage", "<red>Usage: /hexnicks <reload|config-editor> [apply|new] [link]");
+
+  Args0 NICK_USAGE = () -> MiscUtils.configString("messages.nickUsage", "<red>Usage: /nick <nickname>");
+
+  Args0 NICK_COLOR_USAGE = () -> MiscUtils.configString("messages.nickColorUsage", "<red>Usage: /nickcolor <color>");
+
+  Args0 NICK_OTHER_USAGE = () -> MiscUtils.configString("messages.nickOtherUsage", "<red>Usage: /nickother <player> <nickname>");
+
+  Args0 REAL_NAME_USAGE = () -> MiscUtils.configString("messages.realNameUsage", "<red>Usage: /realname <nickname>");
+
   /**
    * A message that has no arguments that need to be replaced.
    */

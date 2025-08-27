@@ -115,3 +115,5 @@ run/
 # Javadoc folder
 javadoc/
 /docs/.docusaurus/
+
+/docs/node_modules/

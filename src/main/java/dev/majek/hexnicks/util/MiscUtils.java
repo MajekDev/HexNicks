@@ -24,7 +24,6 @@
 package dev.majek.hexnicks.util;
 
 import dev.majek.hexnicks.HexNicks;
-import dev.majek.hexnicks.config.Messages;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -32,7 +31,7 @@ import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import net.kyori.adventure.text.Component;
@@ -85,24 +84,21 @@ public class MiscUtils {
    *
    * @param nickname the nickname to check
    * @param player the player trying to set the nickname
-   * @return true if the nickname was a duplicate and the message was sent
+   * @return a future that completes true if the nickname is a duplicate
    */
-  public static boolean preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
-    if (HexNicks.config().PREVENT_DUPLICATE_NICKS) {
-      final AtomicBoolean taken = new AtomicBoolean(false);
-      HexNicks.storage().nicknameExists(nickname, HexNicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player).whenComplete((bool, error) -> {
-        if (error != null) {
-          HexNicks.logging().error("Error checking if nickname exists.", error);
-        } else {
-          taken.set(bool);
-        }
-      });
-      if (taken.get()) {
-        Messages.NICKNAME_TAKEN.send(player);
-        return true;
-      }
+  public static CompletableFuture<Boolean> preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
+    if (!HexNicks.config().PREVENT_DUPLICATE_NICKS) {
+      return CompletableFuture.completedFuture(false);
     }
-    return false;
+    return HexNicks.storage()
+        .nicknameExists(nickname, HexNicks.config().PREVENT_DUPLICATE_NICKS_STRICT, player)
+        .handle((taken, error) -> {
+          if (error != null) {
+            HexNicks.logging().error("Error checking if nickname exists.", error);
+            return false;
+          }
+          return taken;
+        });
   }
 
   /**

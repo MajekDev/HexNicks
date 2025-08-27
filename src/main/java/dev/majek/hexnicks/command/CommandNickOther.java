@@ -117,18 +117,20 @@ public class CommandNickOther implements TabExecutor {
     }
     final Component finalNick = nickEvent.newNick();
 
-    // Send loading message
+    // Send a loading message
     Messages.WORKING.send(sender);
 
     // Asynchronously check to make sure the nickname isn't taken
-    HexNicks.scheduler().runTaskAsynchronously(() -> {
-      // Make sure the nickname isn't taken
-      if (!MiscUtils.preventDuplicates(finalNick, target)) {
-        // Set nick
+    MiscUtils.preventDuplicates(finalNick, target).thenAccept(duplicate -> {
+      if (duplicate) {
+        HexNicks.scheduler().runTask(() -> Messages.NICKNAME_TAKEN.send(sender));
+        return;
+      }
+      HexNicks.scheduler().runTask(() -> {
         HexNicks.core().setNick(target, finalNick);
         Messages.NICKNAME_SET.send(target, finalNick);
         Messages.NICKNAME_SET_OTHER.send(sender, target, finalNick);
-      }
+      });
     });
 
     return true;

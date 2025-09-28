@@ -54,6 +54,7 @@ public class PlayerJoin implements Listener {
         });
       } else {
         HexNicks.logging().debug("Player " + player.getName() + " joined and has no nickname.");
+        HexNicks.core().removeNick(player);
       }
     });
 

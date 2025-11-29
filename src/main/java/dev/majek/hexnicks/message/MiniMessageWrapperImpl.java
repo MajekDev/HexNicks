@@ -25,6 +25,8 @@ package dev.majek.hexnicks.message;
 
 import com.google.common.collect.ImmutableMap;
 import dev.majek.hexnicks.util.MiscUtils;
+
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +46,26 @@ import org.jetbrains.annotations.NotNull;
  */
 @ApiStatus.Internal
 final class MiniMessageWrapperImpl implements MiniMessageWrapper {
+
+  /**
+   * Tries to get StandardTags.sequentialHead() via reflection.
+   * If the method does not exist (MiniMessage < 4.25.0), returns TagResolver.color().
+   */
+  @SuppressWarnings("JavaReflectionMemberAccess")
+  private static TagResolver sequentialHeadResolver() {
+    try {
+      Method method = StandardTags.class.getMethod("sequentialHead");
+      Object result = method.invoke(null);
+      if (result instanceof TagResolver) {
+        return (TagResolver) result;
+      }
+    } catch (Exception ignored) {
+      // Reflection error - the feature is not available
+    }
+    return StandardTags.color();
+  }
+
+  private static final TagResolver SEQUENTIAL_HEAD_RESOLVER = sequentialHeadResolver();
 
   @ApiStatus.Internal
   static final MiniMessageWrapper STANDARD = new MiniMessageWrapperImpl(
@@ -73,14 +95,16 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
 
   private final TagResolver allTags = TagResolver.resolver(
       ExtraTags.cssColors(),
-      StandardTags.defaults()
+      StandardTags.defaults(),
+      SEQUENTIAL_HEAD_RESOLVER
   );
 
   private final TagResolver colorTags = TagResolver.resolver(
       StandardTags.color(),
       StandardTags.decorations(),
       StandardTags.gradient(),
-      StandardTags.rainbow()
+      StandardTags.rainbow(),
+      SEQUENTIAL_HEAD_RESOLVER
   );
 
   private final TagResolver colorTagsPlusCSS = TagResolver.resolver(
@@ -88,7 +112,8 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       StandardTags.color(),
       StandardTags.decorations(),
       StandardTags.gradient(),
-      StandardTags.rainbow()
+      StandardTags.rainbow(),
+      SEQUENTIAL_HEAD_RESOLVER
   );
 
   private TagResolver colorTags() {

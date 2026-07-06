@@ -74,27 +74,39 @@ public class CommandHexNicks implements TabExecutor {
         }
         if (args[1].equalsIgnoreCase("new")) {
           Messages.WORKING.send(sender);
-          Messages.NEW_EDITOR.send(
-              sender,
-              HexNicks.config().toWeb()
-          );
+          HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+            String url = HexNicks.config().toWeb();
+            HexNicks.core().getServer().getScheduler().runTask(HexNicks.core(), () ->
+                Messages.NEW_EDITOR.send(
+                    sender,
+                    url
+                )
+            );
+          });
         } else if (args[1].equalsIgnoreCase("apply") && args.length == 3) {
           Messages.WORKING.send(sender);
-          try {
-            HexNicks.config().fromWeb(args[2]);
-          } catch (IllegalArgumentException ex) {
-            Messages.INVALID_LINK.send(sender);
-            HexNicks.logging().error(
-                "Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
-                    "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. " +
-                    "'https://paste.majek.dev/abcde45'"
+          String link = args[2];
+          HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+            try {
+              HexNicks.config().fromWeb(link);
+            } catch (IllegalArgumentException ex) {
+              HexNicks.core().getServer().getScheduler().runTask(HexNicks.core(), () ->
+                  Messages.INVALID_LINK.send(sender)
+              );
+              HexNicks.logging().error(
+                  "Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
+                      "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. " +
+                      "'https://paste.majek.dev/abcde45'"
+              );
+              return;
+            }
+            HexNicks.core().getServer().getScheduler().runTask(HexNicks.core(), () ->
+                Messages.EDITOR_APPLIED.send(
+                    sender,
+                    link
+                )
             );
-            return true;
-          }
-          Messages.EDITOR_APPLIED.send(
-              sender,
-              args[2]
-          );
+          });
         } else {
           Messages.HEXNICKS_USAGE.send(sender);
           return true;
@@ -108,10 +120,15 @@ public class CommandHexNicks implements TabExecutor {
         }
 
         Messages.WORKING.send(sender);
-        Messages.LATEST_LOG.send(
-            sender,
-            HexNicks.logging().latestToPasteBin()
-        );
+        HexNicks.core().getServer().getScheduler().runTaskAsynchronously(HexNicks.core(), () -> {
+          String url = HexNicks.logging().latestToPasteBin();
+          HexNicks.core().getServer().getScheduler().runTask(HexNicks.core(), () ->
+              Messages.LATEST_LOG.send(
+                  sender,
+                  url
+              )
+          );
+        });
         return true;
       }
       default:

@@ -31,69 +31,60 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import dev.majek.hexnicks.HexNicks;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Used to check for plugin updates from the Spigot plugin page.
+ * Used to check for plugin updates from the Modrinth project page.
  */
 public class UpdateChecker {
 
-  private final JavaPlugin plugin;
-  private final int resourceId;
-  private final int currentVersion;
-  private int spigotVersion;
+  private final String currentVersion;
+  private String latestVersion;
 
   /**
    * Construct a new update checker.
    *
-   * @param plugin The main class of the plugin.
-   * @param resourceId Plugin's resource id on Spigot.
+   * @param currentVersion The current version of the plugin.
    */
-  public UpdateChecker(JavaPlugin plugin, int resourceId) {
-    this.plugin = plugin;
-    this.resourceId = resourceId;
-    this.currentVersion = Integer.parseInt(plugin.getDescription().getVersion()
-        .replace(".", "").replace("-SNAPSHOT", ""));
+  public UpdateChecker(String currentVersion) {
+    this.currentVersion = currentVersion;
     try {
-      final String spigotVersion = getSpigotVersion();
-      if (spigotVersion != null) {
-        this.spigotVersion = Integer.parseInt(spigotVersion.replace(".", ""));
-      } else {
-        this.spigotVersion = currentVersion;
-      }
+      final String latest = getModrinthVersion();
+      this.latestVersion = latest != null ? latest : currentVersion;
     } catch (ExecutionException | InterruptedException ex) {
       HexNicks.logging().error("An error occurred initializing update checker", ex);
+      this.latestVersion = currentVersion;
     }
   }
 
   /**
-   * Get the plugin version currently posted on Spigot.
+   * Get the latest plugin version posted on Modrinth.
    */
-  private @Nullable String getSpigotVersion() throws ExecutionException, InterruptedException {
-    CompletableFuture<String> spigotVersion = CompletableFuture.supplyAsync(() -> {
+  private @Nullable String getModrinthVersion() throws ExecutionException, InterruptedException {
+    CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
       try {
-        URL url = new URL("https://api.spigotmc.org/simple/0.1/index.php?action=getResource&id=" + resourceId);
+        URL url = new URL("https://api.modrinth.com/v2/project/hexnicks/version");
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
         String str = br.readLine();
-        return JsonParser.parseString(str).getAsJsonObject().get("current_version").getAsString();
-      } catch (IOException exception) {
-        this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+        return JsonParser.parseString(str)
+            .getAsJsonArray()
+            .get(0)
+            .getAsJsonObject()
+            .get("version_number")
+            .getAsString();
+      } catch (IOException ex) {
+        HexNicks.logging().error("Failed to get latest version from Modrinth API", ex);
         return null;
       }
     });
-    return spigotVersion.get();
+    return future.get();
   }
 
-  public boolean isAheadOfSpigot() {
-    return currentVersion > spigotVersion;
+  public boolean isLatest() {
+    return currentVersion.equals(latestVersion);
   }
 
-  public boolean isBehindSpigot() {
-    return spigotVersion > currentVersion;
-  }
-
-  public boolean isSpigotLatest() {
-    return spigotVersion == currentVersion;
+  public boolean hasUpdate() {
+    return !isLatest();
   }
 }

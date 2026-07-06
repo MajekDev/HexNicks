@@ -182,7 +182,7 @@ public interface Messages {
   Args0 UPDATE = () -> MiscUtils.configString(
       "messages.update",
       "<gray>HexNicks has an update! View " +
-          "<click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."
+          "<click:open_url:'https://modrinth.com/plugin/hexnicks/'><aqua>here</aqua></click>."
   );
 
   Args0 NICKNAME_TAKEN = () -> MiscUtils.configString(

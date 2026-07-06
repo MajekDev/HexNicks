@@ -88,8 +88,8 @@ public final class HexNicks extends JavaPlugin {
     this.nickMap = new HashMap<>();
     // Track plugin metrics through bStats
     this.metrics = new Metrics(this, 8764);
-    // Check for new versions on Spigot
-    this.updateChecker = new UpdateChecker(this, 83554);
+    // Check for new versions on Modrinth
+    this.updateChecker = new UpdateChecker(this.getDescription().getVersion());
   }
 
   /**
@@ -169,9 +169,9 @@ public final class HexNicks extends JavaPlugin {
     this.registerEvents(new PlayerJoin(), new PaperTabCompleteEvent(), new PlayerChat());
 
     // Check for updates - prompt to update if there is one
-    if (this.updateChecker.isBehindSpigot()) {
+    if (this.updateChecker.hasUpdate()) {
       logging.log("There is a new version of the plugin available! " +
-          "Download it here: https://www.spigotmc.org/resources/83554/");
+          "Download it here: https://modrinth.com/plugin/hexnicks");
     }
   }
 
@@ -380,11 +380,11 @@ public final class HexNicks extends JavaPlugin {
   }
 
   /**
-   * Check if the plugin has a new update on Spigot.
+   * Check if the plugin has a new update on Modrinth.
    *
    * @return whether there's an update
    */
   public boolean hasUpdate() {
-    return this.updateChecker.isBehindSpigot();
+    return this.updateChecker.hasUpdate();
   }
 }

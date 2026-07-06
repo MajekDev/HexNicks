@@ -77,50 +77,39 @@ class PapiHook extends PlaceholderExpansion {
   }
 
   @Override
-  @SuppressWarnings("all")
   public String onRequest(OfflinePlayer player, @NotNull String identifier) {
     // All of our placeholders rely on the player being known
     if (player == null) {
       return null;
     }
 
-    if (identifier.equalsIgnoreCase("nick")) {
-      return getNick(player);
-    } else if (identifier.equalsIgnoreCase("nick_raw")) {
-      Component nick = HexNicks.core().getNickMap().get(player.getUniqueId());
+    boolean cached = identifier.endsWith("_cached");
+    String base = cached ? identifier.substring(0, identifier.length() - 7) : identifier;
+    Component nick = resolveNick(player, !cached);
 
-      // Nickname isn't cached - fetch from permanent storage
-      if (nick == null) {
-        try {
-          nick = HexNicks.storage().getNick(player.getUniqueId()).get();
-        } catch (InterruptedException | ExecutionException e) {
-          HexNicks.logging().error("Error retrieving nickname for Papi: ");
-          e.printStackTrace();
-        }
-      }
-
-      if (nick == null) {
-        return player.getName();
+    if (nick == null) {
+      if (player.getName() != null) {
+        nick = Component.text(player.getName()).colorIfAbsent(HexNicks.config().DEFAULT_USERNAME_COLOR);
       } else {
-        return PlainTextComponentSerializer.plainText().serialize(nick);
+        return null;
       }
-    } else if (identifier.equalsIgnoreCase("nick_hex")) {
-      Component nick = HexNicks.core().getNickMap().get(player.getUniqueId());
+    }
 
-      // Nickname isn't cached - fetch from permanent storage
-      if (nick == null) {
-        try {
-          nick = HexNicks.storage().getNick(player.getUniqueId()).get();
-        } catch (InterruptedException | ExecutionException e) {
-          HexNicks.logging().error("Error retrieving nickname for Papi: ");
-          e.printStackTrace();
-        }
-      }
-
-      if (nick == null) {
-        return player.getName();
-      } else {
-        String legacy = LegacyComponentSerializer.builder().hexColors().character('&').build().serialize(nick);
+    return switch (base.toLowerCase()) {
+      case "nick" ->
+          LegacyComponentSerializer.builder()
+              .hexColors()
+              .useUnusualXRepeatedCharacterHexFormat()
+              .build()
+              .serialize(nick);
+      case "nick_raw" ->
+          PlainTextComponentSerializer.plainText().serialize(nick);
+      case "nick_hex" -> {
+        String legacy = LegacyComponentSerializer.builder()
+            .hexColors()
+            .character('&')
+            .build()
+            .serialize(nick);
         final Pattern pattern = Pattern.compile("&#([0-9a-fA-F]{6})");
         final Matcher matcher = pattern.matcher(legacy);
         StringBuilder sb = new StringBuilder();
@@ -132,51 +121,30 @@ class PapiHook extends PlaceholderExpansion {
           matcher.appendReplacement(sb, replacement.toString());
         }
         matcher.appendTail(sb);
-        return sb.toString();
+        yield sb.toString();
       }
-    } else if (identifier.equalsIgnoreCase("nick_mm")) {
-      Component nick = HexNicks.core().getNickMap().get(player.getUniqueId());
-
-      // Nickname isn't cached - fetch from permanent storage
-      if (nick == null) {
-        try {
-          nick = HexNicks.storage().getNick(player.getUniqueId()).get();
-        } catch (InterruptedException | ExecutionException e) {
-          HexNicks.logging().error("Error retrieving nickname for Papi: ");
-          e.printStackTrace();
-        }
-      }
-
-      if (nick == null) {
-        return player.getName();
-      } else {
-        return MiniMessage.miniMessage().serialize(nick);
-      }
-    }
-    return null;
+      case "nick_mm" ->
+          MiniMessage.miniMessage().serialize(nick);
+      default ->
+          null;
+    };
   }
 
-  @SuppressWarnings("all")
-  private @Nullable String getNick(final @NotNull OfflinePlayer player) {
+  private @Nullable Component resolveNick(
+      final @NotNull OfflinePlayer player,
+      boolean allowDbFallback
+  ) {
     Component nick = HexNicks.core().getNickMap().get(player.getUniqueId());
 
-    // Nickname isn't cached - fetch from permanent storage
-    if (nick == null) {
+    if (nick == null && allowDbFallback) {
       try {
         nick = HexNicks.storage().getNick(player.getUniqueId()).get();
-      } catch (InterruptedException | ExecutionException e) {
-        HexNicks.logging().error("Error retrieving nickname for Papi: ");
-        e.printStackTrace();
+      } catch (InterruptedException | ExecutionException ex) {
+        HexNicks.logging().error("Error retrieving nickname from storage for Papi: " + ex.getMessage());
       }
     }
 
-    if (nick == null) {
-      return LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().build()
-          .serialize(Component.text(player.getName()).colorIfAbsent(HexNicks.config().DEFAULT_USERNAME_COLOR));
-    } else {
-      return LegacyComponentSerializer.builder().hexColors()
-          .useUnusualXRepeatedCharacterHexFormat().build().serialize(nick);
-    }
+    return nick;
   }
 
   /**

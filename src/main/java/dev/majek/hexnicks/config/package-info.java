@@ -22,6 +22,6 @@
  * SOFTWARE.
  */
 /**
- * Configuration for the plugin including Json and SQL configuration managers.
+ * Configuration for the plugin including JSON and SQL configuration managers.
  */
 package dev.majek.hexnicks.config;

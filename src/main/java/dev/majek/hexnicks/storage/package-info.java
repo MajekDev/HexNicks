@@ -22,6 +22,6 @@
  * SOFTWARE.
  */
 /**
- * Nickname storage (Json or SQL).
+ * Nickname storage (JSON or SQL).
  */
 package dev.majek.hexnicks.storage;

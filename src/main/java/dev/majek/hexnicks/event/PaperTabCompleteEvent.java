@@ -43,31 +43,43 @@ public class PaperTabCompleteEvent implements Listener {
       return;
     }
     if (args[0].contains("realname")) {
-      nickCompletions(event, args);
+      nickCompletions(
+          event,
+          args
+      );
     }
   }
 
-  public void nickCompletions(@NotNull AsyncTabCompleteEvent event, @NotNull String[] args) {
+  public void nickCompletions(
+      @NotNull AsyncTabCompleteEvent event,
+      @NotNull String[] args
+  ) {
     if (args.length > 1) {
       event.completions(
-          HexNicks.core().getNickMap().values()
+          HexNicks.core().getNickMap()
+              .values()
               .stream()
               .filter(nickname ->
                   PlainTextComponentSerializer.plainText().serialize(nickname).startsWith(args[1])
               )
               .map(nickname ->
                   AsyncTabCompleteEvent.Completion.completion(
-                      PlainTextComponentSerializer.plainText().serialize(nickname), nickname)
+                      PlainTextComponentSerializer.plainText().serialize(nickname),
+                      nickname
+                  )
               )
               .collect(Collectors.toList())
       );
     } else {
       event.completions(
-          HexNicks.core().getNickMap().values()
+          HexNicks.core().getNickMap()
+              .values()
               .stream()
               .map(nickname ->
                   AsyncTabCompleteEvent.Completion.completion(
-                      PlainTextComponentSerializer.plainText().serialize(nickname), nickname)
+                      PlainTextComponentSerializer.plainText().serialize(nickname),
+                      nickname
+                  )
               )
               .collect(Collectors.toList())
       );

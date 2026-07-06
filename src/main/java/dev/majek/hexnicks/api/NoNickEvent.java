@@ -46,7 +46,10 @@ public class NoNickEvent extends Event implements Cancellable {
    * @param player  The in-game player changing the nickname.
    * @param oldNick The player's old nickname being removed.
    */
-  public NoNickEvent(@NotNull Player player, @NotNull Component oldNick) {
+  public NoNickEvent(
+      @NotNull Player player,
+      @NotNull Component oldNick
+  ) {
     this.player = player;
     this.oldNick = oldNick;
     this.canceled = false;
@@ -57,7 +60,7 @@ public class NoNickEvent extends Event implements Cancellable {
    *
    * @return Player.
    */
-  public Player player() {
+  public @NotNull Player player() {
     return player;
   }
 
@@ -66,8 +69,7 @@ public class NoNickEvent extends Event implements Cancellable {
    *
    * @return Old nickname.
    */
-  @NotNull
-  public Component oldNick() {
+  public @NotNull Component oldNick() {
     return oldNick;
   }
 

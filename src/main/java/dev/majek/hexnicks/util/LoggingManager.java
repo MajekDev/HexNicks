@@ -62,7 +62,10 @@ public class LoggingManager {
    * @param directory the directory to store logs in
    *                  set this to null if log files shouldn't be kept
    */
-  public LoggingManager(final @NotNull Plugin plugin, final @Nullable File directory) {
+  public LoggingManager(
+      final @NotNull Plugin plugin,
+      final @Nullable File directory
+  ) {
     this.plugin = plugin;
     this.logger = plugin.getLogger();
     this.directory = directory;
@@ -122,7 +125,9 @@ public class LoggingManager {
   public void debug(final @NotNull String message, final @NotNull Audience audience) {
     if (this.debug) {
       this.debug(message);
-      audience.sendMessage(Component.text("[DEBUG] [" + this.plugin.getDescription().getName() + "] " + message));
+      audience.sendMessage(
+          Component.text("[DEBUG] [" + this.plugin.getDescription().getName() + "] " + message)
+      );
     }
   }
 
@@ -153,7 +158,8 @@ public class LoggingManager {
    */
   public @NotNull String latestLog() {
     StringBuilder contentBuilder = new StringBuilder();
-    contentBuilder.append("Log file for ").append(this.plugin.getDescription().getName()).append("\n")
+    contentBuilder.append("Log file for ")
+        .append(this.plugin.getDescription().getName()).append("\n")
         .append("Submitted at ").append(LocalDate.now()).append(" on ")
         .append(new SimpleDateFormat("HH:mm:ss").format(new Date())).append("\n")
         .append("Server Software: ").append(Bukkit.getVersion()).append("\n")
@@ -179,7 +185,7 @@ public class LoggingManager {
   }
 
   /**
-   * Whether debugging message should be sent.
+   * Whether debugging messages should be sent.
    *
    * @return debugging status
    */

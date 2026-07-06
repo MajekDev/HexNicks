@@ -43,19 +43,24 @@ import org.jetbrains.annotations.NotNull;
 public class CommandNoNick implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length == 0) {
       // Console has no nickname
-      if (!(sender instanceof Player)) {
+      if (!(sender instanceof Player player)) {
         Messages.INVALID_SENDER.send(sender);
         return true;
       }
-      Player player = (Player) sender;
 
       // Call event
-      NoNickEvent noNickEvent = new NoNickEvent(player,
-          HexNicks.core().getDisplayName(player));
+      NoNickEvent noNickEvent = new NoNickEvent(
+          player,
+          HexNicks.core().getDisplayName(player)
+      );
       HexNicks.api().callEvent(noNickEvent);
       if (noNickEvent.isCancelled()) {
         return true;
@@ -63,9 +68,7 @@ public class CommandNoNick implements TabExecutor {
 
       HexNicks.core().removeNick(player);
       Messages.NICKNAME_REMOVED.send(player);
-
     } else {
-
       // Make sure the sender has permission to remove another player's nickname
       if (!sender.hasPermission("hexnicks.nonick.other")) {
         Messages.NO_PERMISSION.send(sender);
@@ -75,27 +78,41 @@ public class CommandNoNick implements TabExecutor {
       // Make sure the target player is online
       Player target = Bukkit.getPlayer(args[0]);
       if (target == null) {
-        Messages.UNKNOWN_PLAYER.send(sender, args[0]);
+        Messages.UNKNOWN_PLAYER.send(
+            sender,
+            args[0]
+        );
         return true;
       }
 
       // Call event
-      NoNickOtherEvent event = new NoNickOtherEvent(sender, target,
-          HexNicks.core().getDisplayName(target));
+      NoNickOtherEvent event = new NoNickOtherEvent(
+          sender,
+          target,
+          HexNicks.core().getDisplayName(target)
+      );
       HexNicks.api().callEvent(event);
       if (event.isCancelled()) {
         return true;
       }
 
       HexNicks.core().removeNick(target);
-      Messages.NICKNAME_REMOVED_OTHER.send(sender, target);
+      Messages.NICKNAME_REMOVED_OTHER.send(
+          sender,
+          target
+      );
     }
+
     return true;
   }
 
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                    @NotNull String label, @NotNull String[] args) {
+  public List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length == 1) {
       return TabCompleterBase.getOnlinePlayers(args[0]);
     } else {

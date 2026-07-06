@@ -44,8 +44,12 @@ import org.jetbrains.annotations.NotNull;
 public class CommandNickColor implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     // Console cannot have a nickname
     if (!(sender instanceof Player player)) {
       Messages.INVALID_SENDER.send(sender);
@@ -59,9 +63,10 @@ public class CommandNickColor implements TabExecutor {
 
     String nickInput = String.join(" ", args);
 
-    // If there are no colors the length should be 0
-    String plainTextInput = PlainTextComponentSerializer.plainText()
-        .serialize(MiniMessageWrapper.legacy().mmParse(nickInput));
+    // If there are no colors, the length should be 0
+    String plainTextInput = PlainTextComponentSerializer.plainText().serialize(
+        MiniMessageWrapper.legacy().mmParse(nickInput)
+    );
     if (!plainTextInput.isEmpty() && !plainTextInput.equals(player.getName())) {
       Messages.ONLY_COLOR_CODES.send(player);
       return true;
@@ -77,11 +82,12 @@ public class CommandNickColor implements TabExecutor {
         .removeColors(MiscUtils.blockedColors(player))
         .build();
 
-    // Get the players current nickname to apply color codes to
-    String plainTextNick = PlainTextComponentSerializer.plainText()
-        .serialize(HexNicks.core().getDisplayName(player));
+    // Get the players' current nickname to apply color codes to
+    String plainTextNick = PlainTextComponentSerializer.plainText().serialize(
+        HexNicks.core().getDisplayName(player)
+    );
 
-    // Remove nickname prefix if essentials is hooked
+    // Remove nickname prefix if Essentials is hooked
     if (HexNicks.hooks().isEssentialsHooked()) {
       String nickPrefix = HexNicks.hooks().getEssNickPrefix();
       if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
@@ -94,8 +100,11 @@ public class CommandNickColor implements TabExecutor {
     );
 
     // Call event
-    NickColorEvent colorEvent = new NickColorEvent(player, nickname,
-        HexNicks.core().getDisplayName(player));
+    NickColorEvent colorEvent = new NickColorEvent(
+        player,
+        nickname,
+        HexNicks.core().getDisplayName(player)
+    );
     HexNicks.api().callEvent(colorEvent);
     if (colorEvent.isCancelled()) {
       return true;
@@ -112,8 +121,14 @@ public class CommandNickColor implements TabExecutor {
         return;
       }
       HexNicks.scheduler().runTask(() -> {
-        HexNicks.core().setNick(player, finalNick);
-        Messages.NICKNAME_SET.send(player, finalNick);
+        HexNicks.core().setNick(
+            player,
+            finalNick
+        );
+        Messages.NICKNAME_SET.send(
+            player,
+            finalNick
+        );
       });
     });
 
@@ -121,8 +136,12 @@ public class CommandNickColor implements TabExecutor {
   }
 
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                              @NotNull String label, @NotNull String[] args) {
+  public List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     return Collections.emptyList();
   }
 }

@@ -56,8 +56,11 @@ public class JsonStorage implements StorageMethod {
   @Override
   @SuppressWarnings("ConstantConditions")
   public CompletableFuture<Component> getNick(@NotNull UUID uuid) {
-    return hasNick(uuid).thenApplyAsync(b -> b ? HexNicks.core().getNickMap().get(uuid)
-        : Component.text(Bukkit.getOfflinePlayer(uuid).getName()));
+    return hasNick(uuid).thenApplyAsync(bool ->
+        bool
+            ? HexNicks.core().getNickMap().get(uuid)
+            : Component.text(Bukkit.getOfflinePlayer(uuid).getName())
+    );
   }
 
   @Override
@@ -120,6 +123,7 @@ public class JsonStorage implements StorageMethod {
     } else {
       return CompletableFuture.supplyAsync(() -> taken.contains(nickname));
     }
+
     return CompletableFuture.supplyAsync(() -> false);
   }
 }

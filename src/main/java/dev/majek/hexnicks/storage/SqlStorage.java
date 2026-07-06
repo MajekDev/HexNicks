@@ -41,7 +41,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Handles Sql storage for nicknames.
+ * Handles SQL storage for nicknames.
  */
 public class SqlStorage implements StorageMethod {
 
@@ -64,7 +64,6 @@ public class SqlStorage implements StorageMethod {
             }
           } catch (SQLException ex) {
             HexNicks.logging().error("Error with SqlStorage#hasNick", ex);
-            ex.printStackTrace();
             return false;
           }
         });
@@ -89,7 +88,6 @@ public class SqlStorage implements StorageMethod {
         }
       } catch (SQLException ex) {
         HexNicks.logging().error("Error with SqlStorage#getNick", ex);
-        ex.printStackTrace();
       }
       HexNicks.logging().debug("Returning player's username as nickname");
       return Component.text(Bukkit.getOfflinePlayer(uuid).getName());
@@ -106,7 +104,6 @@ public class SqlStorage implements StorageMethod {
         ps.executeUpdate();
       } catch (SQLException ex) {
         HexNicks.logging().error("Error with SqlStorage#removeNick", ex);
-        ex.printStackTrace();
       }
     });
   }
@@ -133,7 +130,6 @@ public class SqlStorage implements StorageMethod {
             update.executeUpdate();
           } catch (SQLException ex) {
             HexNicks.logging().error("Error with SqlStorage#saveNick", ex);
-            ex.printStackTrace();
           }
         })
     );
@@ -169,7 +165,7 @@ public class SqlStorage implements StorageMethod {
           return taken.contains(nickname);
         }
       } catch (SQLException ex) {
-        ex.printStackTrace();
+        HexNicks.logging().error("Error with SqlStorage#nicknameExists", ex);
       }
       return false;
     });

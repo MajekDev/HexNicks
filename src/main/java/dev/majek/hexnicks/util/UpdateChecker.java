@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import dev.majek.hexnicks.HexNicks;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,8 +62,8 @@ public class UpdateChecker {
       } else {
         this.spigotVersion = currentVersion;
       }
-    } catch (ExecutionException | InterruptedException e) {
-      e.printStackTrace();
+    } catch (ExecutionException | InterruptedException ex) {
+      HexNicks.logging().error("An error occurred initializing update checker", ex);
     }
   }
 

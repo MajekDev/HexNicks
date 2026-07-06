@@ -98,12 +98,17 @@ public class ConfigValues {
    */
   public @NotNull String toWeb() {
     final HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("https://bytebin.majek.dev/post"))
+        .uri(
+            URI.create("https://bytebin.majek.dev/post")
+        )
         .header("User-Agent", "hexnicks")
         .header("Content-Type", "text/yaml; charset=utf-8")
-        .POST(HttpRequest.BodyPublishers.ofString(
-            HexNicks.core().getConfig().saveToString()
-        )).build();
+        .POST(
+            HttpRequest.BodyPublishers.ofString(
+                HexNicks.core().getConfig().saveToString()
+            )
+        )
+        .build();
 
     final JsonObject json = JsonParser.parseString(MiscUtils.sendRequestAndGetResponse(request)).getAsJsonObject();
     final String url = "https://paste.majek.dev/" + json.get("key").getAsString();
@@ -113,7 +118,7 @@ public class ConfigValues {
   }
 
   /**
-   * Retrieve an updated config from bytebin and save it to the local file.
+   * Retrieve an updated config from Bytebin and save it to the local file.
    *
    * @param link the link to the pastebin or bytebin.
    * @throws IllegalArgumentException if the link is not a valid bytebin link.
@@ -132,8 +137,17 @@ public class ConfigValues {
         .build();
 
     try {
-      Files.asCharSink(new File(HexNicks.core().getDataFolder(), "config.yml"), Charsets.UTF_8)
-          .write(MiscUtils.sendRequestAndGetResponse(request));
+      Files
+          .asCharSink(
+              new File(
+                  HexNicks.core().getDataFolder(),
+                  "config.yml"
+              ),
+              Charsets.UTF_8
+          )
+          .write(
+              MiscUtils.sendRequestAndGetResponse(request)
+          );
     } catch (final IOException ex) {
       HexNicks.logging().error("Error saving config from editor", ex);
     }

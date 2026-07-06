@@ -52,7 +52,10 @@ public final class ExtraTags {
    * @since 3.2.0
    */
   public static TagResolver cssColors() {
-    return color("css", CSS_COLORS);
+    return color(
+        "css",
+        CSS_COLORS
+    );
   }
 
   /**

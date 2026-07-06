@@ -42,8 +42,12 @@ import org.jetbrains.annotations.Nullable;
 public class CommandHexNicks implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length == 0) {
       Messages.HEXNICKS_USAGE.send(sender);
       return true;
@@ -70,18 +74,27 @@ public class CommandHexNicks implements TabExecutor {
         }
         if (args[1].equalsIgnoreCase("new")) {
           Messages.WORKING.send(sender);
-          Messages.NEW_EDITOR.send(sender, HexNicks.config().toWeb());
+          Messages.NEW_EDITOR.send(
+              sender,
+              HexNicks.config().toWeb()
+          );
         } else if (args[1].equalsIgnoreCase("apply") && args.length == 3) {
           Messages.WORKING.send(sender);
           try {
             HexNicks.config().fromWeb(args[2]);
           } catch (IllegalArgumentException ex) {
             Messages.INVALID_LINK.send(sender);
-            HexNicks.logging().error("Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
-                "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. 'https://paste.majek.dev/abcde45'");
+            HexNicks.logging().error(
+                "Invalid link provided in '/hexnicks config-editor apply'. Expected a link from " +
+                    "either paste.majek.dev or bytebin.majek.dev with a 7 digit page id. Ex. " +
+                    "'https://paste.majek.dev/abcde45'"
+            );
             return true;
           }
-          Messages.EDITOR_APPLIED.send(sender, args[2]);
+          Messages.EDITOR_APPLIED.send(
+              sender,
+              args[2]
+          );
         } else {
           Messages.HEXNICKS_USAGE.send(sender);
           return true;
@@ -95,7 +108,10 @@ public class CommandHexNicks implements TabExecutor {
         }
 
         Messages.WORKING.send(sender);
-        Messages.LATEST_LOG.send(sender, HexNicks.logging().latestToPasteBin());
+        Messages.LATEST_LOG.send(
+            sender,
+            HexNicks.logging().latestToPasteBin()
+        );
         return true;
       }
       default:
@@ -105,12 +121,29 @@ public class CommandHexNicks implements TabExecutor {
   }
 
   @Override
-  public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                              @NotNull String alias, @NotNull String[] args) {
+  public @Nullable List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String alias,
+      @NotNull String[] args
+  ) {
     if (args.length == 1) {
-      return TabCompleterBase.filterStartingWith(args[0], Arrays.asList("reload", "config-editor", "latest-log"));
+      return TabCompleterBase.filterStartingWith(
+          args[0],
+          Arrays.asList(
+              "reload",
+              "config-editor",
+              "latest-log"
+          )
+      );
     } else if (args[0].equalsIgnoreCase("config-editor") && args.length == 2) {
-      return TabCompleterBase.filterStartingWith(args[1], Arrays.asList("new", "apply"));
+      return TabCompleterBase.filterStartingWith(
+          args[1],
+          Arrays.asList(
+              "new",
+              "apply"
+          )
+      );
     } else {
       return Collections.emptyList();
     }

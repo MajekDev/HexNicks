@@ -44,8 +44,12 @@ import org.jetbrains.annotations.Nullable;
 public class CommandRealName implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length == 0) {
       Messages.REAL_NAME_USAGE.send(sender);
       return true;
@@ -53,24 +57,51 @@ public class CommandRealName implements TabExecutor {
 
     OfflinePlayer player = HexNicks.api().playerFromNick(String.join(" ", args));
     if (player == null) {
-      Messages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
+      Messages.UNKNOWN_PLAYER.send(
+          sender,
+          String.join(" ", args)
+      );
       return true;
     }
 
     CompletableFuture<Component> nickname = HexNicks.api().getStoredNick(player);
     if (nickname == null) {
-      Messages.UNKNOWN_PLAYER.send(sender, String.join(" ", args));
+      Messages.UNKNOWN_PLAYER.send(
+          sender,
+          String.join(" ", args)
+      );
       return true;
     }
 
-    nickname.whenComplete(((component, throwable) -> Messages.REALNAME.send(sender, player.getName(), component)));
+    nickname.whenComplete(
+        (component, throwable) ->
+            Messages.REALNAME.send(
+                sender,
+                player.getName(),
+                component
+            )
+    );
+
     return true;
   }
 
   @Override
-  public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                              @NotNull String alias, @NotNull String[] args) {
-    return TabCompleterBase.filterStartingWith(args[0], HexNicks.core().getNickMap().values().stream().map(nickname ->
-        PlainTextComponentSerializer.plainText().serialize(nickname)).collect(Collectors.toList()));
+  public @Nullable List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String alias,
+      @NotNull String[] args
+  ) {
+    return TabCompleterBase
+        .filterStartingWith(
+            args[0],
+            HexNicks.core().getNickMap()
+                .values()
+                .stream()
+                .map(nickname ->
+                    PlainTextComponentSerializer.plainText().serialize(nickname)
+                )
+                .collect(Collectors.toList())
+        );
   }
 }

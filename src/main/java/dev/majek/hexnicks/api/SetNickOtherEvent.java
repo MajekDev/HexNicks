@@ -48,12 +48,16 @@ public class SetNickOtherEvent extends Event implements Cancellable {
    * Fires when a player changes another player's nickname using <code>/nick</code>.
    *
    * @param setter  The {@link CommandSender} changing the target's nickname.
-   * @param target  The player who's nickname is being changed.
+   * @param target  The player whose nickname is being changed.
    * @param newNick The new nickname the setter is attempting to set.
    * @param oldNick The target's old name if they had one.
    */
-  public SetNickOtherEvent(@NotNull CommandSender setter, @NotNull Player target,
-                           @NotNull Component newNick, @Nullable Component oldNick) {
+  public SetNickOtherEvent(
+      @NotNull CommandSender setter,
+      @NotNull Player target,
+      @NotNull Component newNick,
+      @Nullable Component oldNick
+  ) {
     this.setter = setter;
     this.target = target;
     this.newNick = newNick;
@@ -66,16 +70,17 @@ public class SetNickOtherEvent extends Event implements Cancellable {
    *
    * @return Setter.
    */
-  public CommandSender setter() {
+  @SuppressWarnings("unused")
+  public @NotNull CommandSender setter() {
     return setter;
   }
 
   /**
-   * The in-game player who's nickname is being changed by the {@link #setter()}.
+   * The in-game player whose nickname is being changed by the {@link #setter()}.
    *
    * @return Target
    */
-  public Player target() {
+  public @NotNull Player target() {
     return target;
   }
 
@@ -84,8 +89,7 @@ public class SetNickOtherEvent extends Event implements Cancellable {
    *
    * @return Old nickname.
    */
-  @Nullable
-  public Component oldNick() {
+  public @Nullable Component oldNick() {
     return oldNick;
   }
 
@@ -103,7 +107,7 @@ public class SetNickOtherEvent extends Event implements Cancellable {
    *
    * @return New nickname.
    */
-  public Component newNick() {
+  public @NotNull Component newNick() {
     return newNick;
   }
 

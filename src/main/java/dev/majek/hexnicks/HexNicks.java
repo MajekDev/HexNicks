@@ -139,8 +139,11 @@ public final class HexNicks extends JavaPlugin {
         storage = new SqlStorage();
         storage.updateNicks();
         logging.log("Successfully connected to MySQL database.");
-        HexNicks.scheduler().runTaskTimer(() -> HexNicks.storage().updateNicks(),
-                200L, this.getConfig().getInt("update-interval", 300) * 20L);
+        HexNicks.scheduler().runTaskTimer(
+            () -> HexNicks.storage().updateNicks(),
+            200L,
+            this.getConfig().getInt("update-interval", 300) * 20L
+        );
       } catch (final SQLException ex) {
         logging.error("Failed to connect to MySQL database", ex);
         this.loadNicknamesFromJson();
@@ -177,8 +180,10 @@ public final class HexNicks extends JavaPlugin {
       storage = new JsonStorage();
       JsonObject json = (JsonObject) JsonParser.parseReader(new FileReader(HexNicks.core().jsonFile()));
       for (final String key : json.keySet()) {
-        this.nickMap.put(UUID.fromString(key), GsonComponentSerializer.gson()
-                .deserializeFromTree(json.get(key)));
+        this.nickMap.put(
+            UUID.fromString(key),
+            GsonComponentSerializer.gson().deserializeFromTree(json.get(key))
+        );
       }
     } catch (final IOException ex) {
       logging.error("Error loading nickname data from nicknames.json file", ex);

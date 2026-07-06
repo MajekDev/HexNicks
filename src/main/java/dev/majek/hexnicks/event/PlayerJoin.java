@@ -48,9 +48,15 @@ public class PlayerJoin implements Listener {
         HexNicks.logging().debug("Player " + player.getName() + " joined and has nickname, setting...");
         HexNicks.storage().getNick(player.getUniqueId()).whenCompleteAsync((component, throwable1) -> {
           if (HexNicks.config().ANNOUNCE_NICKS_ON_JOIN) {
-            Messages.ANNOUNCE_NICK.announce(player, component);
+            Messages.ANNOUNCE_NICK.announce(
+                player,
+                component
+            );
           }
-          HexNicks.core().setNick(player, component);
+          HexNicks.core().setNick(
+              player,
+              component
+          );
         });
       } else {
         HexNicks.logging().debug("Player " + player.getName() + " joined and has no nickname.");

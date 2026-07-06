@@ -77,7 +77,10 @@ class PapiHook extends PlaceholderExpansion {
   }
 
   @Override
-  public String onRequest(OfflinePlayer player, @NotNull String identifier) {
+  public String onRequest(
+      OfflinePlayer player,
+      @NotNull String identifier
+  ) {
     // All of our placeholders rely on the player being known
     if (player == null) {
       return null;

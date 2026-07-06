@@ -63,9 +63,22 @@ public class MiscUtils {
    * @param player The player for placeholders.
    * @return Formatted component.
    */
-  public static Component configStringPlaceholders(String path, String def, Player player) {
-    return MiniMessage.miniMessage().deserialize(HexNicks.hooks().applyPlaceHolders(player, HexNicks.core()
-        .getConfig().getString(path, def)));
+  public static Component configStringPlaceholders(
+      String path,
+      String def,
+      Player player
+  ) {
+    return MiniMessage.miniMessage()
+        .deserialize(
+            HexNicks.hooks().applyPlaceHolders(
+                player,
+                HexNicks.core().getConfig()
+                    .getString(
+                        path,
+                        def
+                    )
+            )
+        );
   }
 
   /**
@@ -75,8 +88,18 @@ public class MiscUtils {
    * @param def The default if the path returns null.
    * @return Formatted component.
    */
-  public static Component configString(String path, String def) {
-    return MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(path, def));
+  public static Component configString(
+      String path,
+      String def
+  ) {
+    return MiniMessage.miniMessage()
+        .deserialize(
+            HexNicks.core().getConfig()
+                .getString(
+                    path,
+                    def
+                )
+        );
   }
 
   /**
@@ -86,7 +109,10 @@ public class MiscUtils {
    * @param player the player trying to set the nickname
    * @return a future that completes true if the nickname is a duplicate
    */
-  public static CompletableFuture<Boolean> preventDuplicates(@NotNull Component nickname, @NotNull Player player) {
+  public static CompletableFuture<Boolean> preventDuplicates(
+      @NotNull Component nickname,
+      @NotNull Player player
+  ) {
     if (!HexNicks.config().PREVENT_DUPLICATE_NICKS) {
       return CompletableFuture.completedFuture(false);
     }
@@ -203,7 +229,7 @@ public class MiscUtils {
   }
 
   /**
-   * Send a http request and get the response body.
+   * Send an http request and get the response body.
    *
    * @param request the request
    * @return the response body
@@ -213,7 +239,7 @@ public class MiscUtils {
     try {
       response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
     } catch (IOException | InterruptedException ex) {
-      ex.printStackTrace();
+      HexNicks.logging().error("An error occurred while sending an http request", ex);
     }
     if (response == null) {
       throw new RuntimeException("Error getting response from ByteBin");
@@ -227,7 +253,10 @@ public class MiscUtils {
    * @param recipient the recipient of the message
    * @param message the message to send
    */
-  public static void sendMessage(final @NotNull CommandSender recipient, final @NotNull Component message) {
+  public static void sendMessage(
+      final @NotNull CommandSender recipient,
+      final @NotNull Component message
+  ) {
     if (!PlainTextComponentSerializer.plainText().serialize(message).isEmpty()) {
       recipient.sendMessage(message);
     }

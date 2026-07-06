@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
  * Handles some static utility methods available to tab completer.
  */
 public class TabCompleterBase {
+
   /**
    * Returns a list of the currently online players whose name starts with the given partial name.
    *
@@ -41,7 +42,12 @@ public class TabCompleterBase {
    * @return a list of the currently online players whose name starts with the given partial name.
    */
   public static List<String> getOnlinePlayers(String partialName) {
-    return filterStartingWith(partialName, Bukkit.getOnlinePlayers().stream().map(Player::getName));
+    return filterStartingWith(
+        partialName,
+        Bukkit.getOnlinePlayers()
+            .stream()
+            .map(Player::getName)
+    );
   }
 
   /**
@@ -52,11 +58,25 @@ public class TabCompleterBase {
    * @param args  the arguments.
    * @return the result of joining the argument after the given index with the given delimiter.
    */
-  public static String joinArgsBeyond(int index, String delim, String[] args) {
+  @SuppressWarnings("unused")
+  public static String joinArgsBeyond(
+      int index,
+      String delim,
+      String[] args
+  ) {
     ++index;
     String[] data = new String[args.length - index];
-    System.arraycopy(args, index, data, 0, data.length);
-    return String.join(delim, data);
+    System.arraycopy(
+        args,
+        index,
+        data,
+        0,
+        data.length
+    );
+    return String.join(
+        delim,
+        data
+    );
   }
 
   /**
@@ -67,8 +87,14 @@ public class TabCompleterBase {
    * @param stream the stream to filter.
    * @return the list of values left after the stream has been filtered.
    */
-  public static List<String> filterStartingWith(String prefix, Stream<String> stream) {
-    return stream.filter(s -> s != null && !s.isEmpty() && s.toLowerCase().startsWith(prefix.toLowerCase()))
+  public static List<String> filterStartingWith(
+      String prefix,
+      Stream<String> stream
+  ) {
+    return stream
+        .filter(s ->
+            s != null && !s.isEmpty() && s.toLowerCase().startsWith(prefix.toLowerCase())
+        )
         .collect(Collectors.toList());
   }
 
@@ -80,7 +106,13 @@ public class TabCompleterBase {
    * @param strings the strings to filter.
    * @return the list of values left after the strings have been filtered.
    */
-  public static List<String> filterStartingWith(String prefix, Collection<String> strings) {
-    return filterStartingWith(prefix, strings.stream());
+  public static List<String> filterStartingWith(
+      String prefix,
+      Collection<String> strings
+  ) {
+    return filterStartingWith(
+        prefix,
+        strings.stream()
+    );
   }
 }

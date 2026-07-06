@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public enum ConfigType {
+
   BOOLEAN(Boolean.class),
   STRING(String.class),
   INT(Integer.class),

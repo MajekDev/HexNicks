@@ -41,8 +41,10 @@ class EssentialsHook {
 
   public EssentialsHook() {
     this.essentials = (Essentials) HexNicks.core().getServer().getPluginManager().getPlugin("Essentials");
-    legacyComponentSerializer = LegacyComponentSerializer.builder().hexColors()
-        .useUnusualXRepeatedCharacterHexFormat().build();
+    legacyComponentSerializer = LegacyComponentSerializer.builder()
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
   }
 
   /**
@@ -51,7 +53,10 @@ class EssentialsHook {
    * @param player The player.
    * @param nickname The nickname.
    */
-  public void setEssentialsNick(@NotNull Player player, @NotNull Component nickname) {
+  public void setEssentialsNick(
+      @NotNull Player player,
+      @NotNull Component nickname
+  ) {
     if (HexNicks.config().OVERRIDE_ESSENTIALS) {
       essentials.getUser(player).setNickname(legacyComponentSerializer.serialize(nickname));
     }

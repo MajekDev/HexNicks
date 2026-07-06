@@ -46,8 +46,12 @@ import org.jetbrains.annotations.NotNull;
 public class CommandNickOther implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length < 2) {
       Messages.NICK_OTHER_USAGE.send(sender);
       return true;
@@ -56,13 +60,22 @@ public class CommandNickOther implements TabExecutor {
     // Make sure the target player is online
     Player target = Bukkit.getPlayer(args[0]);
     if (target == null) {
-      Messages.UNKNOWN_PLAYER.send(sender, args[0]);
+      Messages.UNKNOWN_PLAYER.send(
+          sender,
+          args[0]
+      );
       return true;
     }
 
     // Remove first element of array and get the nickname input
     String[] newArgs = new String[args.length - 1];
-    System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+    System.arraycopy(
+        args,
+        1,
+        newArgs,
+        0,
+        args.length - 1
+    );
     String nickInput = String.join(" ", newArgs);
 
     Component nickname = MiniMessageWrapper.builder()
@@ -71,14 +84,20 @@ public class CommandNickOther implements TabExecutor {
         .standardColors(true)
         .legacyColors(HexNicks.config().LEGACY_COLORS)
         .cssColors(HexNicks.config().CSS_COLORS)
-        .removeTextDecorations(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedDecorations(target)
-            : Collections.emptyList())
-        .removeColors(HexNicks.config().NICK_OTHER_OVERRIDE ? MiscUtils.blockedColors(target)
-            : Collections.emptyList())
-        .build().mmParse(nickInput);
+        .removeTextDecorations(
+            HexNicks.config().NICK_OTHER_OVERRIDE
+                ? MiscUtils.blockedDecorations(target)
+                : Collections.emptyList()
+        )
+        .removeColors(
+            HexNicks.config().NICK_OTHER_OVERRIDE
+                ? MiscUtils.blockedColors(target)
+                : Collections.emptyList()
+        )
+        .build()
+        .mmParse(nickInput);
+
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
-    int maxLength = HexNicks.config().MAX_LENGTH;
-    int minLength = HexNicks.config().MIN_LENGTH;
 
     // Make sure the nickname is alphanumeric if that's enabled
     if (HexNicks.config().REQUIRE_ALPHANUMERIC) {
@@ -88,7 +107,7 @@ public class CommandNickOther implements TabExecutor {
       }
     }
 
-    // Remove nickname prefix if essentials is hooked
+    // Remove nickname prefix if Essentials is hooked
     if (HexNicks.hooks().isEssentialsHooked()) {
       String nickPrefix = HexNicks.hooks().getEssNickPrefix();
       if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
@@ -96,21 +115,34 @@ public class CommandNickOther implements TabExecutor {
       }
     }
 
+    int minLength = HexNicks.config().MIN_LENGTH;
+    int maxLength = HexNicks.config().MAX_LENGTH;
+
     // Make sure the nickname isn't too short
     if (plainTextNick.length() < minLength) {
-      Messages.TOO_SHORT.send(sender, minLength);
+      Messages.TOO_SHORT.send(
+          sender,
+          minLength
+      );
       return true;
     }
 
     // Make sure the nickname isn't too long
     if (plainTextNick.length() > maxLength) {
-      Messages.TOO_LONG.send(sender, maxLength);
+      Messages.TOO_LONG.send(
+          sender,
+          maxLength
+      );
       return true;
     }
 
     // Call event
-    SetNickOtherEvent nickEvent = new SetNickOtherEvent(sender, target,
-        nickname, HexNicks.core().getDisplayName(target));
+    SetNickOtherEvent nickEvent = new SetNickOtherEvent(
+        sender,
+        target,
+        nickname,
+        HexNicks.core().getDisplayName(target)
+    );
     HexNicks.api().callEvent(nickEvent);
     if (nickEvent.isCancelled()) {
       return true;
@@ -127,9 +159,19 @@ public class CommandNickOther implements TabExecutor {
         return;
       }
       HexNicks.scheduler().runTask(() -> {
-        HexNicks.core().setNick(target, finalNick);
-        Messages.NICKNAME_SET.send(target, finalNick);
-        Messages.NICKNAME_SET_OTHER.send(sender, target, finalNick);
+        HexNicks.core().setNick(
+            target,
+            finalNick
+        );
+        Messages.NICKNAME_SET.send(
+            target,
+            finalNick
+        );
+        Messages.NICKNAME_SET_OTHER.send(
+            sender,
+            target,
+            finalNick
+        );
       });
     });
 
@@ -137,8 +179,12 @@ public class CommandNickOther implements TabExecutor {
   }
 
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                              @NotNull String label, @NotNull String[] args) {
+  public List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     if (args.length == 1) {
       return TabCompleterBase.getOnlinePlayers(args[0]);
     } else {

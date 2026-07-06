@@ -115,7 +115,10 @@ public class HookManager {
    * @param string The string to search.
    * @return Formatted string.
    */
-  public @NotNull String applyPlaceHolders(@NotNull Player player, @NotNull String string) {
+  public @NotNull String applyPlaceHolders(
+      @NotNull Player player,
+      @NotNull String string
+  ) {
     return isPapiHooked() ? PapiHook.applyPlaceholders(player, string) : string;
   }
 
@@ -126,9 +129,9 @@ public class HookManager {
    * @return Player's prefix.
    */
   public @NotNull Component vaultPrefix(@NotNull Player player) {
-    return isVaultHooked() ?
-        MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerPrefix(player)) :
-        Component.empty();
+    return isVaultHooked()
+        ? MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerPrefix(player))
+        : Component.empty();
   }
 
   /**
@@ -138,9 +141,9 @@ public class HookManager {
    * @return Player's suffix.
    */
   public @NotNull Component vaultSuffix(@NotNull Player player) {
-    return isVaultHooked() ?
-        MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerSuffix(player)) :
-        Component.empty();
+    return isVaultHooked()
+        ? MiniMessageWrapper.legacy().mmParse(vaultHook.vaultChat().getPlayerSuffix(player))
+        : Component.empty();
   }
 
   /**
@@ -149,9 +152,15 @@ public class HookManager {
    * @param player The player.
    * @param nickname The nickname.
    */
-  public void setEssNick(@NotNull Player player, @NotNull Component nickname) {
+  public void setEssNick(
+      @NotNull Player player,
+      @NotNull Component nickname
+  ) {
     if (isEssentialsHooked()) {
-      essentialsHook.setEssentialsNick(player, nickname);
+      essentialsHook.setEssentialsNick(
+          player,
+          nickname
+      );
     }
   }
 

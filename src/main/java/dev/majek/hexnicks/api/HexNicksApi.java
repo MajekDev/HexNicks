@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Handles the Nicks API. Contains some useful utility methods.
  */
+@SuppressWarnings("unused")
 public class HexNicksApi {
 
   /**
@@ -61,14 +62,14 @@ public class HexNicksApi {
    * @return The {@link OfflinePlayer} if found.
    * @since 1.0.0
    */
-  @Nullable
-  public OfflinePlayer playerFromNick(@NotNull String nickname) {
+  public @Nullable OfflinePlayer playerFromNick(@NotNull String nickname) {
     Iterator<Map.Entry<UUID, Component>> iterator = HexNicks.core().getNickMap()
-        .entrySet().stream().iterator();
+        .entrySet()
+        .stream()
+        .iterator();
     while (iterator.hasNext()) {
       Map.Entry<UUID, Component> next = iterator.next();
-      if (PlainTextComponentSerializer.plainText().serialize(next.getValue())
-          .equalsIgnoreCase(nickname)) {
+      if (PlainTextComponentSerializer.plainText().serialize(next.getValue()).equalsIgnoreCase(nickname)) {
         return Bukkit.getOfflinePlayer(next.getKey());
       }
     }

@@ -36,108 +36,281 @@ import org.bukkit.entity.Player;
  */
 public interface Messages {
 
-  Args0 INVALID_SENDER = () -> MiscUtils.configString("messages.invalidSender",
-      "<red>You must be in-game to use this command.");
+  Args0 INVALID_SENDER = () -> MiscUtils.configString(
+      "messages.invalidSender",
+      "<red>You must be in-game to use this command."
+  );
 
-  Args1<String> UNKNOWN_PLAYER = playerName -> MiscUtils.configString("messages.unknownPlayer",
-      "<red>Unknown player %player%.").replaceText(TextReplacementConfig.builder()
-      .matchLiteral("%player%").replacement(playerName).build());
+  Args1<String> UNKNOWN_PLAYER = playerName ->
+      MiscUtils
+          .configString(
+              "messages.unknownPlayer",
+              "<red>Unknown player %player%."
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%player%")
+                  .replacement(playerName)
+                  .build()
+          );
 
-  Args0 NO_PERMISSION = () -> MiscUtils.configString("messages.noPermission",
-      "<red>You do not have permission to execute this command.");
+  Args0 NO_PERMISSION = () -> MiscUtils.configString(
+      "messages.noPermission",
+      "<red>You do not have permission to execute this command."
+  );
 
-  Args1<Integer> TOO_SHORT = minLength -> MiscUtils.configString("messages.tooShort",
-      "<red>That nickname is too short. Minimum length is %length% characters.")
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
-          .replacement(String.valueOf(minLength)).build());
+  Args1<Integer> TOO_SHORT = minLength ->
+      MiscUtils
+          .configString(
+              "messages.tooShort",
+              "<red>That nickname is too short. Minimum length is %length% characters."
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%length%")
+                  .replacement(
+                      String.valueOf(minLength)
+                  )
+                  .build()
+          );
 
-  Args1<Integer> TOO_LONG = maxLength -> MiscUtils.configString("messages.tooLong",
-      "<red>That nickname is too long. Maximum length is %length% characters.")
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%length%")
-      .replacement(String.valueOf(maxLength)).build());
+  Args1<Integer> TOO_LONG = maxLength ->
+      MiscUtils
+          .configString(
+              "messages.tooLong",
+              "<red>That nickname is too long. Maximum length is %length% characters."
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%length%")
+                  .replacement(
+                      String.valueOf(maxLength)
+                  )
+                  .build()
+          );
 
-  Args0 NON_ALPHANUMERIC = () -> MiscUtils.configString("messages.nonAlphanumeric",
-      "<red>Your nickname must be alphanumeric.");
+  Args0 NON_ALPHANUMERIC = () -> MiscUtils.configString(
+      "messages.nonAlphanumeric",
+      "<red>Your nickname must be alphanumeric."
+  );
 
-  Args1<Component> NICKNAME_SET = nickname -> MiscUtils.configString("messages.nicknameSet",
-      "<gray>Your nickname has been set to: <white>%nick%<gray>.")
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
+  Args1<Component> NICKNAME_SET = nickname ->
+      MiscUtils
+          .configString(
+              "messages.nicknameSet",
+              "<gray>Your nickname has been set to: <white>%nick%<gray>."
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%nick%")
+                  .replacement(nickname)
+                  .build()
+          );
 
-  Args2<Player, Component> NICKNAME_SET_OTHER = (player, nickname) -> MiscUtils
-      .configStringPlaceholders("messages.nicknameSetOther", "<aqua>%player%<gray>'s nickname has been " +
-          "set to: <white>%nick%<gray>.", player)
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
+  Args2<Player, Component> NICKNAME_SET_OTHER = (player, nickname) ->
+      MiscUtils
+          .configStringPlaceholders(
+              "messages.nicknameSetOther",
+              "<aqua>%player%<gray>'s nickname has been set to: <white>%nick%<gray>.",
+              player
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%player%")
+                  .replacement(
+                      player.getName()
+                  )
+                  .build()
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%nick%")
+                  .replacement(nickname)
+                  .build()
+          );
 
-  Args0 NICKNAME_REMOVED = () -> MiscUtils.configString("messages.nicknameRemoved", "<gray>Nickname removed.");
+  Args0 NICKNAME_REMOVED = () -> MiscUtils.configString(
+      "messages.nicknameRemoved",
+      "<gray>Nickname removed."
+  );
 
-  Args1<Player> NICKNAME_REMOVED_OTHER = target -> MiscUtils.configStringPlaceholders(
-      "messages.nicknameRemovedOther", "<aqua>%player%<gray>'s nickname removed.", target)
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(target.getName()).build());
+  Args1<Player> NICKNAME_REMOVED_OTHER = target ->
+      MiscUtils
+          .configStringPlaceholders(
+              "messages.nicknameRemovedOther",
+              "<aqua>%player%<gray>'s nickname removed.",
+              target
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%player%")
+                  .replacement(
+                      target.getName()
+                  )
+                  .build()
+          );
 
-  Args0 ONLY_COLOR_CODES = () -> MiscUtils.configString("messages.onlyColorCodes",
-      "<red>You may only include color codes.");
+  Args0 ONLY_COLOR_CODES = () -> MiscUtils.configString(
+      "messages.onlyColorCodes",
+      "<red>You may only include color codes."
+  );
 
-  Args0 PLUGIN_RELOADED = () -> MiscUtils.configString("messages.pluginReloaded", "<green>Plugin reloaded.");
+  Args0 PLUGIN_RELOADED = () -> MiscUtils.configString(
+      "messages.pluginReloaded",
+      "<green>Plugin reloaded."
+  );
 
-  Args2<String, Component> REALNAME = (name, nickname) -> MiscUtils
-      .configString("messages.realname", "%nickname% <gray>is <aqua>%name%<gray>.")
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%nickname%").replacement(nickname).build())
-      .replaceText(TextReplacementConfig.builder().matchLiteral("%name%").replacement(name).build());
+  Args2<String, Component> REALNAME = (name, nickname) ->
+      MiscUtils
+          .configString(
+              "messages.realname",
+              "%nickname% <gray>is <aqua>%name%<gray>."
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%nickname%")
+                  .replacement(nickname)
+                  .build()
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%name%")
+                  .replacement(name)
+                  .build()
+          );
 
-  Args0 UPDATE = () -> MiscUtils.configString("messages.update",
-      "<gray>HexNicks has an update! View <click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>.");
+  Args0 UPDATE = () -> MiscUtils.configString(
+      "messages.update",
+      "<gray>HexNicks has an update! View " +
+          "<click:open_url:https://www.spigotmc.org/resources/83554/><aqua>here</aqua></click>."
+  );
 
-  Args0 NICKNAME_TAKEN = () -> MiscUtils.configString("messages.nicknameTaken",
-      "<red>That nickname is taken by another player! Please choose a different one.");
+  Args0 NICKNAME_TAKEN = () -> MiscUtils.configString(
+      "messages.nicknameTaken",
+      "<red>That nickname is taken by another player! Please choose a different one."
+  );
 
-  Args1<String> NEW_EDITOR = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
-      "messages.newEditor",
-      "<green>Edit config <click:open_url:'%link%'><aqua><u>here<u/></aqua></click>. When you're done, save your " +
-          "changes and use <click:suggest_command:/hexnicks config-editor apply><aqua>/hexnicks config-editor " +
-          "apply <link></aqua></click> to apply them."
-  ).replace("%link%", link));
+  Args1<String> NEW_EDITOR = (link) ->
+      MiniMessage
+          .miniMessage()
+          .deserialize(
+              HexNicks.core().getConfig()
+                  .getString(
+                      "messages.newEditor",
+                      "<green>Edit config <click:open_url:'%link%'><aqua><u>here<u/></aqua></click>. When " +
+                          "you're done, save your changes and use <click:suggest_command:/hexnicks config-editor " +
+                          "apply><aqua>/hexnicks config-editor apply <link></aqua></click> to apply them."
+                  )
+                  .replace(
+                      "%link%",
+                      link
+                  )
+          );
 
-  Args1<String> EDITOR_APPLIED = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
-      "messages.editorApplied",
-      "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%<u/></aqua></click> applied."
-  ).replace("%link%", link));
+  Args1<String> EDITOR_APPLIED = (link) ->
+      MiniMessage
+          .miniMessage()
+          .deserialize(
+              HexNicks.core().getConfig()
+                  .getString(
+                      "messages.editorApplied",
+                      "<green>Changes from <click:open_url:'%link%'><aqua><u>%link%<u/></aqua></click> applied."
+                  )
+                  .replace(
+                      "%link%",
+                      link
+                  )
+          );
 
-  Args0 INVALID_LINK = () -> MiscUtils.configString("messages.invalidLink",
-      "<red>The link provided is not valid! See console for further details.");
+  Args0 INVALID_LINK = () -> MiscUtils.configString(
+      "messages.invalidLink",
+      "<red>The link provided is not valid! See console for further details."
+  );
 
-  Args1<String> LATEST_LOG = (link) -> MiniMessage.miniMessage().deserialize(HexNicks.core().getConfig().getString(
-      "messages.latestLog",
-      "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
-  ).replace("%link%", link));
+  Args1<String> LATEST_LOG = (link) ->
+      MiniMessage
+          .miniMessage()
+          .deserialize(
+              HexNicks.core().getConfig()
+                  .getString(
+                      "messages.latestLog",
+                      "<green>View the latest log <click:open_url:'%link%'><aqua><u>here</u></aqua></click>."
+                  )
+                  .replace(
+                      "%link%",
+                      link
+                  )
+          );
 
-  Args0 WORKING = () -> MiscUtils.configString("messages.working", "<gray>Working...");
+  Args0 WORKING = () -> MiscUtils.configString(
+      "messages.working",
+      "<gray>Working..."
+  );
 
-  Args0 NOT_ALLOWED = () -> MiscUtils.configString("messages.notAllowed", "<red>That nickname is not allowed!");
+  Args0 NOT_ALLOWED = () -> MiscUtils.configString(
+      "messages.notAllowed",
+      "<red>That nickname is not allowed!"
+  );
 
-  Args2<Player, Component> ANNOUNCE_NICK = (player, nickname) -> MiscUtils
-          .configStringPlaceholders("messages.joinAnnouncement", "<yellow>%player% has the nickname</yellow> %nick%", player)
-          .replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(player.getName()).build())
-          .replaceText(TextReplacementConfig.builder().matchLiteral("%nick%").replacement(nickname).build());
+  Args2<Player, Component> ANNOUNCE_NICK = (player, nickname) ->
+      MiscUtils
+          .configStringPlaceholders(
+              "messages.joinAnnouncement",
+              "<yellow>%player% has the nickname</yellow> %nick%",
+              player
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%player%")
+                  .replacement(
+                      player.getName()
+                  )
+                  .build()
+          )
+          .replaceText(
+              TextReplacementConfig.builder()
+                  .matchLiteral("%nick%")
+                  .replacement(nickname)
+                  .build()
+          );
 
-  Args0 HEXNICKS_USAGE = () -> MiscUtils.configString("messages.hexnicksUsage", "<red>Usage: /hexnicks <reload|config-editor> [apply|new] [link]");
+  Args0 HEXNICKS_USAGE = () -> MiscUtils.configString(
+      "messages.hexnicksUsage",
+      "<red>Usage: /hexnicks <reload|config-editor> [apply|new] [link]"
+  );
 
-  Args0 NICK_USAGE = () -> MiscUtils.configString("messages.nickUsage", "<red>Usage: /nick <nickname>");
+  Args0 NICK_USAGE = () -> MiscUtils.configString(
+      "messages.nickUsage",
+      "<red>Usage: /nick <nickname>"
+  );
 
-  Args0 NICK_COLOR_USAGE = () -> MiscUtils.configString("messages.nickColorUsage", "<red>Usage: /nickcolor <color>");
+  Args0 NICK_COLOR_USAGE = () -> MiscUtils.configString(
+      "messages.nickColorUsage",
+      "<red>Usage: /nickcolor <color>"
+  );
 
-  Args0 NICK_OTHER_USAGE = () -> MiscUtils.configString("messages.nickOtherUsage", "<red>Usage: /nickother <player> <nickname>");
+  Args0 NICK_OTHER_USAGE = () -> MiscUtils.configString(
+      "messages.nickOtherUsage",
+      "<red>Usage: /nickother <player> <nickname>"
+  );
 
-  Args0 REAL_NAME_USAGE = () -> MiscUtils.configString("messages.realNameUsage", "<red>Usage: /realname <nickname>");
+  Args0 REAL_NAME_USAGE = () -> MiscUtils.configString(
+      "messages.realNameUsage",
+      "<red>Usage: /realname <nickname>"
+  );
 
   /**
    * A message that has no arguments that need to be replaced.
    */
   interface Args0 {
+
     Component build();
 
     default void send(CommandSender sender) {
-      MiscUtils.sendMessage(sender, build());
+      MiscUtils.sendMessage(
+          sender,
+          build()
+      );
     }
   }
 
@@ -145,14 +318,24 @@ public interface Messages {
    * A message that has one argument that needs to be replaced.
    */
   interface Args1<A0> {
+
     Component build(A0 arg0);
 
-    default void send(CommandSender sender, A0 arg0) {
-      MiscUtils.sendMessage(sender, build(arg0));
+    default void send(
+        CommandSender sender,
+        A0 arg0
+    ) {
+      MiscUtils.sendMessage(
+          sender,
+          build(arg0)
+      );
     }
 
+    @SuppressWarnings("unused")
     default void announce(A0 arg0) {
-      MiscUtils.announceMessage(build(arg0));
+      MiscUtils.announceMessage(
+          build(arg0)
+      );
     }
   }
 
@@ -160,14 +343,36 @@ public interface Messages {
    * A message that has two arguments that need to be replaced.
    */
   interface Args2<A0, A1> {
-    Component build(A0 arg0, A1 arg1);
 
-    default void send(CommandSender sender, A0 arg0, A1 arg1) {
-      MiscUtils.sendMessage(sender, build(arg0, arg1));
+    Component build(
+        A0 arg0,
+        A1 arg1
+    );
+
+    default void send(
+        CommandSender sender,
+        A0 arg0,
+        A1 arg1
+    ) {
+      MiscUtils.sendMessage(
+          sender,
+          build(
+              arg0,
+              arg1
+          )
+      );
     }
 
-    default void announce(A0 arg0, A1 arg1) {
-      MiscUtils.announceMessage(build(arg0, arg1));
+    default void announce(
+        A0 arg0,
+        A1 arg1
+    ) {
+      MiscUtils.announceMessage(
+          build(
+              arg0,
+              arg1
+          )
+      );
     }
   }
 }

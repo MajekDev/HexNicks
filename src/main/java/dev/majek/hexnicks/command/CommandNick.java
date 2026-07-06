@@ -44,8 +44,12 @@ import org.jetbrains.annotations.NotNull;
 public class CommandNick implements TabExecutor {
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
-                           @NotNull String label, @NotNull String[] args) {
+  public boolean onCommand(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     // Console cannot have a nickname
     if (!(sender instanceof Player player)) {
       Messages.INVALID_SENDER.send(sender);
@@ -67,11 +71,12 @@ public class CommandNick implements TabExecutor {
         .cssColors(HexNicks.config().CSS_COLORS)
         .removeTextDecorations(MiscUtils.blockedDecorations(player))
         .removeColors(MiscUtils.blockedColors(player))
-        .build().mmParse(nickInput);
+        .build()
+        .mmParse(nickInput);
 
     String plainTextNick = PlainTextComponentSerializer.plainText().serialize(nickname);
 
-    // First make sure the nickname is allowed
+    // First, make sure the nickname is allowed
     if (MiscUtils.isBlocked(plainTextNick)) {
       Messages.NOT_ALLOWED.send(player);
       return true;
@@ -83,7 +88,7 @@ public class CommandNick implements TabExecutor {
       return true;
     }
 
-    // Remove nickname prefix if essentials is hooked
+    // Remove nickname prefix if Essentials is hooked
     if (HexNicks.hooks().isEssentialsHooked()) {
       String nickPrefix = HexNicks.hooks().getEssNickPrefix();
       if (nickPrefix != null && plainTextNick.startsWith(nickPrefix)) {
@@ -97,20 +102,29 @@ public class CommandNick implements TabExecutor {
     // Make sure the nickname isn't too short
     int minLength = HexNicks.config().MIN_LENGTH;
     if (plainTextNick.length() < minLength) {
-      Messages.TOO_SHORT.send(player, minLength);
+      Messages.TOO_SHORT.send(
+          player,
+          minLength
+      );
       return true;
     }
 
     // Make sure the nickname isn't too long
     int maxLength = HexNicks.config().MAX_LENGTH;
     if (plainTextNick.length() > maxLength) {
-      Messages.TOO_LONG.send(player, maxLength);
+      Messages.TOO_LONG.send(
+          player,
+          maxLength
+      );
       return true;
     }
 
     // Call event
-    SetNickEvent nickEvent = new SetNickEvent(player, nickname,
-        HexNicks.core().getDisplayName(player));
+    SetNickEvent nickEvent = new SetNickEvent(
+        player,
+        nickname,
+        HexNicks.core().getDisplayName(player)
+    );
     HexNicks.api().callEvent(nickEvent);
     if (nickEvent.isCancelled()) {
       return true;
@@ -127,8 +141,14 @@ public class CommandNick implements TabExecutor {
         return;
       }
       HexNicks.scheduler().runTask(() -> {
-        HexNicks.core().setNick(player, finalNick);
-        Messages.NICKNAME_SET.send(player, finalNick);
+        HexNicks.core().setNick(
+            player,
+            finalNick
+        );
+        Messages.NICKNAME_SET.send(
+            player,
+            finalNick
+        );
       });
     });
 
@@ -136,8 +156,12 @@ public class CommandNick implements TabExecutor {
   }
 
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                              @NotNull String label, @NotNull String[] args) {
+  public List<String> onTabComplete(
+      @NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args
+  ) {
     return Collections.emptyList();
   }
 }

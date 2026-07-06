@@ -49,8 +49,11 @@ public class NoNickOtherEvent extends Event implements Cancellable {
    * @param target  The player whose nickname is being removed.
    * @param oldNick The player's old nickname being removed.
    */
-  public NoNickOtherEvent(@NotNull CommandSender deleter, @NotNull Player target,
-                          @NotNull Component oldNick) {
+  public NoNickOtherEvent(
+      @NotNull CommandSender deleter,
+      @NotNull Player target,
+      @NotNull Component oldNick
+  ) {
     this.deleter = deleter;
     this.target = target;
     this.oldNick = oldNick;
@@ -62,16 +65,17 @@ public class NoNickOtherEvent extends Event implements Cancellable {
    *
    * @return Deleter.
    */
-  public CommandSender deleter() {
+  @SuppressWarnings("unused")
+  public @NotNull CommandSender deleter() {
     return deleter;
   }
 
   /**
-   * The in-fame player who's nickname is being removed by {@link #deleter()}.
+   * The in-fame player whose nickname is being removed by {@link #deleter()}.
    *
    * @return Target.
    */
-  public Player target() {
+  public @NotNull Player target() {
     return target;
   }
 
@@ -80,8 +84,7 @@ public class NoNickOtherEvent extends Event implements Cancellable {
    *
    * @return Old nickname.
    */
-  @NotNull
-  public Component oldNick() {
+  public @NotNull Component oldNick() {
     return oldNick;
   }
 

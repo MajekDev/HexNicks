@@ -49,8 +49,11 @@ public class SetNickEvent extends Event implements Cancellable {
    * @param newNick The new nickname the player is attempting to set.
    * @param oldNick The player's old name if they had one.
    */
-  public SetNickEvent(@NotNull Player player, @NotNull Component newNick,
-                      @Nullable Component oldNick) {
+  public SetNickEvent(
+      @NotNull Player player,
+      @NotNull Component newNick,
+      @Nullable Component oldNick
+  ) {
     this.player = player;
     this.newNick = newNick;
     this.oldNick = oldNick;
@@ -62,7 +65,7 @@ public class SetNickEvent extends Event implements Cancellable {
    *
    * @return Player.
    */
-  public Player player() {
+  public @NotNull Player player() {
     return player;
   }
 
@@ -71,8 +74,7 @@ public class SetNickEvent extends Event implements Cancellable {
    *
    * @return Old nickname.
    */
-  @Nullable
-  public Component oldNick() {
+  public @Nullable Component oldNick() {
     return oldNick;
   }
 
@@ -90,7 +92,7 @@ public class SetNickEvent extends Event implements Cancellable {
    *
    * @return New nickname.
    */
-  public Component newNick() {
+  public @NotNull Component newNick() {
     return newNick;
   }
 

@@ -78,7 +78,10 @@ public class PlayerChat implements Listener {
    * @param message the message
    * @return formatted chat
    */
-  private @NotNull Component formatChat(final @NotNull Player source, final @NotNull String message) {
+  private @NotNull Component formatChat(
+      final @NotNull Player source,
+      final @NotNull String message
+  ) {
     final MiniMessageWrapper miniMessageWrapper = MiniMessageWrapper.builder()
         .advancedTransformations(source.hasPermission("hexnicks.chat.advanced"))
         .gradients(source.hasPermission("hexnicks.color.gradient"))
@@ -96,7 +99,9 @@ public class PlayerChat implements Listener {
             TextReplacementConfig
                 .builder()
                 .matchLiteral("{displayname}")
-                .replacement(HexNicks.core().getDisplayName(source))
+                .replacement(
+                    HexNicks.core().getDisplayName(source)
+                )
                 .build()
         )
         // Replace prefix placeholder with Vault prefix
@@ -104,7 +109,9 @@ public class PlayerChat implements Listener {
             TextReplacementConfig
                 .builder()
                 .matchLiteral("{prefix}")
-                .replacement(HexNicks.hooks().vaultPrefix(source))
+                .replacement(
+                    HexNicks.hooks().vaultPrefix(source)
+                )
                 .build()
         )
         // Replace suffix placeholder with Vault Suffix
@@ -112,7 +119,9 @@ public class PlayerChat implements Listener {
             TextReplacementConfig
                 .builder()
                 .matchLiteral("{suffix}")
-                .replacement(HexNicks.hooks().vaultSuffix(source))
+                .replacement(
+                    HexNicks.hooks().vaultSuffix(source)
+                )
                 .build()
         )
         // Replace message placeholder with the formatted message from the event
@@ -120,7 +129,9 @@ public class PlayerChat implements Listener {
             TextReplacementConfig
                 .builder()
                 .matchLiteral("{message}")
-                .replacement(miniMessageWrapper.mmParse(message))
+                .replacement(
+                    miniMessageWrapper.mmParse(message)
+                )
                 .build()
         );
 

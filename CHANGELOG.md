@@ -1,5 +1,34 @@
 # Plugin Changelog
 
+# 3.2.1 - Bug Fixes
+
+- Fix /nonick not syncing nicknames when using MySQL.
+- Add support for the new MiniMessage head tag.
+- Add _cached variants for PlaceholderAPI.
+- Bumped dependencies.
+- Update checker now uses Modrinth instead of Spigot.
+- Performance improvements with /hexnicks commands.
+
+Mostly bug fixes, but you can read about the placeholder changes in the [docs](https://hexnicks.majek.dev/chat-formatting#placeholders) if interested.
+
+# 3.2.0 - More Configuration, CSS Colors, Fixes
+
+- Log chats to the console when using the no-chat-reports config option.
+- Make command usage messages configurable.
+- Add support for CSS colors.
+- Fix config option for preventing duplicate nicknames.
+- Updates & fixes for documentation site.
+
+Lots of nice things in this update. The no-chat-reports one was a fairly significant QOL improvement. CSS colors are also really cool and give players easier options without remembering hex codes.
+
+# 3.1.2 - Bug Fixes
+
+- Bumped dependencies.
+- Added support for Folia.
+- Add functionality to announce player nicks on join.
+
+Very minor update with some bug fixes and small new features.
+
 # 3.1.1 - Dependency Bumps
 
 - Bumped dependencies.

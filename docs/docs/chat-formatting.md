@@ -34,3 +34,7 @@ HexNicks has a few PlaceHolderAPI placeholders:
 - `%hexnicks_nick_hex%` - Returns the player's nickname with hex formatting used by 
 [DeluxeChat](https://www.spigotmc.org/resources/deluxechat.1277/) (and derivatives like [ChitChat](https://github.com/heychazza/ChitChat)).
 - `%hexnicks_nick_mm%` - Returns the player's nickname with MiniMessage formatting.
+
+All 4 of the placeholders also have cached variants. Simply add `_cached` to the end of the placeholder, and it 
+will return the value in the cache (or the player's name if not found in the cache) instead of hitting the storage.
+Any player that is online should have their nickname cached.

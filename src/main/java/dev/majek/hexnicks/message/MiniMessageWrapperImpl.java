@@ -102,6 +102,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
   private final TagResolver colorTags = TagResolver.resolver(
       StandardTags.color(),
       StandardTags.decorations(),
+      StandardTags.reset(),
       StandardTags.gradient(),
       StandardTags.rainbow(),
       SEQUENTIAL_HEAD_RESOLVER
@@ -111,6 +112,7 @@ final class MiniMessageWrapperImpl implements MiniMessageWrapper {
       ExtraTags.cssColors(),
       StandardTags.color(),
       StandardTags.decorations(),
+      StandardTags.reset(),
       StandardTags.gradient(),
       StandardTags.rainbow(),
       SEQUENTIAL_HEAD_RESOLVER
